@@ -38,10 +38,19 @@
 #
 
 require 'sinatra'
+
 #require 'json'
 
 require 'conf/engine'
 require 'conf/participants'
+
+#
+# representation stuff
+
+load 'rep/xml.rb'
+
+#
+# resources
 
 load 'res/processes.rb'
 

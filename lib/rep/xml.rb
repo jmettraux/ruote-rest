@@ -37,13 +37,54 @@
 # John Mettraux at openwfe.org
 #
 
-get "/processes.xml" do
-    render_xml $engine.list_process_status
+require 'rexml/document'
+
+#
+# IN
+
+def parse_xml_launchitem (xml)
+
+    d = REXML::Document.new xml
+
+    li = OpenWFE::LaunchItem.new
+
+    li.wfdurl = d.root.elements[1].text
+
+    li
 end
 
-post "/processes*" do
-    xml = request.env["rack.request.form_vars"]
-    li = parse_xml_launchitem xml
-    li.wfdurl
+
+#
+# OUT
+
+def render_xml (data)
+    header 'Content-Type' => 'application/xml'
+    builder do |xml|
+        xml.instruct!
+        if data.is_a?(Hash)
+            render_processes_xml xml, data
+        else
+            render_process_xml xml, data
+        end
+    end
+end
+
+def render_process_xml (xml, p)
+    xml.process do
+        xml.wfid p.wfid
+        xml.launch_time p.launch_time
+        xml.errors :count => p.errors.size
+        xml.paused p.paused
+        # variables
+        # expressions
+    end
+end
+
+def render_processes_xml (xml, ps)
+    xml.processes do
+        ps.each do |fei, process_status|
+            render_process_xml xml, process_status
+        end
+    end
 end
 
