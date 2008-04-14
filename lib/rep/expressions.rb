@@ -37,20 +37,65 @@
 # John Mettraux at openwfe.org
 #
 
-require 'sinatra'
-
-#require 'json'
-
-require 'conf/engine'
-require 'conf/participants'
 
 #
-# representation stuff
-
-load 'rep/xml.rb'
+# IN
 
 #
-# resources
+# OUT
 
-load 'res/processes.rb'
+def render_expressions_xml (es)
+
+    builder do |xml|
+        xml.instruct!
+        xml.expressions :count => es.size do
+            es.each do |fexp|
+                _render_expression_xml xml, fexp
+            end
+        end
+    end
+end
+
+def render_expression_xml (e)
+
+    builder do |xml|
+        xml.instruct!
+        _render_expression_xml xml, e, true
+    end
+end
+
+def _render_expression_xml (xml, e, detailed=false)
+
+    params = {}
+
+    params[:link] = request.link(
+        :expressions, e.fei.wfid, swapdots(e.fei.expid)) unless detailed
+
+    xml.expression params do
+
+        xml.tag! "class", e.class.name
+        xml.name e.fei.expression_name
+        xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
+
+        if detailed
+
+            OpenWFE::Xml._fei_to_xml(xml, e.fei)
+
+            xml.parent(
+                e.parent_id.to_s, 
+                :link => request.link(
+                    :expressions, e.parent_id.wfid, swapdots(e.parent_id.expid)))
+
+            xml.children do
+                e.children.each do |c|
+                    xml.child(
+                        c.to_s, :link => request.link(
+                            :expressions, c.wfid, swapdots(c.expid)))
+                end
+            end
+        else
+            xml.fei e.fei.to_s
+        end
+    end
+end
 

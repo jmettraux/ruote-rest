@@ -8,5 +8,5 @@ $:.unshift "#{dir}/../conf"
 $:.unshift "~/sinatra/lib"
 $:.unshift "~/ruote/lib"
 
-load 'application.rb'
+load 'ruote_rest.rb'
 

@@ -39,56 +39,25 @@
 
 
 #
-# Returns the statuses of all the process currently running in this ruote_rest
+# Reopening Rack::Request to add some convenience methods
 #
-get "/processes" do
+class Rack::Request
 
-    header 'Content-Type' => 'application/xml'
+    #
+    #     request.link(:expressions, "abc", "0_0_1")
+    #     #=> "http://example.org:4567/expressions/abc/0_0_1"
+    #
+    def link (*args)
 
-    render_processes_xml $engine.list_process_status
-end
+        base = "#{scheme}://#{host}"
 
-#
-# Launches a business process
-#
-post "/processes" do
+        if (scheme == 'https' && port != 443) || 
+           (scheme == 'http' && port != 80)
 
-    xml = request.env["rack.request.form_vars"]
+           base << ":#{port}"
+        end
 
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
-
-    response.status = 201
-    header 'Content-Type' => 'application/xml'
-    header 'Location' => request.link(:processes, fei.wfid)
-    OpenWFE::Xml.fei_to_xml fei
-end
-
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
-
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
-
-    throw :halt, [ 404, "no such process" ] unless ps
-
-    header 'Content-Type' => 'application/xml'
-    render_process_xml ps
-end
-
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
-
-    wfid = params[:wfid]
-
-    $engine.cancel_process wfid
-
-    response.status = 204
-    nil
+        base + "/" + args.collect {|a| a.to_s }.join("/")
+    end
 end
 

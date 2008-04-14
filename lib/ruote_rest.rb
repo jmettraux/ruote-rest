@@ -37,58 +37,29 @@
 # John Mettraux at openwfe.org
 #
 
+require 'sinatra'
+
+require 'rexml/document'
+require 'json'
+
+require 'conf/engine'
+require 'conf/participants'
 
 #
-# Returns the statuses of all the process currently running in this ruote_rest
-#
-get "/processes" do
+# misc
 
-    header 'Content-Type' => 'application/xml'
-
-    render_processes_xml $engine.list_process_status
-end
+require 'request'
+require 'misc'
 
 #
-# Launches a business process
-#
-post "/processes" do
+# representations
 
-    xml = request.env["rack.request.form_vars"]
-
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
-
-    response.status = 201
-    header 'Content-Type' => 'application/xml'
-    header 'Location' => request.link(:processes, fei.wfid)
-    OpenWFE::Xml.fei_to_xml fei
-end
+load 'rep/processes.rb'
+load 'rep/expressions.rb'
 
 #
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
+# resources
 
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
-
-    throw :halt, [ 404, "no such process" ] unless ps
-
-    header 'Content-Type' => 'application/xml'
-    render_process_xml ps
-end
-
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
-
-    wfid = params[:wfid]
-
-    $engine.cancel_process wfid
-
-    response.status = 204
-    nil
-end
+load 'res/processes.rb'
+load 'res/expressions.rb'
 

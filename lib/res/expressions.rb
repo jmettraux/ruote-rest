@@ -37,54 +37,39 @@
 # John Mettraux at openwfe.org
 #
 
-require 'rexml/document'
 
-#
-# IN
+get "/expressions/:wfid" do
 
-def parse_xml_launchitem (xml)
+    wfid = params[:wfid]
+    es = $engine.process_stack wfid, true
 
-    d = REXML::Document.new xml
+    throw :halt, [ 404, "no process #{wfid}" ] unless es
 
-    li = OpenWFE::LaunchItem.new
+    es = es.sort_by { |e| e.fei.expid }
 
-    li.wfdurl = d.root.elements[1].text
-
-    li
-end
-
-
-#
-# OUT
-
-def render_xml (data)
     header 'Content-Type' => 'application/xml'
-    builder do |xml|
-        xml.instruct!
-        if data.is_a?(Hash)
-            render_processes_xml xml, data
-        else
-            render_process_xml xml, data
-        end
-    end
+    render_expressions_xml es
 end
 
-def render_process_xml (xml, p)
-    xml.process do
-        xml.wfid p.wfid
-        xml.launch_time p.launch_time
-        xml.errors :count => p.errors.size
-        xml.paused p.paused
-        # variables
-        # expressions
-    end
+get "/expressions/:wfid/:expid" do
+
+    wfid = params[:wfid]
+    expid = swapdots params[:expid]
+
+    es = $engine.process_stack wfid, true
+    e = es.find { |e| e.fei.expid == expid }
+
+    throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ] unless e
+
+    header 'Content-Type' => 'application/xml'
+    render_expression_xml e
 end
 
-def render_processes_xml (xml, ps)
-    xml.processes do
-        ps.each do |fei, process_status|
-            render_process_xml xml, process_status
-        end
-    end
+delete "/expressions/:wfid/:expid" do
+
+    wfid = params[:wfid]
+    expid = swapdots params[:expid]
+
+    # TODO : implement me
 end
 

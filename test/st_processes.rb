@@ -11,7 +11,8 @@
 require 'sinatra'
 require 'sinatra/test/unit'
 
-require 'application.rb'
+require 'ruote_rest.rb'
+
 
 class StProcessesTest < Test::Unit::TestCase
 
@@ -21,28 +22,62 @@ class StProcessesTest < Test::Unit::TestCase
 
     def test_0
 
-        get_it "/processes.xml"
+        get_it "/processes"
 
         assert_equal(
             "application/xml", 
             @response.content_type)
 
         assert_equal(
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes>\n</processes>\n",
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\">\n</processes>\n",
             @response.body)
     end
 
     def test_1
 
-        xml = builder do |x|
-            x.instruct!
-            x.launchitem do
-                x.wfdurl "http://toto.server.com/def"
+        li = OpenWFE::LaunchItem.new <<-EOS
+            class TestStProcesses < OpenWFE::ProcessDefinition
+                sequence do
+                    alpha
+                    bravo
+                end
             end
-        end
+        EOS
 
-        post_it "/processes.xml", xml, { "CONTENT_TYPE" => "application/xml;fuck" }
+        post_it(
+            "/processes", 
+            OpenWFE::Xml.launchitem_to_xml(li),
+            { "CONTENT_TYPE" => "application/xml" })
 
-        assert_equal "nada", @response.body
+        fei = OpenWFE::Xml.fei_from_xml @response.body
+
+        assert_equal 201, @response.status
+        assert_equal "TestStProcesses", fei.workflow_definition_name
+        assert_not_nil @response["Location"]
+
+        sleep 0.350
+
+        get_it "/processes"
+
+        assert_not_nil @response.body.index(fei.wfid)
+
+        get_it "/processes/#{fei.wfid}"
+        #puts @response.body
+
+        assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
+
+        delete_it "/processes/#{fei.wfid}"
+
+        assert_equal 204, @response.status
+
+        sleep 0.350
+
+        get_it "/processes"
+
+        assert_not_nil @response.body.index('count="0"')
+
+        get_it "/processes/#{fei.wfid}"
+
+        assert_equal 404, @response.status
     end
 end

@@ -37,58 +37,16 @@
 # John Mettraux at openwfe.org
 #
 
-
 #
-# Returns the statuses of all the process currently running in this ruote_rest
+# swap from dots to underscores
 #
-get "/processes" do
-
-    header 'Content-Type' => 'application/xml'
-
-    render_processes_xml $engine.list_process_status
-end
-
+#     swapdots "0_0_1" # => "0.0.1"
 #
-# Launches a business process
+#     swapdots "0.0.1" # => "0_0_1"
 #
-post "/processes" do
+def swapdots (s)
 
-    xml = request.env["rack.request.form_vars"]
-
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
-
-    response.status = 201
-    header 'Content-Type' => 'application/xml'
-    header 'Location' => request.link(:processes, fei.wfid)
-    OpenWFE::Xml.fei_to_xml fei
-end
-
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
-
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
-
-    throw :halt, [ 404, "no such process" ] unless ps
-
-    header 'Content-Type' => 'application/xml'
-    render_process_xml ps
-end
-
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
-
-    wfid = params[:wfid]
-
-    $engine.cancel_process wfid
-
-    response.status = 204
-    nil
+    return s.gsub(/\./, '_') if s.index(".")
+    s.gsub(/\_/, '.')
 end
 

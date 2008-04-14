@@ -39,56 +39,79 @@
 
 
 #
-# Returns the statuses of all the process currently running in this ruote_rest
+# IN
+
 #
-get "/processes" do
+# OUT
 
-    header 'Content-Type' => 'application/xml'
+def render_processes_xml (ps)
 
-    render_processes_xml $engine.list_process_status
+    builder do |xml|
+        xml.instruct!
+        xml.processes :count => ps.size do
+            ps.each do |fei, process_status|
+                _render_process_xml xml, process_status
+            end
+        end
+    end
 end
 
-#
-# Launches a business process
-#
-post "/processes" do
+def render_process_xml (p)
 
-    xml = request.env["rack.request.form_vars"]
-
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
-
-    response.status = 201
-    header 'Content-Type' => 'application/xml'
-    header 'Location' => request.link(:processes, fei.wfid)
-    OpenWFE::Xml.fei_to_xml fei
+    builder do |xml|
+        xml.instruct!
+        _render_process_xml xml, p, true
+    end
 end
 
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
+def _render_process_xml (xml, p, detailed=false)
 
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
+    xml.process do
 
-    throw :halt, [ 404, "no such process" ] unless ps
+        xml.wfid p.wfid
+        xml.wfname p.wfname
+        xml.wfrevision p.wfrevision
 
-    header 'Content-Type' => 'application/xml'
-    render_process_xml ps
-end
+        xml.launch_time p.launch_time
+        xml.paused p.paused
 
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
+        xml.tags do
+            p.tags.each { |t| xml.tag t }
+        end
 
-    wfid = params[:wfid]
+        xml.branches p.branches
 
-    $engine.cancel_process wfid
+        xml.errors :count => p.errors.size
 
-    response.status = 204
-    nil
+        if detailed
+
+            xml.variables do
+
+                #OpenWFE::Xml.object_to_xml xml, p.variables
+                    # too nested
+
+                p.variables.each do |k, v|
+                    xml.entry do
+                        xml.string k.to_s
+                        xml.string v.to_json
+                    end
+                end
+            end
+
+            xml.expressions :link => request.link(:expressions, p.wfid) do
+
+                p.expressions.each do |fexp|
+
+                    fei = fexp.fei
+
+                    xml.expression(
+                        "#{fei.to_s}", 
+                        :short => fei.to_web_s,
+                        :link => request.link(
+                            :expressions, fei.wfid, swapdots(fei.expid)))
+                end
+            end
+        end
+    end
 end
 
