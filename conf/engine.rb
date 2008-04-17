@@ -1,5 +1,6 @@
 
 require 'openwfe/engine'
+#require 'openwfe/engine/file_persisted_engine'
 require 'openwfe/util/xml'
 
 configure do
@@ -10,4 +11,6 @@ configure do
     # further configuration goes here
 
     $engine = OpenWFE::Engine.new ac
+    #$engine = OpenWFE::FilePersistedEngine.new ac
 end
+

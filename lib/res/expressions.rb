@@ -51,8 +51,31 @@ end
 
 get "/expressions/:wfid/:expid" do
 
+    e = find_expression
+
+    header 'Content-Type' => 'application/xml'
+    render_expression_xml e
+end
+
+delete "/expressions/:wfid/:expid" do
+
+    e = find_expression
+
+    $engine.cancel_expression e
+
+    response.status = 204
+    nil
+end
+
+
+#
+# some methods
+
+def find_expression
+
     wfid = params[:wfid]
     expid = swapdots params[:expid]
+
     env = false
 
     if expid[-1, 1] == "e"
@@ -62,21 +85,10 @@ get "/expressions/:wfid/:expid" do
 
     es = $engine.process_stack wfid, true
 
-    e = es.find do |e| 
-        (e.fei.expid == expid) and (env or ( ! e.is_a?(OpenWFE::Environment)))
-    end
+    es.find { |e| 
 
-    throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ] unless e
+        (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
 
-    header 'Content-Type' => 'application/xml'
-    render_expression_xml e
-end
-
-delete "/expressions/:wfid/:expid" do
-
-    wfid = params[:wfid]
-    expid = swapdots params[:expid]
-
-    # TODO : implement me
+    } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
 end
 

@@ -45,11 +45,11 @@ class StExpressionsTest < Test::Unit::TestCase
         sleep 0.350
 
         get_it "/expressions/#{fei.wfid}"
-        puts
-        puts @response.body
-        puts
-
+        #puts
+        #puts @response.body
+        #puts
         assert_not_nil @response.body.index(' count="5"')
+
 
         get_it "/expressions/#{fei.wfid}/0_0"
 
@@ -57,17 +57,25 @@ class StExpressionsTest < Test::Unit::TestCase
             '<class>OpenWFE::SequenceExpression</class>')
 
         get_it "/expressions/#{fei.wfid}/0e"
-        puts
-        puts @response.body
-        puts
+        #puts
+        #puts @response.body
+        #puts
+        assert_not_nil(
+            @response.body.index('<class>OpenWFE::Environment</class>'), 
+            "GET /0e --> not an environment")
 
-        assert_not_nil @response.body.index(
-            '<class>OpenWFE::Environment</class>')
+
+        get_it "/expressions/#{fei.wfid}/0"
+
+        assert_not_nil(
+            @response.body.index('<class>OpenWFE::DefineExpression</class>'),
+            "GET /0e --> not an 'process-definition'")
 
         #
         # cancel process
 
-        delete_it "/processes/#{fei.wfid}"
+        delete_it "/expressions/#{fei.wfid}/0"
+
         assert_equal 204, @response.status
 
         sleep 0.350
