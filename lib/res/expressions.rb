@@ -45,8 +45,6 @@ get "/expressions/:wfid" do
 
     throw :halt, [ 404, "no process #{wfid}" ] unless es
 
-    es = es.sort_by { |e| e.fei.expid }
-
     header 'Content-Type' => 'application/xml'
     render_expressions_xml es
 end
@@ -55,9 +53,18 @@ get "/expressions/:wfid/:expid" do
 
     wfid = params[:wfid]
     expid = swapdots params[:expid]
+    env = false
+
+    if expid[-1, 1] == "e"
+        expid = expid[0..-2]
+        env = true
+    end
 
     es = $engine.process_stack wfid, true
-    e = es.find { |e| e.fei.expid == expid }
+
+    e = es.find do |e| 
+        (e.fei.expid == expid) and (env or ( ! e.is_a?(OpenWFE::Environment)))
+    end
 
     throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ] unless e
 

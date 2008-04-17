@@ -43,10 +43,15 @@ class StProcessesTest < Test::Unit::TestCase
                 end
             end
         EOS
+        #li.attributes.merge!(
+        #    "customer" => "toto", "amount" => 5, "discount" => false )
+        #puts
+        #puts OpenWFE::Xml.launchitem_to_xml(li, 2)
+        #puts
 
         post_it(
             "/processes", 
-            OpenWFE::Xml.launchitem_to_xml(li),
+            OpenWFE::Xml.launchitem_to_xml(li, 2),
             { "CONTENT_TYPE" => "application/xml" })
 
         fei = OpenWFE::Xml.fei_from_xml @response.body
@@ -62,7 +67,9 @@ class StProcessesTest < Test::Unit::TestCase
         assert_not_nil @response.body.index(fei.wfid)
 
         get_it "/processes/#{fei.wfid}"
+        #puts
         #puts @response.body
+        #puts
 
         assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 

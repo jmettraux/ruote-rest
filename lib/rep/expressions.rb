@@ -47,11 +47,16 @@
 def render_expressions_xml (es)
 
     builder do |xml|
+
         xml.instruct!
+
         xml.expressions :count => es.size do
-            es.each do |fexp|
+
+            es.sort_by { |e| e.fei.expid }.each do |fexp|
                 _render_expression_xml xml, fexp
             end
+
+            xml.process_representation es.representation.to_json
         end
     end
 end
@@ -59,9 +64,27 @@ end
 def render_expression_xml (e)
 
     builder do |xml|
+
         xml.instruct!
+
         _render_expression_xml xml, e, true
     end
+end
+
+def _expression_link (xml, tagname, fei, env=false)
+
+    return unless fei
+
+    expid = fei.expid
+    expid += "e" if env
+
+    xml.tag!(
+        tagname, 
+        fei.to_s, 
+        :link => request.link(
+            :expressions,
+            fei.wfid,
+            swapdots(expid)))
 end
 
 def _render_expression_xml (xml, e, detailed=false)
@@ -81,19 +104,34 @@ def _render_expression_xml (xml, e, detailed=false)
 
             OpenWFE::Xml._fei_to_xml(xml, e.fei)
 
-            xml.parent(
-                e.parent_id.to_s, 
-                :link => request.link(
-                    :expressions, e.parent_id.wfid, swapdots(e.parent_id.expid)))
+            #
+            # parent id
+
+            _expression_link(xml, 'parent', e.parent_id)
+
+            #
+            # environment id
+
+            _expression_link(xml, 'environment', e.environment_id)
+
+            #
+            # children
 
             xml.children do
                 e.children.each do |c|
-                    xml.child(
-                        c.to_s, :link => request.link(
-                            :expressions, c.wfid, swapdots(c.expid)))
+                    _expression_link(xml, 'child', c)
                 end
-            end
+            end if e.children
+
+            #
+            # process/expression representations
+
+            xml.raw_representation(e.raw_representation.to_json) \
+                if e.raw_representation
+            xml.raw_rep_updated(e.raw_rep_updated.to_json) \
+                if e.raw_rep_updated
         else
+
             xml.fei e.fei.to_s
         end
     end

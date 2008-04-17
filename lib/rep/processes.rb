@@ -81,8 +81,6 @@ def _render_process_xml (xml, p, detailed=false)
 
         xml.branches p.branches
 
-        xml.errors :count => p.errors.size
-
         if detailed
 
             xml.variables do
@@ -111,6 +109,20 @@ def _render_process_xml (xml, p, detailed=false)
                             :expressions, fei.wfid, swapdots(fei.expid)))
                 end
             end
+
+            xml.errors :count => p.errors.size do
+                p.errors.each do |k, v|
+                    xml.error do
+                        #xml.stacktrace do
+                        #    xml.cdata! "\n#{v.stacktrace}\n"
+                        #end
+                        xml.fei v.fei.to_s
+                        xml.message v.stacktrace.split("\n")[0]
+                    end
+                end
+            end
+        else
+            xml.errors :count => p.errors.size
         end
     end
 end

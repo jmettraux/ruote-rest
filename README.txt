@@ -12,9 +12,9 @@ To get Ruote and Ruote-Rest :
     git clone git://github.com/jmettraux/ruote-rest.git
 
 
-To get Sinatra :
+== dependencies
 
-    git clone git://github.com/jmettraux/sinatra.git
+    [sudo] gem install -y sinatra
 
 
 == interface

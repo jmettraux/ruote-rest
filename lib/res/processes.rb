@@ -53,7 +53,7 @@ end
 #
 post "/processes" do
 
-    xml = request.env["rack.request.form_vars"]
+    xml = request.env["rack.input"].read
 
     li = OpenWFE::Xml.launchitem_from_xml xml
 

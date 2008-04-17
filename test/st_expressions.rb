@@ -7,7 +7,11 @@
 # Mon Apr 14 15:45:00 JST 2008
 #
 
+
+
 #require 'test/unit'
+
+require 'rubygems'
 require 'sinatra'
 require 'sinatra/test/unit'
 
@@ -48,9 +52,27 @@ class StExpressionsTest < Test::Unit::TestCase
         assert_not_nil @response.body.index(' count="5"')
 
         get_it "/expressions/#{fei.wfid}/0_0"
+
+        assert_not_nil @response.body.index(
+            '<class>OpenWFE::SequenceExpression</class>')
+
+        get_it "/expressions/#{fei.wfid}/0e"
         puts
         puts @response.body
         puts
+
+        assert_not_nil @response.body.index(
+            '<class>OpenWFE::Environment</class>')
+
+        #
+        # cancel process
+
+        delete_it "/processes/#{fei.wfid}"
+        assert_equal 204, @response.status
+
+        sleep 0.350
+
+        # done.
     end
 end
 
