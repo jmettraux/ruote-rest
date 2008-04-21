@@ -45,16 +45,14 @@ get "/expressions/:wfid" do
 
     throw :halt, [ 404, "no process #{wfid}" ] unless es
 
-    header 'Content-Type' => 'application/xml'
-    render_expressions_xml es
+    rrender :expressions, es
 end
 
 get "/expressions/:wfid/:expid" do
 
     e = find_expression
 
-    header 'Content-Type' => 'application/xml'
-    render_expression_xml e
+    rrender :expression, e
 end
 
 delete "/expressions/:wfid/:expid" do

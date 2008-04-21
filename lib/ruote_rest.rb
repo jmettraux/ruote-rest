@@ -52,8 +52,11 @@ require 'request'
 require 'misc'
 
 #
-# representations
+# representations (I'd prefer another name...)
 
+load 'rep/render.rb'
+
+load 'rep/fei.rb'
 load 'rep/processes.rb'
 load 'rep/expressions.rb'
 

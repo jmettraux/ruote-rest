@@ -37,54 +37,28 @@
 # John Mettraux at openwfe.org
 #
 
-
 #
-# Returns the statuses of all the process currently running in this ruote_rest
+# the entry point for rendering any ruote-rest object
 #
-get "/processes" do
+# (pronounce with a "rolling r")
+#
+def rrender (type, object, options={})
 
-    rrender :processes, $engine.list_process_status
+    format, ctype = _determine_format
+
+    response.status = options.delete(:status) || 200
+
+    header 'Content-Type' => ctype
+    options.each { |k, v| header(k => v) }
+
+    send "render_#{type}_#{format}", object
 end
 
 #
-# Launches a business process
+# for now, only render in XML
 #
-post "/processes" do
+def _determine_format
 
-    xml = request.env["rack.input"].read
-
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
-
-    rrender(
-        :fei, fei, 
-        :status => 201, 'Location' => request.link(:processes, fei.wfid))
-end
-
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
-
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
-
-    throw :halt, [ 404, "no such process" ] unless ps
-
-    rrender :process, ps
-end
-
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
-
-    wfid = params[:wfid]
-
-    $engine.cancel_process wfid
-
-    response.status = 204
-    nil
+    [ "xml", "application/xml" ]
 end
 

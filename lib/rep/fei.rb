@@ -39,52 +39,15 @@
 
 
 #
-# Returns the statuses of all the process currently running in this ruote_rest
-#
-get "/processes" do
-
-    rrender :processes, $engine.list_process_status
-end
+# IN
 
 #
-# Launches a business process
-#
-post "/processes" do
+# OUT
 
-    xml = request.env["rack.input"].read
+def render_fei_xml (fei)
 
-    li = OpenWFE::Xml.launchitem_from_xml xml
+    #header 'Location' => request.link(:processes, fei.wfid)
 
-    fei = $engine.launch li
-
-    rrender(
-        :fei, fei, 
-        :status => 201, 'Location' => request.link(:processes, fei.wfid))
-end
-
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
-
-    wfid = params[:wfid]
-    ps = $engine.process_status wfid
-
-    throw :halt, [ 404, "no such process" ] unless ps
-
-    rrender :process, ps
-end
-
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
-
-    wfid = params[:wfid]
-
-    $engine.cancel_process wfid
-
-    response.status = 204
-    nil
+    OpenWFE::Xml.fei_to_xml fei
 end
 
