@@ -51,11 +51,9 @@ end
 #
 post "/processes" do
 
-    xml = request.env["rack.input"].read
+    launchitem = rparse :launchitem
 
-    li = OpenWFE::Xml.launchitem_from_xml xml
-
-    fei = $engine.launch li
+    fei = $engine.launch launchitem
 
     rrender(
         :fei, fei, 

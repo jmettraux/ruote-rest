@@ -37,28 +37,18 @@
 # John Mettraux at openwfe.org
 #
 
+
 #
-# the entry point for rendering any ruote-rest object
+# IN
+
 #
-# (pronounce with a "rolling r")
+# builds a launchitem from its XML representation
 #
-def rrender (type, object, options={})
+def parse_launchitem_xml (xml)
 
-    format, ctype = _determine_format
-
-    response.status = options.delete(:status) || 200
-
-    header 'Content-Type' => ctype
-    options.each { |k, v| header(k => v) }
-
-    send "render_#{type}_#{format}", object
+    OpenWFE::Xml.launchitem_from_xml xml
 end
 
 #
-# for now, only render in XML
-#
-def _determine_format
-
-    [ "xml", "application/xml" ]
-end
+# OUT
 

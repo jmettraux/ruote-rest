@@ -37,33 +37,49 @@
 # John Mettraux at openwfe.org
 #
 
-require 'sinatra'
+#
+# parses the representation sent in the request body
+#
+def rparse (type)
 
-require 'rexml/document'
-require 'json'
+    representation = request.env["rack.input"].read
 
-require 'conf/engine'
-require 'conf/participants'
+    format = determine_in_format
+
+    send "parse_#{type}_#{format}", representation
+end
 
 #
-# misc
+# the entry point for rendering any ruote-rest object
+#
+# (pronounce with a "rolling r")
+#
+def rrender (type, object, options={})
 
-require 'request'
-require 'misc'
+    format, ctype = determine_out_format
+
+    response.status = options.delete(:status) || 200
+
+    header 'Content-Type' => ctype
+    options.each { |k, v| header(k => v) }
+
+    send "render_#{type}_#{format}", object
+end
 
 #
-# representations (I'd prefer another name...)
+# simply reads the "Content-Type" header
+#
+def determine_in_format
 
-require 'inout.rb'
-
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/expressions.rb'
+    "xml"
+end
 
 #
-# resources
+# determines the format the client is expecting by reading the "Accept"
+# request header
+#
+def determine_out_format
 
-load 'res/processes.rb'
-load 'res/expressions.rb'
+    [ "xml", "application/xml" ]
+end
 
