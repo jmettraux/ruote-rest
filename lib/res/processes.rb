@@ -37,11 +37,6 @@
 # John Mettraux at openwfe.org
 #
 
-#get "/test" do
-#    header "Content-Type" => "text/plain"
-#    request.inspect
-#end
-
 
 #
 # Returns the statuses of all the process currently running in this ruote_rest
