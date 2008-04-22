@@ -39,10 +39,7 @@
 
 
 #
-# IN
-
-#
-# OUT
+# PROCESSES
 
 def render_processes_xml (ps)
 
@@ -55,6 +52,72 @@ def render_processes_xml (ps)
         end
     end
 end
+
+def render_processes_html (ps)
+
+    builder do |html|
+
+        html.div :class => "proc_processes" do
+
+            html.h3 "Processes"
+
+            if ps.size == 0
+                html.p "none."
+            else
+                ps.each do |fei, process_status|
+                    _render_process_html html, process_status
+                end
+            end
+        end
+
+        html.div :class => "proc_launch" do
+
+            html.h4 "POST /processes"
+            html.p "launch a new process instance"
+            html.form :action => request.link(:processes) do
+                html.div do
+                    html.label "process definition URL", :for => "pdef_url"
+                    html.input :type => "text", :name => "pdef_url", :id => "pdef_url"
+                end
+                html.div do
+                    html.label "process definition", :for => "pdef"
+                    html.textarea :cols => 50, :rows => 10 do
+                        html.cdata! \
+                        <<-EOS
+                        <process-definition name="Test" revision="0">
+                            <sequence>
+                                <participant ref="alice" />
+                                <participant ref="bob" />
+                            </sequence>
+                        </process-definition>
+                        EOS
+                    end
+                end
+            end
+        end
+    end
+end
+
+#
+# PROCESS
+
+# html
+
+def render_process_html (p)
+
+    builder do |html|
+        _render_process_html html, p
+    end
+end
+
+def _render_process_html (html, p, detailed=false)
+
+    html.div :class => "proc_process" do
+        html.h4 "Process #{p.wfid}"
+    end
+end
+
+# xml
 
 def render_process_xml (p)
 

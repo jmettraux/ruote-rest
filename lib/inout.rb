@@ -63,7 +63,19 @@ def rrender (type, object, options={})
     header 'Content-Type' => ctype
     options.each { |k, v| header(k => v) }
 
-    send "render_#{type}_#{format}", object
+    method_name = "render_#{type}_#{format}"
+
+    begin
+
+        send method_name, object
+
+    rescue Exception => e
+
+        puts e
+
+        header 'Content-Type' => 'application/xml'
+        send "render_#{type}_xml", object
+    end
 end
 
 #
@@ -79,6 +91,10 @@ end
 # request header
 #
 def determine_out_format
+
+    accept = request.env['HTTP_ACCEPT'] || ""
+
+    return [ "html", "text/html" ] if accept.index("text/html")
 
     [ "xml", "application/xml" ]
 end

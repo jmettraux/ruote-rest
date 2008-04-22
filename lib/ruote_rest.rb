@@ -42,8 +42,12 @@ require 'sinatra'
 require 'rexml/document'
 require 'json'
 
-require 'conf/engine'
-require 'conf/participants'
+#
+# conf
+
+load 'auth.rb'
+require 'engine'
+require 'participants'
 
 #
 # misc
@@ -54,7 +58,7 @@ require 'misc'
 #
 # representations (I'd prefer another name...)
 
-require 'inout.rb'
+load 'inout.rb'
 
 load 'rep/fei.rb'
 load 'rep/launchitems.rb'

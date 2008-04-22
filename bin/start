@@ -4,9 +4,10 @@ dir = File.dirname(__FILE__)
 $:.unshift "#{dir}/../lib"
 $:.unshift "#{dir}/../conf"
 
-require 'rubygems'
 #$:.unshift "~/sinatra/lib"
 $:.unshift "~/ruote/lib"
+
+require 'rubygems'
 
 load 'ruote_rest.rb'
 

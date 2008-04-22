@@ -7,7 +7,8 @@
 # Sun Apr 13 14:44:10 JST 2008
 #
 
-#require 'test/unit'
+require 'rubygems'
+
 require 'sinatra'
 require 'sinatra/test/unit'
 
@@ -23,6 +24,8 @@ class StProcessesTest < Test::Unit::TestCase
     def test_0
 
         get_it "/processes"
+
+        #p @response
 
         assert_equal(
             "application/xml", 

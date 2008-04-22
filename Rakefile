@@ -26,6 +26,7 @@ CLEAN.include("work", "log")
 Rake::TestTask.new(:test) do |t|
 
     t.libs << "test"
+    t.libs << "conf"
     t.libs << RUOTE_PATH
     t.libs << SINATRA_PATH
     t.test_files = FileList['test/test.rb']
