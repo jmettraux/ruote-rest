@@ -81,16 +81,10 @@ def render_processes_html (ps)
                 end
                 html.div do
                     html.label "process definition", :for => "pdef"
-                    html.textarea :cols => 50, :rows => 10 do
-                        html.cdata! \
-                        <<-EOS
-                        <process-definition name="Test" revision="0">
-                            <sequence>
-                                <participant ref="alice" />
-                                <participant ref="bob" />
-                            </sequence>
-                        </process-definition>
-                        EOS
+                    html.textarea :cols => 50, :rows => 10, :name => "pdef" do
+                        html.text! <<-EOS
+surf
+                            EOS
                     end
                 end
             end
@@ -112,9 +106,10 @@ end
 
 def _render_process_html (html, p, detailed=false)
 
-    html.div :class => "proc_process" do
-        html.h4 "Process #{p.wfid}"
-    end
+    #html.div :class => "proc_process" do
+    #    html.h4 "Process #{p.wfid}"
+    #end
+    erb :process
 end
 
 # xml
