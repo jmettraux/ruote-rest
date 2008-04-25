@@ -1,0 +1,36 @@
+<h4>GET /processes</h4>
+
+<% @processes.values.each do |process| %>
+    <%= render_process_html(process, false) %>
+<% end %>
+
+<br/>
+<br/>
+
+<h4>POST /processes</h4>
+
+<div>launching a new process instance</div>
+
+<br/>
+
+<form action="/processes" method="POST" enctype="multipart/form-data">
+    <div>process definition :<br/>
+        <div><input 
+            name="pdef_url" 
+            type="text" 
+            value="public/process_definitions/sequence0.rb" 
+            size="50"
+        /> (url)</div>
+        or
+        <div><textarea name="pdef"></textarea> (definition)</div>
+    </div>
+
+    <br/>
+    <br/>
+
+    <div>initial payload :<br/>
+        <div><textarea name="fields">{ "key0": "value0", "key1": "value1" }</textarea> (json)</div>
+    </div>
+    <div><input type="submit" name="launch" value="launch"></div>
+</form>
+

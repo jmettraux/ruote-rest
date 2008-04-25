@@ -1,0 +1,16 @@
+
+<div class="process">
+
+    <div class="process_link"><a href="/processes/<%= @process.wfid %>">GET /processes/<%= @process.wfid %></a></div>
+
+    <div>wfid : <span class="process_wfid"><%= @process.wfid %></div>
+    <div>
+        process : <span class="process_wfname"><%= @process.wfname %></span>
+        <span class="process_wfrevision"><%= @process.wfrevision %>
+    </div>
+    <div>launched : <span class="process_launch_time"><%= @process.launch_time %></div>
+    <div>paused : <span class="process_paused"><%= @process.paused %></div>
+    <div>tags : <span class="process_tags"><%= @process.tags.join(", ") %></div>
+    <div>branches : <span class="process_branches"><%= @process.branches %></div>
+</div>
+

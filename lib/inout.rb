@@ -37,6 +37,7 @@
 # John Mettraux at openwfe.org
 #
 
+
 #
 # parses the representation sent in the request body
 #
@@ -82,6 +83,10 @@ end
 # simply reads the "Content-Type" header
 #
 def determine_in_format
+
+    ct = request.env['CONTENT_TYPE']
+
+    return "form" if ct.index("form-")
 
     "xml"
 end

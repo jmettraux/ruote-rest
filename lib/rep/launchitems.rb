@@ -50,5 +50,26 @@ def parse_launchitem_xml (xml)
 end
 
 #
+# builds a launchitem from the request parameters (html form)
+#
+def parse_launchitem_form (x)
+
+    url = request.params['pdef_url']
+    pdef = request.params['pdef']
+    fields = JSON.parse(request.params['fields'])
+
+    if pdef.strip != ""
+        li = OpenWFE::LaunchItem.new url
+    else
+        li = OpenWFE::LaunchItem.new
+        li.workflow_definition_url = url
+    end
+
+    li.fields = fields
+
+    li
+end
+
+#
 # OUT
 
