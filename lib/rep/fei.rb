@@ -44,6 +44,13 @@
 #
 # OUT
 
+def render_fei_html (fei)
+
+    @fei = fei
+
+    erb :fei
+end
+
 def render_fei_xml (fei)
 
     #header 'Location' => request.link(:processes, fei.wfid)
