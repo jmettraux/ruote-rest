@@ -14,6 +14,8 @@ To get Ruote and Ruote-Rest :
 
 == dependencies
 
+Depends on Sinatra 0.2.2
+
     [sudo] gem install -y sinatra
 
 

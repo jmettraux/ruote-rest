@@ -56,7 +56,11 @@ end
 def render_processes_html (processes)
 
     @processes = processes
+
     #erb :processes, :locals => { "ps" => processes }
+        #
+        # sinatra 0.2.2 : locals seem not working
+
     erb :processes
 end
 
@@ -65,10 +69,10 @@ end
 
 # html
 
-def render_process_html (process, alone=false)
+def render_process_html (process, detailed=true)
 
     @process = process
-    @alone = alone
+    @detailed = detailed
 
     erb :process
 end
@@ -124,8 +128,7 @@ def _render_process_xml (xml, p, detailed=false)
                     xml.expression(
                         "#{fei.to_s}", 
                         :short => fei.to_web_s,
-                        :link => request.link(
-                            :expressions, fei.wfid, swapdots(fei.expid)))
+                        :link => fei.link(request))
                 end
             end
 

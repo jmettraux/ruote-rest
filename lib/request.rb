@@ -61,3 +61,35 @@ class Rack::Request
     end
 end
 
+#
+# reopening some OpenWFE classes to add some link magic
+#
+
+class OpenWFE::FlowExpressionId
+
+    #
+    # Returns the relative link to the expression pointed at by this
+    # FlowExpressionId.
+    #
+    #     fei.link 
+    #         # => "/expressions/{wfid}/{expid}"
+    #
+    #     fei.link(request)
+    #         # => "http://host:port/expressions/{wfid}/{expid}"
+    #
+    #     fei.link(request, 'smurfs')
+    #         # => "http://host:port/smurfs/{wfid}/{expid}"
+    #
+    #     fei.link(nil, 'smurfs')
+    #         # => "smurfs/{wfid}/{expid}"
+    #
+    def link (req=nil, resource_name='expressions')
+
+        ei = swapdots self.expid
+
+        return req.link(resource_name, wfid, ei) if req
+
+        "/#{resource_name}/#{wfid}/#{ei}"
+    end
+end
+

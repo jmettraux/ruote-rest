@@ -10,7 +10,7 @@ require 'rake/testtask'
 
 
 RUOTE_PATH = "~/ruote/lib"
-SINATRA_PATH = "~/sinatra/lib"
+#SINATRA_PATH = "~/sinatra/lib"
 
 #
 # tasks
@@ -28,7 +28,7 @@ Rake::TestTask.new(:test) do |t|
     t.libs << "test"
     t.libs << "conf"
     t.libs << RUOTE_PATH
-    t.libs << SINATRA_PATH
+    #t.libs << SINATRA_PATH
     t.test_files = FileList['test/test.rb']
     t.verbose = true
 end
