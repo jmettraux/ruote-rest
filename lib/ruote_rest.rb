@@ -59,6 +59,7 @@ require 'misc'
 # representations (I'd prefer another name...)
 
 load 'inout.rb'
+load 'rep/html.rb'
 
 load 'rep/fei.rb'
 load 'rep/launchitems.rb'

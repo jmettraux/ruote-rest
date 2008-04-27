@@ -30,12 +30,12 @@
         <br/>
 
         <div class="process_expression">
-            Process expressions (active) :
+            Expressions (active) :
             <% @process.expressions.each do |fexp| 
                   fei = fexp.fei
             %>
                 <div class="process_exp">
-                    <a href="<%= fei.link %>">GET <%= fei.link %></a>
+                    <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.link %>">GET <%= fei.link %></a>
                 <div>
             <% end %>
         </div>
@@ -43,7 +43,7 @@
         <br/>
 
         <div class="process_errors">
-            Process errors :
+            Errors :
             <% @process.errors.each do |k, error| %>
                 <div class="process_err">
                     <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
@@ -56,5 +56,11 @@
     <% else %>
         <div>errors : <span class="process_errors_count"><%= @process.errors.size %></div>
     <% end %>
+
+    <br/>
+
+    <div>Expressions (all) : 
+        <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
+    </div>
 </div>
 

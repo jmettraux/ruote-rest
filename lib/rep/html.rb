@@ -1,3 +1,4 @@
+
 #
 #--
 # Copyright (c) 2008, John Mettraux, OpenWFE.org
@@ -39,22 +40,19 @@
 
 
 #
-# IN
-
+# this method (this file) will vanish as soon as a Sinatra that handles
+# layout for erb is available
 #
-# OUT
+def _erb (template, opts={})
 
-def render_fei_html (fei)
+    if opts[:layout]
 
-    @fei = fei
+        erb(:header) +
+        erb(template) +
+        erb(:footer)
+    else
 
-    _erb :fei, :layout => :html
-end
-
-def render_fei_xml (fei)
-
-    #header 'Location' => request.link(:processes, fei.wfid)
-
-    OpenWFE::Xml.fei_to_xml fei
+        erb(template)
+    end
 end
 

@@ -61,7 +61,7 @@ def render_processes_html (processes)
         #
         # sinatra 0.2.2 : locals seem not working
 
-    erb :processes
+    _erb :processes, :layout => :html
 end
 
 #
@@ -74,7 +74,7 @@ def render_process_html (process, detailed=true)
     @process = process
     @detailed = detailed
 
-    erb :process
+    _erb :process, :layout => detailed ? :html : false
 end
 
 # xml
