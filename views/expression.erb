@@ -5,7 +5,7 @@
     <div>fei : <span class="expression_fei"><%= @expression.fei.to_s %></div>
     <div>class : <span class="expression_class"><%= @expression.class.name %></div>
     <div>name : <span class="expression_name"><%= @expression.fei.expname %></div>
-    <div>apply time : <span class="expression_apply_time"><%= OpenWFE::Xml.to_httpdate(@expression.apply_time) %></div>
+    <div>apply time : <span class="expression_apply_time"><%= display_time(@expression, :apply_time) %></div>
 
     <% if @detailed %>
 
