@@ -61,16 +61,37 @@ post "/processes" do
 end
 
 #
+# just return the process instance tree as JSON
+#
+get "/processes/:wfid/representation" do
+
+    pstack = $engine.process_stack params[:wfid], true
+
+    throw :halt, [ 404, "no such process" ] unless pstack
+
+    header "Content-Type" => "application/json"
+
+    pstack.representation.to_json.to_s
+end
+
+#
 # Returns the detailed status of a process instance
 #
 get "/processes/:wfid" do
 
     wfid = params[:wfid]
-    ps = $engine.process_status wfid
 
-    throw :halt, [ 404, "no such process" ] unless ps
+    pstatus = $engine.process_status wfid
+    pstack = $engine.process_stack wfid, true
 
-    rrender :process, ps
+    class << pstatus
+        attr_accessor :process_stack
+    end
+    pstatus.process_stack = pstack
+
+    throw :halt, [ 404, "no such process" ] unless pstatus
+
+    rrender :process, pstatus
 end
 
 #

@@ -76,6 +76,12 @@ class StProcessesTest < Test::Unit::TestCase
 
         assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 
+        get_it "/processes/#{fei.wfid}/representation"
+
+        js = JSON.parse(@response.body)
+        assert_kind_of Array, js
+        assert_equal "application/json", @response["Content-Type"]
+
         delete_it "/processes/#{fei.wfid}"
 
         assert_equal 204, @response.status

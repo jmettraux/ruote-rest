@@ -143,8 +143,15 @@ def _render_process_xml (xml, p, detailed=false)
                     end
                 end
             end
+
+            xml.representation(
+                p.process_stack.representation.to_json.to_s,
+                :link => request.link(:processes, p.wfid, :representation))
+
         else
+
             xml.errors :count => p.errors.size
+
         end
     end
 end

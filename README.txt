@@ -38,6 +38,11 @@ GET /processes/{wfid}
     returns the detailed status of a given process instance
 
 
+GET /processes/{wfid}/representation
+
+    returns the JSON representation of the current process instance tree
+
+
 DELETE /processes/{wfid}
 
     cancels a business process instance

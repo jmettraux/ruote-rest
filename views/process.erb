@@ -12,6 +12,13 @@
     <div>paused : <span class="process_paused"><%= @process.paused %></div>
     <div>tags : <span class="process_tags"><%= @process.tags.join(", ") %></div>
     <div>branches : <span class="process_branches"><%= @process.branches %></div>
+    <div>all expressions : 
+        <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
+    </div>
+    <div>representation (json) : 
+        <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a>
+    </div>
+
     <% if @detailed %>
 
         <br/>
@@ -53,14 +60,17 @@
             <% end %>
         </div>
 
+        <br/>
+
+        <div class="process_representation">
+            Representation :<br/>
+            <span class="process_rep"><%= @process.process_stack.representation.to_json.to_s %></span>
+        </div>
+
     <% else %>
+
         <div>errors : <span class="process_errors_count"><%= @process.errors.size %></div>
+
     <% end %>
-
-    <br/>
-
-    <div>Expressions (all) : 
-        <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
-    </div>
 </div>
 
