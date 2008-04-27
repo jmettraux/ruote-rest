@@ -93,3 +93,16 @@ class OpenWFE::FlowExpressionId
     end
 end
 
+class OpenWFE::FlowExpression
+
+    #
+    # a shortcut for
+    #
+    #     self.fei.link(req)
+    #
+    def link (req=nil)
+
+        self.fei.link(req)
+    end
+end
+

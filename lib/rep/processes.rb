@@ -119,7 +119,7 @@ def _render_process_xml (xml, p, detailed=false)
                 end
             end
 
-            xml.expressions :link => request.link(:expressions, p.wfid) do
+            xml.active_expressions :link => request.link(:expressions, p.wfid) do
 
                 p.expressions.each do |fexp|
 

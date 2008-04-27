@@ -44,6 +44,9 @@
 #
 # OUT
 
+#
+# expressions
+
 def render_expressions_xml (es)
 
     builder do |xml|
@@ -61,6 +64,16 @@ def render_expressions_xml (es)
     end
 end
 
+def render_expressions_html (es)
+
+    @expressions = es
+
+    _erb :expressions, :layout => :html
+end
+
+#
+# expression
+
 def render_expression_xml (e)
 
     builder do |xml|
@@ -69,6 +82,16 @@ def render_expression_xml (e)
 
         _render_expression_xml xml, e, true
     end
+end
+
+def render_expression_html (e, detailed=true)
+
+    @expression = e
+    @detailed = detailed
+
+    layout = detailed ? :html : nil
+
+    _erb :expression, :layout => layout
 end
 
 def _expression_link (xml, tagname, fei, env=false)
@@ -107,12 +130,12 @@ def _render_expression_xml (xml, e, detailed=false)
             #
             # parent id
 
-            _expression_link(xml, 'parent', e.parent_id)
+            _expression_link xml, 'parent', e.parent_id
 
             #
             # environment id
 
-            _expression_link(xml, 'environment', e.environment_id)
+            _expression_link xml, 'environment', e.environment_id
 
             #
             # children

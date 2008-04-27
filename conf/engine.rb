@@ -1,6 +1,6 @@
 
 require 'openwfe/engine'
-#require 'openwfe/engine/file_persisted_engine'
+require 'openwfe/storage/yamlcustom'
 require 'openwfe/util/xml'
 
 configure do

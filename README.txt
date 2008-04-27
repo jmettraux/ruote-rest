@@ -60,6 +60,16 @@ GET /expressions/{wfid}/{expid}
     returns one expression
 
 
+GET /expressions/{wfid}/{expid}/yaml
+
+    returns the YAML representation of an expression
+
+
+PUT /expressions/{wfid}/{expid}/yaml
+
+    updates an expression, live (TODO)
+
+
 DELETE /expressions/{wfid}/{expid}
 
     cancels one expression
