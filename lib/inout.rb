@@ -87,6 +87,7 @@ def determine_in_format
     ct = request.env['CONTENT_TYPE']
 
     return "form" if ct.index("form-")
+    return "yaml" if ct.index("application/yaml")
 
     "xml"
 end
@@ -99,7 +100,8 @@ FORMATS = {
 
     :xml => [ "xml", "application/xml" ],
     :html => [ "html", "text/html" ],
-    :json => [ "json", "application/json" ]
+    :json => [ "json", "application/json" ],
+    :yaml => [ "yaml", "application/yaml" ]
 
 } unless defined?(FORMATS)
 

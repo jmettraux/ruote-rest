@@ -67,7 +67,7 @@ GET /expressions/{wfid}/{expid}/yaml
 
 PUT /expressions/{wfid}/{expid}/yaml
 
-    updates an expression, live (TODO)
+    updates an expression, live
 
 
 DELETE /expressions/{wfid}/{expid}

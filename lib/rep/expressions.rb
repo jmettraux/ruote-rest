@@ -41,6 +41,11 @@
 #
 # IN
 
+def parse_expression_yaml (yaml)
+
+    YAML.load yaml
+end
+
 #
 # OUT
 

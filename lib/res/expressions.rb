@@ -56,11 +56,19 @@ get "/expressions/:wfid/:expid/yaml" do
     e.to_yaml
 end
 
+put "/expressions/:wfid/:expid/yaml" do
+
+    expression = rparse :expression
+
+    $engine.update_expression expression
+
+    header "Location" => expression.link(request)
+    rrender :expression, find_expression
+end
+
 get "/expressions/:wfid/:expid" do
 
-    e = find_expression
-
-    rrender :expression, e
+    rrender :expression, find_expression
 end
 
 delete "/expressions/:wfid/:expid" do
