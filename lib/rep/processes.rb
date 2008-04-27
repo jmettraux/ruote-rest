@@ -89,7 +89,7 @@ end
 
 def _render_process_xml (xml, p, detailed=false)
 
-    xml.process do
+    xml.process :link => request.link(:processes, p.wfid) do
 
         xml.wfid p.wfid
         xml.wfname p.wfname

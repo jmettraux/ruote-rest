@@ -91,16 +91,33 @@ def determine_in_format
     "xml"
 end
 
+
+#
+# some common formats
+#
+FORMATS = {
+
+    :xml => [ "xml", "application/xml" ],
+    :html => [ "html", "text/html" ],
+    :json => [ "json", "application/json" ]
+
+} unless defined?(FORMATS)
+
 #
 # determines the format the client is expecting by reading the "Accept"
 # request header
 #
 def determine_out_format
 
+    f = params["format"]
+
+    return FORMATS[:xml] if f == "xml"
+    return FORMATS[:json] if f == "json"
+
     accept = request.env['HTTP_ACCEPT'] || ""
 
-    return [ "html", "text/html" ] if accept.index("text/html")
+    return FORMATS[:html] if accept.index("text/html")
 
-    [ "xml", "application/xml" ]
+    FORMATS[:xml]
 end
 
