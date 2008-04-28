@@ -100,7 +100,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
         sleep 0.350
 
-        get_it "/expressions/#{fei.wfid}/0_0/yaml"
+        get_it "/expressions/#{fei.wfid}/0_0?format=yaml"
 
         assert_equal "text/plain", @response["Content-Type"]
 

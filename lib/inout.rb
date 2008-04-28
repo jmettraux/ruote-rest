@@ -114,10 +114,13 @@ def determine_out_format
 
     return FORMATS[:xml] if f == "xml"
     return FORMATS[:json] if f == "json"
+    return FORMATS[:yaml] if f == "yaml"
 
     accept = request.env['HTTP_ACCEPT'] || ""
 
     return FORMATS[:html] if accept.index("text/html")
+    return FORMATS[:yaml] if accept.index("yaml")
+    return FORMATS[:json] if accept.index("json")
 
     FORMATS[:xml]
 end

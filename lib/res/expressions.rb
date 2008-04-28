@@ -48,14 +48,6 @@ get "/expressions/:wfid" do
     rrender :expressions, es
 end
 
-get "/expressions/:wfid/:expid/yaml" do
-
-    e = find_expression
-
-    header "Content-Type" => "text/plain"
-    e.to_yaml
-end
-
 put "/expressions/:wfid/:expid" do
 
     expression = rparse :expression

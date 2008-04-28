@@ -64,6 +64,11 @@ end
 #
 # expressions
 
+def render_expression_yaml (e)
+
+    e.to_yaml
+end
+
 def render_expressions_xml (es)
 
     builder do |xml|
