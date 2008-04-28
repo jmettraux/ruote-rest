@@ -89,7 +89,9 @@ class OpenWFE::FlowExpressionId
 
         return req.link(resource_name, wfid, ei) if req
 
-        "/#{resource_name}/#{wfid}/#{ei}"
+        env = self.expname == "environment" ? "e" : ""
+
+        "/#{resource_name}/#{wfid}/#{ei}#{env}"
     end
 end
 

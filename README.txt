@@ -65,9 +65,9 @@ GET /expressions/{wfid}/{expid}/yaml
     returns the YAML representation of an expression
 
 
-PUT /expressions/{wfid}/{expid}/yaml
+PUT /expressions/{wfid}/{expid}
 
-    updates an expression, live
+    updates an expression, live. Expects a YAML version of the expression
 
 
 DELETE /expressions/{wfid}/{expid}

@@ -1,3 +1,4 @@
+
 #
 #--
 # Copyright (c) 2008, John Mettraux, OpenWFE.org
@@ -38,70 +39,20 @@
 #
 
 
-get "/expressions/:wfid" do
-
-    wfid = params[:wfid]
-    es = $engine.process_stack wfid, true
-
-    throw :halt, [ 404, "no process #{wfid}" ] unless es
-
-    rrender :expressions, es
-end
-
-get "/expressions/:wfid/:expid/yaml" do
-
-    e = find_expression
-
-    header "Content-Type" => "text/plain"
-    e.to_yaml
-end
-
-put "/expressions/:wfid/:expid" do
-
-    expression = rparse :expression
-
-    $engine.update_expression expression
-
-    header "Location" => expression.link(request)
-    rrender :expression, find_expression
-end
-
-get "/expressions/:wfid/:expid" do
-
-    rrender :expression, find_expression
-end
-
-delete "/expressions/:wfid/:expid" do
-
-    e = find_expression
-
-    $engine.cancel_expression e
-
-    response.status = 204
-end
-
-
 #
-# some methods
+# applies the accessor on the object and then renders under the tag in
+# the xml (Builder).
+#
+def hash_to_xml (xml, tag, object, accessor)
 
-def find_expression
+    vars = object.send accessor
 
-    wfid = params[:wfid]
-    expid = swapdots params[:expid]
-
-    env = false
-
-    if expid[-1, 1] == "e"
-        expid = expid[0..-2]
-        env = true
+    xml.variables do
+        vars.each do |k, v|
+            xml.entry do
+                xml.string k.to_s
+                xml.string v.to_json
+            end
+        end
     end
-
-    es = $engine.process_stack wfid, true
-
-    es.find { |e| 
-
-        (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-
-    } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
 end
-

@@ -87,6 +87,7 @@ def determine_in_format
     ct = request.env['CONTENT_TYPE']
 
     return "form" if ct.index("form-")
+    return "json" if ct.index("application/json")
     return "yaml" if ct.index("application/yaml")
 
     "xml"

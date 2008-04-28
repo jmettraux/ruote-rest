@@ -38,70 +38,45 @@
 #
 
 
-get "/expressions/:wfid" do
+#
+# IN
 
-    wfid = params[:wfid]
-    es = $engine.process_stack wfid, true
+def parse_participant_json (json)
 
-    throw :halt, [ 404, "no process #{wfid}" ] unless es
-
-    rrender :expressions, es
+    JSON.parse json
 end
-
-get "/expressions/:wfid/:expid/yaml" do
-
-    e = find_expression
-
-    header "Content-Type" => "text/plain"
-    e.to_yaml
-end
-
-put "/expressions/:wfid/:expid" do
-
-    expression = rparse :expression
-
-    $engine.update_expression expression
-
-    header "Location" => expression.link(request)
-    rrender :expression, find_expression
-end
-
-get "/expressions/:wfid/:expid" do
-
-    rrender :expression, find_expression
-end
-
-delete "/expressions/:wfid/:expid" do
-
-    e = find_expression
-
-    $engine.cancel_expression e
-
-    response.status = 204
-end
-
 
 #
-# some methods
+# OUT
 
-def find_expression
+def render_participants_xml (ps)
 
-    wfid = params[:wfid]
-    expid = swapdots params[:expid]
-
-    env = false
-
-    if expid[-1, 1] == "e"
-        expid = expid[0..-2]
-        env = true
+    builder do |xml|
+        xml.instruct!
+        xml.participants :count => ps.size do
+            ps.each_with_index do |part, i|
+                _render_participant_xml xml, part, i
+            end
+        end
     end
+end
 
-    es = $engine.process_stack wfid, true
+def render_participant_xml (part)
 
-    es.find { |e| 
+    builder do |xml|
+        xml.instruct!
+        _render_participant_xml xml, part
+    end
+end
 
-        (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
+def _render_participant_xml (xml, part, index=nil)
 
-    } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
+    regex, participant = part
+
+    xml.participant do
+        xml.index(index.to_s) if index
+        xml.regex regex.original_string
+        xml.tag! :class, participant.class.name
+    end
 end
 

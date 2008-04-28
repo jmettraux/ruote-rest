@@ -110,7 +110,7 @@ class StExpressionsTest < Test::Unit::TestCase
         exp.attributes = { :toto => :surf }
 
         put_it(
-            "/expressions/#{fei.wfid}/0_0/yaml", 
+            "/expressions/#{fei.wfid}/0_0",
             exp.to_yaml,
             { "CONTENT_TYPE" => "application/yaml" })
 
@@ -122,6 +122,10 @@ class StExpressionsTest < Test::Unit::TestCase
         exp = YAML.load @response.body
 
         assert_equal :surf, exp.attributes[:toto]
+
+        $engine.cancel_process fei
+
+        sleep 0.350
     end
 end
 

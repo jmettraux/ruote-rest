@@ -104,6 +104,5 @@ delete "/processes/:wfid" do
     $engine.cancel_process wfid
 
     response.status = 204
-    nil
 end
 

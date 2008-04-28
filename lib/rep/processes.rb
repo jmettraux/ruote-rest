@@ -106,18 +106,7 @@ def _render_process_xml (xml, p, detailed=false)
 
         if detailed
 
-            xml.variables do
-
-                #OpenWFE::Xml.object_to_xml xml, p.variables
-                    # too nested
-
-                p.variables.each do |k, v|
-                    xml.entry do
-                        xml.string k.to_s
-                        xml.string v.to_json
-                    end
-                end
-            end
+            hash_to_xml xml, :variables, p, :variables
 
             xml.active_expressions :link => request.link(:expressions, p.wfid) do
 

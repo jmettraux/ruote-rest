@@ -60,15 +60,18 @@ require 'misc'
 
 load 'inout.rb'
 load 'rep/html.rb'
+load 'rep/xml.rb'
 
 load 'rep/fei.rb'
 load 'rep/launchitems.rb'
 load 'rep/processes.rb'
 load 'rep/expressions.rb'
+load 'rep/participants.rb'
 
 #
 # resources
 
 load 'res/processes.rb'
 load 'res/expressions.rb'
+load 'res/participants.rb'
 

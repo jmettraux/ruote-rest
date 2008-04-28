@@ -158,6 +158,12 @@ def _render_expression_xml (xml, e, detailed=false)
                 if e.raw_representation
             xml.raw_rep_updated(e.raw_rep_updated.to_json) \
                 if e.raw_rep_updated
+
+            #
+            # variables
+
+            hash_to_xml(xml, :variables, e, :variables) \
+                if e.is_a?(OpenWFE::Environment)
         else
 
             xml.fei e.fei.to_s

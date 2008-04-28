@@ -43,6 +43,12 @@
 
         <div>yaml : <a href="<%= @expression.link %>/yaml">GET <%= @expression.link %>/yaml</a></div>
 
+        <div>
+            <form id="cancel" action="<%= @expression.link %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
+            cancel expression :
+            <a href="/expressions/<%= @expression.fei.wfid %>" onclick="document.getElementById('cancel').submit();">DELETE <%= @expression.link %></a>
+        </div>
+
     <% end %>
 </div>
 

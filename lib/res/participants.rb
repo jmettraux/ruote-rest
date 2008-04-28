@@ -38,70 +38,58 @@
 #
 
 
-get "/expressions/:wfid" do
+get "/participants" do
 
-    wfid = params[:wfid]
-    es = $engine.process_stack wfid, true
-
-    throw :halt, [ 404, "no process #{wfid}" ] unless es
-
-    rrender :expressions, es
+    rrender :participants, $engine.list_participants
 end
 
-get "/expressions/:wfid/:expid/yaml" do
+get "/participants/:pid" do
 
-    e = find_expression
+    pid, part = get_participant
 
-    header "Content-Type" => "text/plain"
-    e.to_yaml
+    rrender :participant, part
 end
 
-put "/expressions/:wfid/:expid" do
+post "/participants" do
 
-    expression = rparse :expression
+    regex, pclass = rparse :participant
 
-    $engine.update_expression expression
+    $engine.register_participant regex, new_participant(pclass)
 
-    header "Location" => expression.link(request)
-    rrender :expression, find_expression
+    rrender :participants, $engine.list_participants, :status => 201
 end
 
-get "/expressions/:wfid/:expid" do
+delete "/participants/:pid" do
 
-    rrender :expression, find_expression
-end
+    pid, part = get_participant
 
-delete "/expressions/:wfid/:expid" do
-
-    e = find_expression
-
-    $engine.cancel_expression e
+    $engine.unregister_participant pid
 
     response.status = 204
 end
 
 
 #
-# some methods
+# helpers
 
-def find_expression
+helpers do
 
-    wfid = params[:wfid]
-    expid = swapdots params[:expid]
+    def get_participant
 
-    env = false
+        pid = params[:pid].to_i
+        part = $engine.list_participants[pid]
 
-    if expid[-1, 1] == "e"
-        expid = expid[0..-2]
-        env = true
+        throw :halt, [ 404, "no participant at #{pid}" ] unless part
+
+        [ pid, part ]
     end
 
-    es = $engine.process_stack wfid, true
+    def new_participant (pclass)
 
-    es.find { |e| 
+        throw :halt, [ 400, "cannot create participant of class '#{pclass}'" ] \
+            if pclass.match /[\(\) ]/
 
-        (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-
-    } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
+        eval(pclass).new # evil
+    end
 end
 

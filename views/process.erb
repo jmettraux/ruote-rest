@@ -67,7 +67,15 @@
             <span class="process_rep"><%= @process.process_stack.representation.to_json.to_s %></span>
         </div>
 
-    <% else %>
+        <br/>
+
+        <div>
+            <form id="cancel" action="/processes/<%= @process.wfid %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
+            cancel process :
+            <a href="/processes" onclick="document.getElementById('cancel').submit();">DELETE /processes/<%= @process.wfid %></a>
+        </div>
+
+    <% else # not detailed %>
 
         <div>errors : <span class="process_errors_count"><%= @process.errors.size %></div>
 
