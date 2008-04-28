@@ -13,13 +13,39 @@
 
 <br/>
 
+
+<%= some_javascript %>
+
+<script>
+
+    function on_participant_class () {
+
+        sel = document.getElementById('new_participant_class');
+
+        if (sel.value == 'OpenWFE::ActiveStoreParticipant')
+            show('store_name');
+        else
+            hide('store_name');
+    }
+</script>
+
 <form action="/participants" method="POST" enctype="multipart/form-data">
+
     <div>regex : <br/>
     <input type="text" name="regex" /></div>
+
     <div>class : <br/>
-    <select name="class">
+    <select id="new_participant_class" name="class" onchange="on_participant_class()">
         <option>OpenWFE::HashParticipant</option>
+        <option>OpenWFE::Extras::ActiveParticipant</option>
+        <option>OpenWFE::Extras::ActiveStoreParticipant</option>
     </select></div>
-    <div><input type="submit" name="POST /participants" /></div>
+
+    <div id="store_name" style="display: none">store name : <br/>
+    <input type="text" name="store_name" /></div>
+
+    <br/>
+
+    <div><input type="submit" value="POST /participants" /></div>
 </form>
 

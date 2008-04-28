@@ -48,7 +48,7 @@ end
 
 def parse_participant_form (x)
 
-    [ params[:regex], params[:class] ]
+    [ params[:regex], params[:class], params[:store_name] ]
 end
 
 #

@@ -40,7 +40,13 @@
 
 get "/participants" do
 
-    rrender :participants, $engine.participant_list
+    pid, part = get_participant
+
+    if part
+        rrender :participant, part
+    else
+        rrender :participants, $engine.participant_list
+    end
 end
 
 get "/participants/:pid" do
@@ -52,9 +58,9 @@ end
 
 post "/participants" do
 
-    regex, pclass = rparse :participant
+    regex, pclass, store_name = rparse :participant
 
-    $engine.register_participant regex, new_participant(pclass)
+    $engine.register_participant regex, new_participant(pclass, store_name)
 
     rrender :participants, $engine.participant_list, :status => 201
 end
@@ -76,20 +82,48 @@ helpers do
 
     def get_participant
 
-        pid = params[:pid].to_i
-        part = $engine.participant_list[pid]
+        pid = params[:pid]
+        pname = params[:pname]
 
-        throw :halt, [ 404, "no participant at #{pid}" ] unless part
+        if pid
 
-        [ pid, part ]
+            pid = pid.to_i
+            part = $engine.participant_list[pid]
+
+            throw :halt, [ 404, "no participant at #{pid}" ] unless part
+
+            [ pid, part ]
+
+        elsif pname
+
+            part = $engine.get_participant pname
+
+            throw :halt, [ 404, "no participant for name #{pname}" ] unless part
+
+            [ part.index, part ]
+
+        else
+
+            [ nil, nil ]
+        end
     end
 
-    def new_participant (pclass)
+    def new_participant (pclass, store_name)
 
         throw :halt, [ 400, "cannot create participant of class '#{pclass}'" ] \
             if pclass.match /[\(\) ]/
 
-        eval(pclass).new # evil
+        pclass = eval(pclass)
+
+        store_name = store_name.strip if store_name
+        store_name = nil if store_name == ''
+
+        if pclass == OpenWFE::Extras::ActiveStoreParticipant
+            throw :halt, [ 400, "store_name missing" ] unless store_name
+            pclass.new store_name
+        else
+            pclass.new
+        end
     end
 end
 

@@ -1,5 +1,7 @@
 
 require 'openwfe/worklist/storeparticipant'
+require 'openwfe/extras/participants/activeparticipants'
+
 
 #
 # participants initialization goes here
