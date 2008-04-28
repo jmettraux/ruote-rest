@@ -41,12 +41,32 @@
 
         <br/>
 
-        <div>yaml : <a href="<%= @expression.link %>/yaml">GET <%= @expression.link %>/yaml</a></div>
+        <script>
+            function show (eltid) {
+                elt = document.getElementById(eltid);
+                elt.style.display = "block";
+            }
+            function hide (eltid) {
+                elt = document.getElementById(eltid);
+                elt.style.display = "none";
+            }
+        </script>
+
+        <div>yaml : <a href="<%= @expression.link %>/yaml">GET <%= @expression.link %>/yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
+
+        <div id="put_yaml" style="display: none">
+            <br/>
+            <form action="<%= @expression.link %>" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT" />
+                <textarea name="yaml" cols="80" rows="24"><%= @expression.to_yaml %></textarea>
+                <input type="submit" value="PUT <%= @expression.link %>" />
+            </form>
+        </div>
 
         <div>
             <form id="cancel" action="<%= @expression.link %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
             cancel expression :
-            <a href="/expressions/<%= @expression.fei.wfid %>" onclick="document.getElementById('cancel').submit();">DELETE <%= @expression.link %></a>
+            <a href="/expressions/<%= @expression.fei.wfid %>" onclick="return (confirm('DELETE expression ?') && document.getElementById('cancel').submit())">DELETE <%= @expression.link %></a>
         </div>
 
     <% end %>

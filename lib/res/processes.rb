@@ -103,6 +103,8 @@ delete "/processes/:wfid" do
 
     $engine.cancel_process wfid
 
+    sleep 0.350
+
     response.status = 204
 end
 

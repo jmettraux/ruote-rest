@@ -41,8 +41,20 @@
 #
 # IN
 
+#
+# The YAML is the body of the request
+#
 def parse_expression_yaml (yaml)
 
+    YAML.load yaml
+end
+
+#
+# fetches the YAML out of the 'yaml' request param
+#
+def parse_expression_form (x)
+
+    yaml = request.params['yaml']
     YAML.load yaml
 end
 
