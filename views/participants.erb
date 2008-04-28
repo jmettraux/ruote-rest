@@ -1,0 +1,25 @@
+
+<h4>GET /participants</h4>
+
+<% @participants.each do |part| %>
+    <%= render_participant_html part, false %>
+<% end %>
+
+<hr/>
+
+<h4>POST /participants</h4>
+
+<div>adding a participant to the engine in ruote-rest</div>
+
+<br/>
+
+<form action="/participants" method="POST" enctype="multipart/form-data">
+    <div>regex : <br/>
+    <input type="text" name="regex" /></div>
+    <div>class : <br/>
+    <select name="class">
+        <option>OpenWFE::HashParticipant</option>
+    </select></div>
+    <div><input type="submit" name="POST /participants" /></div>
+</form>
+

@@ -40,7 +40,7 @@
 
 get "/participants" do
 
-    rrender :participants, $engine.list_participants
+    rrender :participants, $engine.participant_list
 end
 
 get "/participants/:pid" do
@@ -56,7 +56,7 @@ post "/participants" do
 
     $engine.register_participant regex, new_participant(pclass)
 
-    rrender :participants, $engine.list_participants, :status => 201
+    rrender :participants, $engine.participant_list, :status => 201
 end
 
 delete "/participants/:pid" do
@@ -77,7 +77,7 @@ helpers do
     def get_participant
 
         pid = params[:pid].to_i
-        part = $engine.list_participants[pid]
+        part = $engine.participant_list[pid]
 
         throw :halt, [ 404, "no participant at #{pid}" ] unless part
 

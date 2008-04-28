@@ -52,7 +52,7 @@ require 'participants'
 #
 # misc
 
-require 'request'
+require 'patching'
 require 'misc'
 
 #

@@ -1,0 +1,19 @@
+
+<%
+    regex, part = @participant
+%>
+<div class="participant">
+
+    <div class="participant_link"><a href="/participants/<%= part.index %>">GET /participants/<%= part.index %></a></div>
+
+    <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
+    <div>class : <span class="participant_class"><%= part.class.name %></span></div>
+
+    <div>
+        <form id="remove" action="<%= part.link %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
+        remove :
+        <a href="/participants" onclick="return (confirm('DELETE participant ?') && document.getElementById('remove').submit())">DELETE <%= part.link %></a>
+    </div>
+
+</div>
+

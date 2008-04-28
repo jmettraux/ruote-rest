@@ -46,6 +46,11 @@ def parse_participant_json (json)
     JSON.parse json
 end
 
+def parse_participant_form (x)
+
+    [ params[:regex], params[:class] ]
+end
+
 #
 # OUT
 
@@ -61,6 +66,13 @@ def render_participants_xml (ps)
     end
 end
 
+def render_participants_html (ps)
+
+    @participants = ps
+
+    _erb :participants, :layout => :html
+end
+
 def render_participant_xml (part)
 
     builder do |xml|
@@ -69,11 +81,23 @@ def render_participant_xml (part)
     end
 end
 
+def render_participant_html (part, alone=true)
+
+    @participant = part
+
+    layout = alone ? :html : nil
+
+    _erb :participant, :layout => layout
+end
+
 def _render_participant_xml (xml, part, index=nil)
 
     regex, participant = part
 
-    xml.participant do
+    opts = {}
+    opts[:link] = request.link(:participants, index) if index
+
+    xml.participant opts do
         xml.index(index.to_s) if index
         xml.regex regex.original_string
         xml.tag! :class, participant.class.name

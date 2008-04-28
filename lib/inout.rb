@@ -66,17 +66,15 @@ def rrender (type, object, options={})
 
     method_name = "render_#{type}_#{format}"
 
-    begin
-
-        send method_name, object
-
-    rescue Exception => e
-
-        puts e
-
-        header 'Content-Type' => 'application/xml'
-        send "render_#{type}_xml", object
-    end
+    send method_name, object
+    #begin
+    #    send method_name, object
+    #rescue Exception => e
+    #    puts e
+    #    #puts e.backtrace
+    #    header 'Content-Type' => 'application/xml'
+    #    send "render_#{type}_xml", object
+    #end
 end
 
 #

@@ -56,3 +56,21 @@ def _erb (template, opts={})
     end
 end
 
+helpers do
+
+    def some_javascript
+        <<-EOS
+<script>
+    function show (eltid) {
+        elt = document.getElementById(eltid);
+        elt.style.display = "block";
+    }
+    function hide (eltid) {
+        elt = document.getElementById(eltid);
+        elt.style.display = "none";
+    }
+</script>
+        EOS
+    end
+end
+

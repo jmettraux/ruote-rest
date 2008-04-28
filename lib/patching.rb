@@ -108,3 +108,38 @@ class OpenWFE::FlowExpression
     end
 end
 
+module OpenWFE::Participant
+
+    #
+    # adding an 'index' field
+    #
+    attr_accessor :index
+
+    #
+    # Returns the ruote-rest link for this participant.
+    # If a request is passed, the link will be absolute.
+    #
+    def link (request=nil)
+
+        return request.link(:participants, index) if request
+
+        "/participants/#{index}"
+    end
+end
+
+class OpenWFE::Engine
+
+    #
+    # Making sure that each participant has an index field
+    #
+    def participant_list
+
+        l = []
+        self.list_participants.each_with_index do |part, i|
+            part[1].index = i
+            l << part
+        end
+        l
+    end
+end
+

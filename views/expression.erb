@@ -9,6 +9,8 @@
 
     <% if @detailed %>
 
+        <%= some_javascript %>
+
         <div>process expressions : <a href="/expressions/<%= @expression.fei.wfid %>">GET /expressions/<%= @expression.fei.wfid %></a></div>
 
         <br/>
@@ -40,17 +42,6 @@
         <% end %>
 
         <br/>
-
-        <script>
-            function show (eltid) {
-                elt = document.getElementById(eltid);
-                elt.style.display = "block";
-            }
-            function hide (eltid) {
-                elt = document.getElementById(eltid);
-                elt.style.display = "none";
-            }
-        </script>
 
         <div>yaml : <a href="<%= @expression.link %>/yaml">GET <%= @expression.link %>/yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
 
