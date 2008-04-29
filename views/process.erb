@@ -72,9 +72,21 @@
         <br/>
 
         <div>
-            <form id="cancel" action="/processes/<%= @process.wfid %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
+            <form id="pause_resume" action="/processes/<%= @process.wfid %>" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="PUT"/>
+                <input type="hidden" name="paused" value="<%= ( ! @process.paused?) %>" />
+                <input type="submit" />
+            </form>
+            <%= @process.paused? ? "resume" : "pause" %> process :
+            <a href="/processes/<%= @process.wfid %>" onclick="return (confirm('do it ?') && document.getElementById('pause_resume').submit())">PUT /processes/<%= @process.wfid %></a>
+        </div>
+
+        <div>
+            <form id="cancel" action="/processes/<%= @process.wfid %>" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="_method" value="DELETE"/>
+            </form>
             terminate process :
-            <a href="/processes" onclick="return (confirm('DELETE process ?') && document.getElementById('cancel').submit())">DELETE /processes/<%= @process.wfid %></a>
+            <a href="/processes" onclick="return (confirm('DELETE process ?') && document.getElementById('cancel').submit() && false)">DELETE /processes/<%= @process.wfid %></a>
         </div>
 
     <% else # not detailed %>

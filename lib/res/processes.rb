@@ -79,17 +79,27 @@ get "/processes/:wfid" do
 
     wfid = params[:wfid]
 
-    pstatus = $engine.process_status wfid
-    pstack = $engine.process_stack wfid, true
-
-    class << pstatus
-        attr_accessor :process_stack
-    end
-    pstatus.process_stack = pstack
-
-    throw :halt, [ 404, "no such process" ] unless pstatus
+    pstatus = get_status_and_stack
 
     rrender :process, pstatus
+end
+
+#
+# Updates a process instance (pauses or resumes it).
+#
+put "/processes/:wfid" do
+
+    pstatus = get_process_status
+    process = rparse :process
+
+    if process[:paused]
+        $engine.pause_process pstatus.wfid
+    else
+        p :resume
+        $engine.resume_process pstatus.wfid
+    end
+
+    rrender :process, get_status_and_stack
 end
 
 #
@@ -104,5 +114,33 @@ delete "/processes/:wfid" do
     sleep 0.350
 
     response.status = 204
+end
+
+
+#
+# well, helpers...
+
+helpers do
+
+    def get_process_status
+
+        wfid = params[:wfid]
+
+        $engine.process_status(wfid) ||
+            throw(:halt, [ 404, "no process '#{wfid}'" ])
+    end
+
+    def get_status_and_stack
+
+        pstatus = get_process_status
+
+        pstack = $engine.process_stack pstatus.wfid, true
+        class << pstatus
+            attr_accessor :process_stack
+        end
+        pstatus.process_stack = pstack
+
+        pstatus
+    end
 end
 

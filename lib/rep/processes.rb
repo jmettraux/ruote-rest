@@ -147,6 +147,26 @@ helpers do
         end
     end
 
+    #
+    # Receiving a process representation in XML
+    #
+    def parse_process_xml (xml)
+
+        elt = REXML::Document.new(xml).root
+        elt = elt.owfe_first_elt_child 'paused'
+
+        {
+            :paused => (elt.text.downcase == 'true')
+        }
+    end
+
+    def parse_process_form (x)
+
+        {
+            :paused => (request.params['paused'] == 'true')
+        }
+    end
+
     # json
 
     #

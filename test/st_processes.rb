@@ -96,4 +96,47 @@ class StProcessesTest < Test::Unit::TestCase
 
         assert_equal 404, @response.status
     end
+
+    #
+    # pause / resume
+    #
+    def test_2
+
+        $engine.register_participant :alpha, OpenWFE::HashParticipant
+
+        li = OpenWFE::LaunchItem.new <<-EOS
+            class TestStProcesses < OpenWFE::ProcessDefinition
+                alpha
+            end
+        EOS
+
+        post_it(
+            "/processes", 
+            OpenWFE::Xml.launchitem_to_xml(li, 2),
+            { "CONTENT_TYPE" => "application/xml" })
+
+        fei = OpenWFE::Xml.fei_from_xml @response.body
+
+        sleep 0.350
+
+        get_it "/processes/#{fei.wfid}"
+
+        put_it(
+            "/processes/#{fei.wfid}",
+            "<process><paused>true</paused></process>",
+            { "CONTENT_TYPE" => "application/xml" })
+
+        assert_not_nil @response.body.index('<paused>true</paused>')
+
+        put_it(
+            "/processes/#{fei.wfid}",
+            "<process><paused>false</paused></process>",
+            { "CONTENT_TYPE" => "application/xml" })
+
+        assert_not_nil @response.body.index('<paused>false</paused>')
+
+        $engine.cancel_process fei
+
+        sleep 0.350
+    end
 end
