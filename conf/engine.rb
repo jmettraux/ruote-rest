@@ -1,11 +1,17 @@
 
 require 'openwfe/engine'
+require 'openwfe/engine/file_persisted_engine'
 require 'openwfe/storage/yamlcustom'
 require 'openwfe/util/xml'
+
+#require 'openwfe/extras/engine/db_persisted_engine'
+
 
 configure do
 
     ac = {}
+
+    ac[:work_directory] = "work_#{Sinatra.application.options.env}"
 
     ac[:remote_definitions_allowed] = true
         #
@@ -17,9 +23,26 @@ configure do
         #
         # (this is a dangerous, you really have to trust the clients)
 
-    # further configuration goes here
+    #
+    # instantiating the workflow / BPM engine
 
-    $engine = OpenWFE::Engine.new ac
-    #$engine = OpenWFE::FilePersistedEngine.new ac
+    #engine_class = OpenWFE::Engine
+        #
+        # a transient, in-memory engine
+
+    #engine_class = OpenWFE::FilePersistedEngine
+    engine_class = OpenWFE::CachedFilePersistedEngine
+        #
+        # file based persistence
+
+    #engine_class = OpenWFE::Extras::CachedDbPersistedEngine
+        #
+        # database persistence for the engine
+
+    engine_class = OpenWFE::Engine if Sinatra.application.options.env == :test
+        #
+        # for tests, stick with a transient engine
+
+    $engine = engine_class.new ac
 end
 

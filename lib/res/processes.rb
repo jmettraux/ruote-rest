@@ -95,7 +95,6 @@ put "/processes/:wfid" do
     if process[:paused]
         $engine.pause_process pstatus.wfid
     else
-        p :resume
         $engine.resume_process pstatus.wfid
     end
 

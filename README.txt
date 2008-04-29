@@ -60,9 +60,10 @@ GET /expressions/{wfid}/{expid}
     returns one expression
 
 
-GET /expressions/{wfid}/{expid}/yaml
+GET /expressions/{wfid}/{expid}?format=yaml
 
     returns the YAML representation of an expression
+    (note that using the Accept header is the best way to do that)
 
 
 PUT /expressions/{wfid}/{expid}
