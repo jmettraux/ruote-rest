@@ -2,6 +2,9 @@
 <div class="expression">
 
     <div class="expression_link"><a href="<%= @expression.link %>">GET <%= @expression.link %></a></div>
+
+    <%= @detailed ? "<br/>" : "" %>
+
     <div>fei : <span class="expression_fei"><%= @expression.fei.to_s %></div>
     <div>class : <span class="expression_class"><%= @expression.class.name %></div>
     <div>name : <span class="expression_name"><%= @expression.fei.expname %></div>

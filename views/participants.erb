@@ -1,6 +1,10 @@
 
 <h4>GET /participants</h4>
 
+<div class="explanation">listing the participants registered in the engine.<br/>
+Various implementations are available.
+</div>
+
 <% @participants.each do |part| %>
     <%= render_participant_html part, false %>
 <% end %>
@@ -9,7 +13,7 @@
 
 <h4>POST /participants</h4>
 
-<div>adding a participant to the engine in ruote-rest</div>
+<div class="explanation">adding a participant to the engine in ruote-rest</div>
 
 <br/>
 
