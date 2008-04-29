@@ -96,11 +96,14 @@ helpers do
 
         elsif pname
 
-            part = $engine.get_participant pname
+            #part = $engine.get_participant pname
+            part = $engine.participant_list.find do |r, p|
+                pname.match r
+            end
 
             throw :halt, [ 404, "no participant for name #{pname}" ] unless part
 
-            [ part.index, part ]
+            [ part[1].index, part ]
 
         else
 

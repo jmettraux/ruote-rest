@@ -102,7 +102,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
         get_it "/expressions/#{fei.wfid}/0_0?format=yaml"
 
-        assert_equal "text/plain", @response["Content-Type"]
+        assert_equal "application/yaml", @response["Content-Type"]
 
         exp = YAML.load @response.body
         assert_kind_of OpenWFE::FlowExpression, exp
@@ -118,7 +118,10 @@ class StExpressionsTest < Test::Unit::TestCase
             "http://example.org/expressions/#{fei.wfid}/0_0", 
             @response["Location"])
 
-        get_it "/expressions/#{fei.wfid}/0_0/yaml"
+        get_it(
+            "/expressions/#{fei.wfid}/0_0",
+            :env => { 'HTTP_ACCEPT' => "application/yaml" })
+
         exp = YAML.load @response.body
 
         assert_equal :surf, exp.attributes[:toto]
