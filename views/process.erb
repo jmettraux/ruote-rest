@@ -60,6 +60,7 @@
                     <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
                 </div>
             <% end %>
+            <%= @process.errors.size == 0 ? "none" : "" %>
         </div>
 
         <br/>

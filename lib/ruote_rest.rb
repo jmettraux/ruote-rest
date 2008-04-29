@@ -46,6 +46,7 @@ require 'json'
 # conf
 
 load 'auth.rb'
+require 'db'
 require 'engine'
 require 'participants'
 

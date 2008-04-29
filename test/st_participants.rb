@@ -16,9 +16,12 @@ require 'sinatra'
 require 'sinatra/test/unit'
 
 require 'ruote_rest.rb'
+require 'testbase'
 
 
 class StParticipantsTest < Test::Unit::TestCase
+
+    include TestBase
 
     include Sinatra::Builder
     include Sinatra::RenderingHelpers
@@ -41,19 +44,19 @@ class StParticipantsTest < Test::Unit::TestCase
 
         get_it "/participants"
 
-        assert_not_nil @response.body.index(' count="1"')
+        assert_not_nil @response.body.index(' count="3"')
 
-        get_it "/participants/0"
+        get_it "/participants/2"
 
         assert_not_nil @response.body.index('>toto<')
 
-        delete_it "/participants/0"
+        delete_it "/participants/2"
 
         assert_equal 204, @response.status
 
         get_it "/participants"
 
-        assert_not_nil @response.body.index(' count="0"')
+        assert_not_nil @response.body.index(' count="2"')
     end
 
     def test_1
@@ -68,7 +71,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
         get_it "/participants"
 
-        assert_not_nil @response.body.index(' count="1"')
+        assert_not_nil @response.body.index(' count="3"')
 
         get_it "/participants?pname=toto"
 

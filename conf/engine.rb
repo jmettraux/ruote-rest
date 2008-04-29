@@ -39,10 +39,6 @@ configure do
         #
         # database persistence for the engine
 
-    engine_class = OpenWFE::Engine if Sinatra.application.options.env == :test
-        #
-        # for tests, stick with a transient engine
-
     $engine = engine_class.new ac
 end
 

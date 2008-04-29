@@ -13,9 +13,12 @@ require 'sinatra'
 require 'sinatra/test/unit'
 
 require 'ruote_rest.rb'
+require 'testbase'
 
 
 class StProcessesTest < Test::Unit::TestCase
+
+    include TestBase
 
     include Sinatra::Builder
     include Sinatra::RenderingHelpers

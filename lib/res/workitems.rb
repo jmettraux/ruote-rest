@@ -38,65 +38,23 @@
 #
 
 
-get "/expressions/:wfid" do
+get "/workitems" do
 
-    wfid = params[:wfid]
-    es = $engine.process_stack wfid, true
-
-    throw :halt, [ 404, "no process #{wfid}" ] unless es
-
-    rrender :expressions, es
+    rrender :workitems, get_workitems
 end
 
-put "/expressions/:wfid/:expid" do
+get "/workitems/:wid" do
 
-    expression = rparse :expression
-
-    $engine.update_expression expression
-
-    header "Location" => expression.link(request)
-    rrender :expression, find_expression
-end
-
-get "/expressions/:wfid/:expid" do
-
-    rrender :expression, find_expression
-end
-
-delete "/expressions/:wfid/:expid" do
-
-    e = find_expression
-
-    $engine.cancel_expression e
-
-    response.status = 204
+    nil
 end
 
 
 #
-# some helper methods
+# helpers
 
 helpers do
 
-    def find_expression
-
-        wfid = params[:wfid]
-        expid = swapdots params[:expid]
-
-        env = false
-
-        if expid[-1, 1] == "e"
-            expid = expid[0..-2]
-            env = true
-        end
-
-        es = $engine.process_stack wfid, true
-
-        es.find { |e| 
-
-            (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-
-        } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
+    def get_workitems
     end
 end
 

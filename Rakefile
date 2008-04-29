@@ -15,7 +15,7 @@ RUOTE_LIB = "~/ruote/lib"
 #
 # tasks
 
-CLEAN.include("work", "log")
+CLEAN.include("work_test", "work_development", "log")
 
 #task :default => [ :clean, :repackage ]
 
@@ -46,7 +46,12 @@ task :recreate_mysql_db do
     # (just before Shinagawa)
     #
 
-    db = "ruote_rest"
+    stage = ENV['stage']
+
+    stage = 'development' \
+        unless [ 'test', 'development', 'production' ].include?(stage)
+
+    db = "ruoterest_#{stage}"
     db_admin_user = "root"
 
     # drop
@@ -67,7 +72,7 @@ task :recreate_mysql_db do
 
     ActiveRecord::Base.establish_connection(
         :adapter => "mysql",
-        :database => "ruote_rest",
+        :database => db,
         :encoding => "utf8")
     
     $:.unshift RUOTE_LIB
