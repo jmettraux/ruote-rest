@@ -11,6 +11,8 @@
 
         <%= some_javascript %>
 
+        <div>process : <a href="/processes/<%= @expression.fei.wfid %>">GET /processes/<%= @expression.fei.wfid %></a></div>
+
         <div>process expressions : <a href="/expressions/<%= @expression.fei.wfid %>">GET /expressions/<%= @expression.fei.wfid %></a></div>
 
         <br/>
@@ -56,7 +58,7 @@
 
         <div>
             <form id="cancel" action="<%= @expression.link %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
-            cancel expression :
+            terminate expression :
             <a href="/expressions/<%= @expression.fei.wfid %>" onclick="return (confirm('DELETE expression ?') && document.getElementById('cancel').submit())">DELETE <%= @expression.link %></a>
         </div>
 

@@ -38,110 +38,123 @@
 #
 
 
+helpers do
+
 #
 # PROCESSES
 
-def render_processes_xml (ps)
+    def render_processes_xml (ps)
 
-    builder do |xml|
-        xml.instruct!
-        xml.processes :count => ps.size do
-            ps.each do |fei, process_status|
-                _render_process_xml xml, process_status
+        builder do |xml|
+            xml.instruct!
+            xml.processes :count => ps.size do
+                ps.each do |fei, process_status|
+                    _render_process_xml xml, process_status
+                end
             end
         end
     end
-end
 
-def render_processes_html (processes)
+    def render_processes_html (processes)
 
-    @processes = processes
+        @processes = processes
 
-    #erb :processes, :locals => { "ps" => processes }
-        #
-        # sinatra 0.2.2 : locals seem not working
+        #erb :processes, :locals => { "ps" => processes }
+            #
+            # sinatra 0.2.2 : locals seem not working
 
-    _erb :processes, :layout => :html
-end
+        _erb :processes, :layout => :html
+    end
 
 #
 # PROCESS
 
 # html
 
-def render_process_html (process, detailed=true)
+    def render_process_html (process, detailed=true)
 
-    @process = process
-    @detailed = detailed
+        @process = process
+        @detailed = detailed
 
-    _erb :process, :layout => detailed ? :html : false
-end
+        _erb :process, :layout => detailed ? :html : false
+    end
 
 # xml
 
-def render_process_xml (p)
+    def render_process_xml (p)
 
-    builder do |xml|
-        xml.instruct!
-        _render_process_xml xml, p, true
-    end
-end
-
-def _render_process_xml (xml, p, detailed=false)
-
-    xml.process :link => request.link(:processes, p.wfid) do
-
-        xml.wfid p.wfid
-        xml.wfname p.wfname
-        xml.wfrevision p.wfrevision
-
-        xml.launch_time p.launch_time
-        xml.paused p.paused
-
-        xml.tags do
-            p.tags.each { |t| xml.tag t }
+        builder do |xml|
+            xml.instruct!
+            _render_process_xml xml, p, true
         end
+    end
 
-        xml.branches p.branches
+    def _render_process_xml (xml, p, detailed=false)
 
-        if detailed
+        xml.process :link => request.link(:processes, p.wfid) do
 
-            hash_to_xml xml, :variables, p, :variables
+            xml.wfid p.wfid
+            xml.wfname p.wfname
+            xml.wfrevision p.wfrevision
 
-            xml.active_expressions :link => request.link(:expressions, p.wfid) do
+            xml.launch_time p.launch_time
+            xml.paused p.paused
 
-                p.expressions.each do |fexp|
-
-                    fei = fexp.fei
-
-                    xml.expression(
-                        "#{fei.to_s}", 
-                        :short => fei.to_web_s,
-                        :link => fei.link(request))
-                end
+            xml.tags do
+                p.tags.each { |t| xml.tag t }
             end
 
-            xml.errors :count => p.errors.size do
-                p.errors.each do |k, v|
-                    xml.error do
-                        #xml.stacktrace do
-                        #    xml.cdata! "\n#{v.stacktrace}\n"
-                        #end
-                        xml.fei v.fei.to_s
-                        xml.message v.stacktrace.split("\n")[0]
+            xml.branches p.branches
+
+            if detailed
+
+                hash_to_xml xml, :variables, p, :variables
+
+                xml.active_expressions :link => request.link(:expressions, p.wfid) do
+
+                    p.expressions.each do |fexp|
+
+                        fei = fexp.fei
+
+                        xml.expression(
+                            "#{fei.to_s}", 
+                            :short => fei.to_web_s,
+                            :link => fei.link(request))
                     end
                 end
+
+                xml.errors :count => p.errors.size do
+                    p.errors.each do |k, v|
+                        xml.error do
+                            #xml.stacktrace do
+                            #    xml.cdata! "\n#{v.stacktrace}\n"
+                            #end
+                            xml.fei v.fei.to_s
+                            xml.message v.stacktrace.split("\n")[0]
+                        end
+                    end
+                end
+
+                xml.representation(
+                    p.process_stack.representation.to_json.to_s,
+                    :link => request.link(:processes, p.wfid, :representation))
+
+            else
+
+                xml.errors :count => p.errors.size
+
             end
-
-            xml.representation(
-                p.process_stack.representation.to_json.to_s,
-                :link => request.link(:processes, p.wfid, :representation))
-
-        else
-
-            xml.errors :count => p.errors.size
-
         end
     end
-end
 
+    # json
+
+    #
+    # Renders the process definition tree (potientally updated) as some JSON
+    #
+    def render_process_representation_json (pstack)
+
+        pstack.representation.to_json.to_s
+    end
+
+end

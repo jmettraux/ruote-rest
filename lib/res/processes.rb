@@ -69,9 +69,7 @@ get "/processes/:wfid/representation" do
 
     throw :halt, [ 404, "no such process" ] unless pstack
 
-    header "Content-Type" => "application/json"
-
-    pstack.representation.to_json.to_s
+    rrender :process_representation, pstack, :format => 'json'
 end
 
 #

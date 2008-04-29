@@ -57,7 +57,10 @@ end
 #
 def rrender (type, object, options={})
 
-    format, ctype = determine_out_format
+    format, ctype = determine_out_format options
+
+    ctype = "text/plain" if params[:plain]
+        # useful for debugging
 
     response.status = options.delete(:status) || 200
 
@@ -108,9 +111,9 @@ FORMATS = {
 # determines the format the client is expecting by reading the "Accept"
 # request header
 #
-def determine_out_format
+def determine_out_format (options)
 
-    f = params["format"]
+    f = options[:format] || params["format"]
 
     return FORMATS[:xml] if f == "xml"
     return FORMATS[:json] if f == "json"

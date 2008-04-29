@@ -16,7 +16,7 @@
         <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
     </div>
     <div>representation (json) : 
-        <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a>
+        <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)
     </div>
 
     <% if @detailed %>
@@ -71,7 +71,7 @@
 
         <div>
             <form id="cancel" action="/processes/<%= @process.wfid %>" method="post"><input type="hidden" name="_method" value="DELETE"/></form>
-            cancel process :
+            terminate process :
             <a href="/processes" onclick="return (confirm('DELETE process ?') && document.getElementById('cancel').submit())">DELETE /processes/<%= @process.wfid %></a>
         </div>
 
