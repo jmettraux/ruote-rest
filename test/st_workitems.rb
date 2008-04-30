@@ -28,6 +28,76 @@ class StWorkitemsTest < Test::Unit::TestCase
     
 
     def test_0
+
+        $engine.launch <<-EOS
+            class Test0 < OpenWFE::ProcessDefinition
+                sequence do
+                    alpha
+                    bravo
+                end
+            end
+        EOS
+
+        sleep 0.200
+
+        assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
+
+        get_it '/workitems'
+
+        #p @response.status
+        #puts @response.body
+
+        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+
+        assert_equal 1, workitems.size
+
+        get_it workitems.first._uri
+
+        workitem = OpenWFE::Xml.workitem_from_xml @response.body
+
+        assert_equal workitems.first._uri, workitem._uri
+
+        #
+        # save workitem
+
+        workitem.owner = "toto"
+
+        put_it(
+            workitem._uri,
+            OpenWFE::Xml.workitem_to_xml(workitem),
+            { "CONTENT_TYPE" => "application/xml" })
+        
+        get_it workitem._uri
+
+        workitem = OpenWFE::Xml.workitem_from_xml @response.body
+
+        assert_equal "toto", workitem.owner
+
+        #
+        # proceed workitem
+
+        workitem._state = "proceeded"
+
+        put_it(
+            workitem._uri,
+            OpenWFE::Xml.workitem_to_xml(workitem),
+            { "CONTENT_TYPE" => "application/xml" })
+
+        sleep 0.350
+
+        get_it workitem._uri
+
+        assert_equal 404, @response.status
+
+        #
+        # proceeded ?
+
+        get_it '/workitems'
+
+        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+
+        assert_equal 1, workitems.size
+        assert_equal "bravo", workitems.first.participant_name
     end
 
 end

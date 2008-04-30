@@ -21,6 +21,17 @@ Depends on Sinatra 0.2.2
 
 == interface
 
+By default, XML representations will be returned. The 'Accept' header is used to determine which representation the client expects. 
+
+The 'format' query parameter can be used to override that, like in
+
+     GET /processes?format=json
+
+For debugging purposes, you can force to a text/plain content type with 'plain' :
+
+    GET /workitems?format=json&plain=true
+
+
 === /processes
 
 GET /processes
@@ -78,6 +89,16 @@ DELETE /expressions/{wfid}/{expid}
 
 === /workitems
 
-GET /workitems.xml?wfid={wfid}
-GET /workitems/{wfid}/{expid} .... (refine that)
+GET /workitems
+
+    lists all the workitems 
+
+GET /workitems/{wid}
+
+    returns a workitem
+
+PUT /workitems/{wid}
+
+    updates a workitem
+    If the workitem field '_state' is set to 'proceeded' the workitem will resume its travel in its business process
 

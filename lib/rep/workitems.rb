@@ -38,81 +38,39 @@
 #
 
 
-get "/workitems" do
+#
+# IN
 
-    rrender :workitems, find_workitems
-end
+def parse_workitem_xml (xml)
 
-get "/workitems/:wid" do
-
-    rrender :workitem, find_workitem
-end
-
-put "/workitems/:wid" do
-
-    wi = find_workitem
-
-    owi = rparse :workitem
-
-    owi.attributes.delete '_uri'
-    state = owi.attributes.delete '_state'
-
-    if state == 'proceeded'
-
-        $engine.reply owi
-        wi.destroy
-
-        header 'Location' => request.link(:workitems)
-        rrender :workitems, find_workitems
-    else
-
-        wi.replace_fields owi.attributes
-        rrender :workitem, wi
-    end
+    OpenWFE::Xml.workitem_from_xml xml
 end
 
 
 #
-# helpers
+# OUT
 
-helpers do
+def render_workitems_xml (wis)
 
-    def find_workitem
-
-        wid = params[:wid]
-
-        begin
-            OpenWFE::Extras::Workitem.find wid
-        rescue Exception => e
-            throw :halt, [ 404, "no workitem with id #{wid}" ]
+    builder do |xml|
+        xml.instruct!
+        xml.workitems :count => wis.size do
+            wis.each do |wi|
+                owi = wi.as_owfe_workitem
+                owi._uri = request.link(:workitems, wi.id)
+                OpenWFE::Xml._workitem_to_xml xml, owi
+            end
         end
     end
+end
 
-    def find_workitems
+def render_workitem_xml (wi)
 
-        #pname = params[:pname]
-        sn = get_store_names
-        q = params[:q]
-
-        if q
-            OpenWFE::Extras::Workitem.search q, sn
-        elsif sn
-            OpenWFE::Extras::Workitem.find_in_stores sn
-        else
-            OpenWFE::Extras::Workitem.find :all
-        end
-    end
-
-    #
-    # Returns an array of store names or nil, if the parameter 'store'
-    # is not passed.
-    # Expects a comma separated list of store names
-    #
-    def get_store_names
-
-        sname = params[:store]
-        return nil unless sname
-        sname.split ","
+    builder do |xml|
+        xml.instruct!
+        owi = wi.as_owfe_workitem
+        owi._uri = request.link(:workitems, wi.id)
+        OpenWFE::Xml._workitem_to_xml xml, owi
     end
 end
 

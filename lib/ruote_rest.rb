@@ -68,6 +68,7 @@ load 'rep/launchitems.rb'
 load 'rep/processes.rb'
 load 'rep/expressions.rb'
 load 'rep/participants.rb'
+load 'rep/workitems.rb'
 
 #
 # resources
@@ -75,4 +76,5 @@ load 'rep/participants.rb'
 load 'res/processes.rb'
 load 'res/expressions.rb'
 load 'res/participants.rb'
+load 'res/workitems.rb'
 
