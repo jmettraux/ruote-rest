@@ -54,18 +54,18 @@ task :recreate_mysql_db do
         unless [ 'test', 'development', 'production' ].include?(stage)
 
     db = "ruoterest_#{stage}"
-    db_admin_user = "root"
+    dbadmin = ENV['dbadmin'] || "root"
 
     # drop
 
     begin
-        sh 'mysql -u '+db_admin_user+' -p -e "drop database '+db+'"'
+        sh 'mysql -u '+dbadmin+' -p -e "drop database '+db+'"'
     rescue Exception => e
     end
 
     # create
 
-    sh 'mysql -u '+db_admin_user+' -p -e "create database '+db+' CHARACTER SET utf8 COLLATE utf8_general_ci"'
+    sh 'mysql -u '+dbadmin+' -p -e "create database '+db+' CHARACTER SET utf8 COLLATE utf8_general_ci"'
 
     # run the migrations
 
@@ -75,6 +75,8 @@ task :recreate_mysql_db do
     ActiveRecord::Base.establish_connection(
         :adapter => "mysql",
         :database => db,
+        #:username => 'toto',
+        #:password => 'secret',
         :encoding => "utf8")
     
     $:.unshift RUOTE_LIB

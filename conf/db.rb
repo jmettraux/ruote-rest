@@ -9,6 +9,8 @@ configure do
     ActiveRecord::Base.establish_connection(
         :adapter => "mysql",
         :database => db,
+        #:username => 'toto',
+        #:password => 'secret',
         :encoding => "utf8")
 end
 

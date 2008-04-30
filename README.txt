@@ -19,12 +19,16 @@ To prepare the development database
 
     rake recreate_mysql_db
 
-Expects a mysql db with a 'root' admin account that has a blank password. Feel free to modify the Rakefile according to your db/preferences.
+Expects a mysql db with a 'root' admin account with sufficient access rights. It will create a database named "ruoterest_development".
 
 (
 To prepare the test database
 
     rake recreate_mysql_db stage=test
+
+To prepare the dev database with the admin 'toto'
+
+    rake recreate_mysql_db dbadmin=toto
 )
 
 
@@ -124,4 +128,14 @@ PUT /workitems/{wid}
 
     updates a workitem
     If the workitem field '_state' is set to 'proceeded' the workitem will resume its travel in its business process
+
+
+== license
+
+BSD
+
+
+== feedback
+
+http://groups.google.com/group/openwferu-users
 
