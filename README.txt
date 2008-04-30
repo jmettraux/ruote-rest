@@ -8,8 +8,24 @@ A RESTful instance of OpenWFEru (ruote) powered by Sinatra (http://sinatrarb.com
 
 To get Ruote and Ruote-Rest :
 
-    git clone git://github.com/jmettraux/ruote.git
     git clone git://github.com/jmettraux/ruote-rest.git
+
+Then
+
+    cd ruote-rest 
+    rake install_workflow_engine
+
+To prepare the development database
+
+    rake recreate_mysql_db
+
+Expects a mysql db with a 'root' admin account that has a blank password. Feel free to modify the Rakefile according to your db/preferences.
+
+(
+To prepare the test database
+
+    rake recreate_mysql_db stage=test
+)
 
 
 == dependencies

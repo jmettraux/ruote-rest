@@ -8,6 +8,8 @@ require 'rake/clean'
 #require 'rake/rdoctask'
 require 'rake/testtask'
 
+load 'lib/tasks/install_workflow_engine.rake'
+
 
 RUOTE_LIB = "~/ruote/lib"
 #SINATRA_LIB = "~/sinatra/lib"
@@ -15,7 +17,7 @@ RUOTE_LIB = "~/ruote/lib"
 #
 # tasks
 
-CLEAN.include("work_test", "work_development", "log")
+CLEAN.include 'work_test', 'work_development', 'log', 'tmp'
 
 #task :default => [ :clean, :repackage ]
 
