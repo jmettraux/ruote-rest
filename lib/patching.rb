@@ -143,3 +143,16 @@ class OpenWFE::Engine
     end
 end
 
+class OpenWFE::InFlowWorkItem
+
+    #
+    # Returns the 'ruote-rest' link for this workitem
+    #
+    def link (request=nil)
+
+        return request.link(:workitems, db_id) if request
+
+        "/workitems/#{db_id}"
+    end
+end
+

@@ -29,7 +29,7 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     def test_0
 
-        $engine.launch <<-EOS
+        fei = $engine.launch <<-EOS
             class Test0 < OpenWFE::ProcessDefinition
                 sequence do
                     alpha
@@ -56,6 +56,21 @@ class StWorkitemsTest < Test::Unit::TestCase
         workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
         assert_equal workitems.first._uri, workitem._uri
+
+        #
+        # get /workitems?wfid=x
+
+        get_it "/workitems?wfid=#{fei.wfid}"
+
+        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+
+        assert_equal 1, workitems.size
+
+        get_it "/workitems?wfid=#{fei.wfid}nada"
+
+        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+
+        assert_equal 0, workitems.size
 
         #
         # save workitem

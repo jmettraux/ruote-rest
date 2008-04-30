@@ -59,13 +59,13 @@ def parse_launchitem_form (x)
     fields = JSON.parse(request.params['fields'])
 
     if pdef.strip != ""
-        li = OpenWFE::LaunchItem.new url
+        li = OpenWFE::LaunchItem.new pdef
     else
         li = OpenWFE::LaunchItem.new
         li.workflow_definition_url = url
     end
 
-    li.fields = fields
+    li.attributes.merge! fields
 
     li
 end

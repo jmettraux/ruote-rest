@@ -1,0 +1,9 @@
+
+<h4>GET /workitems</h4>
+
+<div class="explanation">the workitems waiting for [human] intervention</div>
+
+<% @workitems.each do |wi| %>
+    <%= render_workitem_html wi, false %>
+<% end %>
+

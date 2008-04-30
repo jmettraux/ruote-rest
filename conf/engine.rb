@@ -9,9 +9,14 @@ require 'openwfe/util/xml'
 
 configure do
 
+    ev = Sinatra.application.options.env
+
     ac = {}
 
-    ac[:work_directory] = "work_#{Sinatra.application.options.env}"
+    ac[:work_directory] = "work_#{ev}"
+
+    ac[:logger] = Logger.new "logs/openwferu_#{ev}.log", 10, 1024000
+    ac[:logger].level = (ev == 'production') ? Logger::INFO : Logger::DEBUG
 
     ac[:remote_definitions_allowed] = true
         #

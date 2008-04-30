@@ -1,3 +1,4 @@
+
 <h4>GET /processes</h4>
 
 <div class="explanation">listing all the processes currently running</div>
@@ -19,18 +20,23 @@
         <div><input 
             name="pdef_url" 
             type="text" 
-            value="public/process_definitions/sequence0.rb" 
             size="50"
         /> (url)</div>
+            <!--value="public/process_definitions/sequence0.rb" -->
         or
-        <div><textarea name="pdef"></textarea> (definition)</div>
+        <div><textarea name="pdef" cols="40" rows="7">class Test0 &lt; OpenWFE::ProcessDefinition
+    sequence do
+        participant ref="alpha"
+        participant ref="bravo"
+    end
+end</textarea> (definition)</div>
     </div>
 
     <br/>
     <br/>
 
     <div>initial payload :<br/>
-        <div><textarea name="fields">{ "key0": "value0", "key1": "value1" }</textarea> (json)</div>
+        <div><textarea name="fields" cols="40" rows="4">{ "key0": "value0", "key1": "value1" }</textarea> (json)</div>
     </div>
     <div><input type="submit" name="launch" value="launch"></div>
 </form>

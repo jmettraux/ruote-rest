@@ -1,0 +1,33 @@
+
+<div class="workitem">
+
+    <div class="workitem_link"><a href="<%= @workitem.link %>">GET <%= @workitem.link %></a></div>
+
+    <%= @detailed ? "<br/>" : "" %>
+
+    <div>participant : <span class="workitem_participant"><%= @workitem.participant_name %></span></div>
+    <div>dispatch time : <span class="workitem_dispatch_time"><%= display_time @workitem, :dispatch_time %></span></div>
+
+    <% if @detailed %>
+
+        <div>last modified : <span class="workitem_last_modified"><%= display_time @workitem, :last_modified %></span></div>
+
+        <br/>
+
+        <form action="<%= @workitem.link %>" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="_method" value="PUT" />
+
+            attributes :<br/>
+            <textarea name="attributes" cols="80" rows="24"><%= @workitem.attributes.to_json.to_s %></textarea>(json)<br/>
+
+            proceed : <input type="checkbox" name="proceed" value="proceed" /><br/>
+
+            <br/>
+
+            <input type="submit" value="PUT <%= @workitem.link %>" />
+        </form>
+
+    <% end %>
+
+</div>
+

@@ -97,6 +97,10 @@ GET /workitems/{wid}
 
     returns a workitem
 
+GET /workitems?wfid=x
+
+    returns all the workitems belonging to a [business] process instance
+
 PUT /workitems/{wid}
 
     updates a workitem

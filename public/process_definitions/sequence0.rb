@@ -1,8 +1,8 @@
 
 class Test0 < OpenWFE::ProcessDefinition
     sequence do
-        alpha
         bravo
+        alpha
     end
 end
 

@@ -38,39 +38,74 @@
 #
 
 
-#
-# IN
+helpers do
 
-def parse_workitem_xml (xml)
+    #
+    # IN
 
-    OpenWFE::Xml.workitem_from_xml xml
-end
+    def parse_workitem_xml (xml)
+
+        OpenWFE::Xml.workitem_from_xml xml
+    end
+
+    def parse_workitem_form (x)
+
+        wi = OpenWFE::InFlowWorkItem.new
+
+        wi.attributes = JSON.parse(params[:attributes])
+
+        wi._state = 'proceeded' if params[:proceed] == 'proceed'
+
+        wi
+    end
 
 
-#
-# OUT
+    #
+    # OUT
 
-def render_workitems_xml (wis)
+    def render_workitems_xml (wis)
 
-    builder do |xml|
-        xml.instruct!
-        xml.workitems :count => wis.size do
-            wis.each do |wi|
-                owi = wi.as_owfe_workitem
-                owi._uri = request.link(:workitems, wi.id)
-                OpenWFE::Xml._workitem_to_xml xml, owi
+        builder do |xml|
+            xml.instruct!
+            xml.workitems :count => wis.size do
+                wis.each do |wi|
+                    owi = wi.as_owfe_workitem
+                    owi._uri = request.link(:workitems, wi.id)
+                    OpenWFE::Xml._workitem_to_xml xml, owi
+                end
             end
         end
     end
-end
 
-def render_workitem_xml (wi)
+    def render_workitem_xml (wi)
 
-    builder do |xml|
-        xml.instruct!
-        owi = wi.as_owfe_workitem
-        owi._uri = request.link(:workitems, wi.id)
-        OpenWFE::Xml._workitem_to_xml xml, owi
+        builder do |xml|
+            xml.instruct!
+            owi = wi.as_owfe_workitem
+            owi._uri = request.link(:workitems, wi.id)
+            OpenWFE::Xml._workitem_to_xml xml, owi
+        end
     end
+
+    def render_workitems_html (wis)
+
+        @workitems = wis.sort_by { |wi| wi.participant_name }
+        @workitems = @workitems.collect { |wi| wi.as_owfe_workitem }
+
+        _erb :workitems, :layout => :html
+    end
+
+    def render_workitem_html (wi, detailed=true)
+
+        @workitem = wi
+        @workitem = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::Workitem)
+
+        @detailed = detailed
+
+        layout = @detailed ? :html : nil
+
+        _erb :workitem, :layout => layout
+    end
+
 end
 
