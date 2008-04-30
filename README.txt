@@ -28,11 +28,14 @@ To prepare the test database
 )
 
 
-== dependencies
+== starting it
 
-Depends on Sinatra 0.2.2
+    bin/start
 
-    [sudo] gem install -y sinatra
+
+Then head to
+
+    http://localhost:4567/processes
 
 
 == interface

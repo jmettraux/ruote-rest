@@ -11,6 +11,8 @@ configure do
 
     ev = Sinatra.application.options.env
 
+    FileUtils.mkdir 'logs'
+
     ac = {}
 
     ac[:work_directory] = "work_#{ev}"
