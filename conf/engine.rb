@@ -11,7 +11,7 @@ configure do
 
     ev = Sinatra.application.options.env
 
-    FileUtils.mkdir 'logs'
+    FileUtils.mkdir 'logs' unless File.exist?('logs')
 
     ac = {}
 
