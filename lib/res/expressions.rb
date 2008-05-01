@@ -69,7 +69,9 @@ delete "/expressions/:wfid/:expid" do
 
     $engine.cancel_expression e
 
-    response.status = 204
+    response.status = 303
+    header "Location" => request.link(:expressions, params[:wfid])
+    "expression at #{e.link} cancelled (terminated)"
 end
 
 

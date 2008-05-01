@@ -52,7 +52,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
         delete_it "/participants/2"
 
-        assert_equal 204, @response.status
+        assert_equal 303, @response.status
 
         get_it "/participants"
 

@@ -31,6 +31,7 @@
         <% if @expression.children %>
             children :
             <% @expression.children.each do |eid| %>
+                <% next unless eid.respond_to?(:link) %>
                 <div>&nbsp;&nbsp;<a href="<%= eid.link %>">GET <%= eid.link %></a></div>
             <% end %>
         <% end %>

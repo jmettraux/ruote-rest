@@ -87,7 +87,7 @@ class StProcessesTest < Test::Unit::TestCase
 
         delete_it "/processes/#{fei.wfid}"
 
-        assert_equal 204, @response.status
+        assert_equal 303, @response.status
 
         sleep 0.350
 

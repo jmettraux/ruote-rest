@@ -79,7 +79,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
         delete_it "/expressions/#{fei.wfid}/0"
 
-        assert_equal 204, @response.status
+        assert_equal 303, @response.status
 
         sleep 0.350
 

@@ -112,7 +112,9 @@ delete "/processes/:wfid" do
 
     sleep 0.350
 
-    response.status = 204
+    response.status = 303
+    header "Location" => request.link(:processes)
+    "process #{wfid} deleted"
 end
 
 

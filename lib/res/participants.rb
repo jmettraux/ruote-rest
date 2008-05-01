@@ -71,7 +71,9 @@ delete "/participants/:pid" do
 
     $engine.unregister_participant pid
 
-    response.status = 204
+    response.status = 303
+    header "Location" => request.link(:participants)
+    "participant #{pid} removed"
 end
 
 

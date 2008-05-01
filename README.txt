@@ -19,7 +19,8 @@ To prepare the development database
 
     rake recreate_mysql_db
 
-Expects a mysql db with a 'root' admin account with sufficient access rights. It will create a database named "ruoterest_development".
+Expects a mysql db with a 'root' admin account with sufficient access rights. 
+It will create a database named "ruoterest_development".
 
 (
 To prepare the test database
@@ -44,13 +45,15 @@ Then head to
 
 == interface
 
-By default, XML representations will be returned. The 'Accept' header is used to determine which representation the client expects. 
+By default, XML representations will be returned. The 'Accept' header is used 
+to determine which representation the client expects. 
 
 The 'format' query parameter can be used to override that, like in
 
      GET /processes?format=json
 
-For debugging purposes, you can force to a text/plain content type with 'plain' :
+For debugging purposes, you can force to a text/plain content type 
+with 'plain' :
 
     GET /workitems?format=json&plain=true
 
@@ -127,7 +130,8 @@ GET /workitems?wfid=x
 PUT /workitems/{wid}
 
     updates a workitem
-    If the workitem field '_state' is set to 'proceeded' the workitem will resume its travel in its business process
+    If the workitem field '_state' is set to 'proceeded' the workitem will 
+    resume its travel in its business process
 
 
 == license
