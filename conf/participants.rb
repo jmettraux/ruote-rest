@@ -1,21 +1,18 @@
 
-require 'openwfe/worklist/storeparticipant'
-require 'openwfe/extras/participants/activeparticipants'
-
-
 #
 # participants initialization goes here
 
 configure do
 
-    #$engine.register_participant :toto do
-    #    puts "hello world"
-    #end
+    #
+    # loading active participants
 
-    active_participants = [ :alpha, :bravo ]
+    Participants.init_all
 
-    active_participants.each do |ap|
-        $engine.register_participant ap, OpenWFE::Extras::ActiveParticipant
+    #
+    # other participants
+
+    $engine.register_participant :kilroy do
+        puts "Kilroy was here"
     end
 end
-

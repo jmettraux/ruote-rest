@@ -127,22 +127,6 @@ module OpenWFE::Participant
     end
 end
 
-class OpenWFE::Engine
-
-    #
-    # Making sure that each participant has an index field
-    #
-    def participant_list
-
-        l = []
-        self.list_participants.each_with_index do |part, i|
-            part[1].index = i
-            l << part
-        end
-        l
-    end
-end
-
 class OpenWFE::InFlowWorkItem
 
     #

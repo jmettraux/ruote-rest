@@ -16,6 +16,12 @@ module TestBase
 
         OpenWFE::Extras::Workitem.delete_all
         OpenWFE::Extras::Field.delete_all
+
+        Participants.reset_participants_test_yaml
+
+        $engine.get_participant_map.participants.clear
+
+        Participants.init_all
     end
 
     #def teardown

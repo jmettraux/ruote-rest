@@ -38,69 +38,73 @@
 #
 
 
-#
-# IN
+helpers do
 
-def parse_participant_json (json)
+    #
+    # IN
 
-    JSON.parse json
-end
+    def parse_participant_json (json)
 
-def parse_participant_form (x)
+        JSON.parse json
+    end
 
-    [ params[:regex], params[:class], params[:store_name] ]
-end
+    def parse_participant_form (x)
 
-#
-# OUT
+        [ params[:regex], params[:class], params[:store_name] ]
+    end
 
-def render_participants_xml (ps)
+    #
+    # OUT
 
-    builder do |xml|
-        xml.instruct!
-        xml.participants :count => ps.size do
-            ps.each_with_index do |part, i|
-                _render_participant_xml xml, part, i
+    def render_participants_xml (ps)
+
+        builder do |xml|
+            xml.instruct!
+            xml.participants :count => ps.size do
+                ps.each do |part|
+                    _render_participant_xml xml, part
+                end
             end
         end
     end
-end
 
-def render_participants_html (ps)
+    def render_participants_html (ps)
 
-    @participants = ps
+        @participants = ps
 
-    _erb :participants, :layout => :html
-end
-
-def render_participant_xml (part)
-
-    builder do |xml|
-        xml.instruct!
-        _render_participant_xml xml, part
+        _erb :participants, :layout => :html
     end
-end
 
-def render_participant_html (part, alone=true)
+    def render_participant_xml (part)
 
-    @participant = part
-
-    layout = alone ? :html : nil
-
-    _erb :participant, :layout => layout
-end
-
-def _render_participant_xml (xml, part, index=nil)
-
-    regex, participant = part
-
-    opts = {}
-    opts[:link] = request.link(:participants, index) if index
-
-    xml.participant opts do
-        xml.index(index.to_s) if index
-        xml.regex regex.original_string
-        xml.tag! :class, participant.class.name
+        builder do |xml|
+            xml.instruct!
+            _render_participant_xml xml, part
+        end
     end
+
+    def render_participant_html (part, alone=true)
+
+        @participant = part
+
+        layout = alone ? :html : nil
+
+        _erb :participant, :layout => layout
+    end
+
+    def _render_participant_xml (xml, part)
+
+        regex, participant = part
+
+        opts = {
+            :link => 
+            request.link(:participants, CGI.escape(regex.original_string)) }
+
+        xml.participant opts do
+            xml.regex regex.original_string
+            xml.tag! :class, participant.class.name
+        end
+    end
+
 end
 

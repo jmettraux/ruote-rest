@@ -40,36 +40,27 @@
 
 get "/participants" do
 
-    pid, part = get_participant
-
-    if part
-        rrender :participant, part
-    else
-        rrender :participants, $engine.participant_list
-    end
+    rrender :participants, $engine.list_participants
 end
 
 get "/participants/:pid" do
 
-    pid, part = get_participant
-
-    rrender :participant, part
+    rrender :participant, get_participant
 end
 
 post "/participants" do
 
     regex, pclass, store_name = rparse :participant
 
-    $engine.register_participant regex, new_participant(pclass, store_name)
+    Participants.add regex, pclass, store_name
 
-    rrender :participants, $engine.participant_list, :status => 201
+    rrender :participants, $engine.list_participants, :status => 201
 end
 
 delete "/participants/:pid" do
 
     pid, part = get_participant
-
-    $engine.unregister_participant pid
+    Participants.remove pid
 
     response.status = 303
     header "Location" => request.link(:participants)
@@ -85,49 +76,22 @@ helpers do
     def get_participant
 
         pid = params[:pid]
-        pname = params[:pname]
 
         if pid
 
-            pid = pid.to_i
-            part = $engine.participant_list[pid]
+            #pid = CGI.unescape(pid)
+
+            regex, part = $engine.list_participants.find do |pr, pa|
+                pr.original_string == pid
+            end
 
             throw :halt, [ 404, "no participant at #{pid}" ] unless part
 
-            [ pid, part ]
-
-        elsif pname
-
-            #part = $engine.get_participant pname
-            part = $engine.participant_list.find do |r, p|
-                pname.match r
-            end
-
-            throw :halt, [ 404, "no participant for name #{pname}" ] unless part
-
-            [ part[1].index, part ]
+            [ regex, part ]
 
         else
 
             [ nil, nil ]
-        end
-    end
-
-    def new_participant (pclass, store_name)
-
-        throw :halt, [ 400, "cannot create participant of class '#{pclass}'" ] \
-            if pclass.match /[\(\) ]/
-
-        pclass = eval(pclass)
-
-        store_name = store_name.strip if store_name
-        store_name = nil if store_name == ''
-
-        if pclass == OpenWFE::Extras::ActiveStoreParticipant
-            throw :halt, [ 400, "store_name missing" ] unless store_name
-            pclass.new store_name
-        else
-            pclass.new
         end
     end
 end

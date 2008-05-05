@@ -46,6 +46,8 @@ require 'json'
 # conf
 
 load 'auth.rb'
+require 'part.rb'
+
 require 'db'
 require 'engine'
 require 'participants'
@@ -77,4 +79,14 @@ load 'res/processes.rb'
 load 'res/expressions.rb'
 load 'res/participants.rb'
 load 'res/workitems.rb'
+
+#
+# "/" redirection
+
+get "/" do
+
+    response.status = 303
+    header "Location" => request.link(:processes)
+    ""
+end
 

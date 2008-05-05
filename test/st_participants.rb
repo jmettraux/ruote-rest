@@ -8,7 +8,6 @@
 #
 
 
-
 #require 'test/unit'
 
 require 'rubygems'
@@ -44,17 +43,21 @@ class StParticipantsTest < Test::Unit::TestCase
 
         get_it "/participants"
 
+        #puts @response.body
+
         assert_not_nil @response.body.index(' count="3"')
 
-        get_it "/participants/2"
+        get_it "/participants/toto"
 
         assert_not_nil @response.body.index('>toto<')
 
-        delete_it "/participants/2"
+        delete_it "/participants/toto"
 
         assert_equal 303, @response.status
 
         get_it "/participants"
+
+        #puts @response.body
 
         assert_not_nil @response.body.index(' count="2"')
     end

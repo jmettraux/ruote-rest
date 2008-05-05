@@ -134,6 +134,23 @@ PUT /workitems/{wid}
     resume its travel in its business process
 
 
+== configuration
+
+conf/db.rb
+
+    database configuration
+
+conf/engine.rb
+
+    engine configuration
+
+conf/participants.rb
+conf/participants_development.yaml
+
+    participants configuration, the yaml file holds the list of 
+    'active participants' (the worklist in fact).
+
+
 == license
 
 BSD

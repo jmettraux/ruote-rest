@@ -15,6 +15,8 @@ configure do
 
     ac = {}
 
+    ac[:engine_name] = "ruote_rest"
+
     ac[:work_directory] = "work_#{ev}"
 
     ac[:logger] = Logger.new "logs/openwferu_#{ev}.log", 10, 1024000

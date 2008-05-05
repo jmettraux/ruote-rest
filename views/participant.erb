@@ -1,10 +1,11 @@
 
 <%
     regex, part = @participant
+    pid = CGI.escape regex.original_string
 %>
 <div class="participant">
 
-    <div class="participant_link"><a href="/participants/<%= part.index %>">GET /participants/<%= part.index %></a></div>
+    <div class="participant_link"><a href="/participants/<%= pid %>">GET /participants/<%= pid %></a></div>
 
     <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
     <div>class : <span class="participant_class"><%= part.class.name %></span></div>

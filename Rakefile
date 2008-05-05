@@ -88,3 +88,16 @@ task :recreate_mysql_db do
     #OpenWFE::Extras::ExpressionTables.up
 end
 
+#
+# dumps an initial version of conf/participants_test.yaml
+#
+task :redo_participants do
+
+    require 'yaml'
+
+
+    puts
+    puts "file created ./conf/participants_test.yaml"
+    puts
+end
+
