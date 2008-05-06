@@ -1,21 +1,21 @@
 
 <%
     regex, part = @participant
-    pid = CGI.escape regex.original_string
+    link = "/participants/#{CGI.escape regex.original_string}"
 %>
 <div class="participant">
 
-    <div class="participant_link"><a href="/participants/<%= pid %>">GET /participants/<%= pid %></a></div>
+    <div class="participant_link"><a href="<%= link %>">GET <%= link %></a></div>
 
     <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
     <div>class : <span class="participant_class"><%= part.class.name %></span></div>
 
-    <form id="remove" action="<%= part.link %>" method="post">
+    <form id="remove" action="<%= link %>" method="post">
 
         <input type="hidden" name="_method" value="DELETE"/>
 
         remove : 
-        <input type="submit" value="DELETE <%= part.link %>" />
+        <input type="submit" value="DELETE <%= link %>" />
     </form>
 
 </div>

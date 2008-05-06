@@ -108,25 +108,6 @@ class OpenWFE::FlowExpression
     end
 end
 
-module OpenWFE::Participant
-
-    #
-    # adding an 'index' field
-    #
-    attr_accessor :index
-
-    #
-    # Returns the ruote-rest link for this participant.
-    # If a request is passed, the link will be absolute.
-    #
-    def link (request=nil)
-
-        return request.link(:participants, index) if request
-
-        "/participants/#{index}"
-    end
-end
-
 class OpenWFE::InFlowWorkItem
 
     #

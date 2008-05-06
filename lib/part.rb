@@ -64,13 +64,13 @@ module Participants
 
     def self.add (pregex, classname, *args)
 
-        register pregex, classname, args
+        register pregex, classname, *args
 
         participants = load_all
 
         pregex = pregex.source if pregex.is_a?(Regexp)
 
-        participants << [ pregex, classname, args ]
+        participants << [ pregex, classname, *args ]
 
         save participants
     end
@@ -80,9 +80,9 @@ module Participants
         clazz = classname.constantize # thanks activesupport
 
         participant = if args
-            clazz.send :new, args
+            clazz.new args
         else
-            clazz.send :new
+            clazz.new
         end
 
         $engine.register_participant pregex, participant

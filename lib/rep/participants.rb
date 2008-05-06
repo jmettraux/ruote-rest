@@ -50,7 +50,10 @@ helpers do
 
     def parse_participant_form (x)
 
-        [ params[:regex], params[:class], params[:store_name] ]
+        store_name = params[:store_name]
+        store_name = nil if store_name.strip == ''
+
+        [ params[:regex], params[:class], store_name ]
     end
 
     #
