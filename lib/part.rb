@@ -37,8 +37,6 @@
 # John Mettraux at openwfe.org
 #
 
-require 'cgi' # for CGI.escape()
-
 require 'openwfe/worklist/storeparticipant'
 require 'openwfe/extras/participants/activeparticipants'
 

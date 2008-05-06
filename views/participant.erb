@@ -1,7 +1,7 @@
 
 <%
     regex, part = @participant
-    link = "/participants/#{CGI.escape regex.original_string}"
+    link = "/participants/#{uri_escape regex.original_string}"
 %>
 <div class="participant">
 

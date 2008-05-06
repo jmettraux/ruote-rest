@@ -79,7 +79,7 @@ helpers do
 
         if pid
 
-            #pid = CGI.unescape(pid)
+            #pid = CGI.unescape(pid) # no need :)
 
             regex, part = $engine.list_participants.find do |pr, pa|
                 pr.original_string == pid

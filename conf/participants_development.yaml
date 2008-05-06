@@ -5,3 +5,6 @@
 - - bravo
   - OpenWFE::Extras::ActiveParticipant
   - 
+- - .*
+  - OpenWFE::Extras::ActiveParticipant
+  - 

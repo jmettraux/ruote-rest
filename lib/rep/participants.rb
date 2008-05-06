@@ -101,7 +101,7 @@ helpers do
 
         opts = {
             :link => 
-            request.link(:participants, CGI.escape(regex.original_string)) }
+            request.link(:participants, uri_escape(regex.original_string)) }
 
         xml.participant opts do
             xml.regex regex.original_string
