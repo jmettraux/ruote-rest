@@ -20,6 +20,7 @@
     <div>representation (json) : 
         <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)
     </div>
+    <div>workitems : <a href="/workitems?wfid=<%= @process.wfid %>">GET /workitems/<%= @process.wfid %></a></div>
 
     <% if @detailed %>
 

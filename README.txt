@@ -15,6 +15,8 @@ Then
     cd ruote-rest 
     rake install_workflow_engine
 
+( or get a prepackaged release of ruote + ruote-rest at http://rubyforge.org/frs/?group_id=2609 )
+
 To prepare the development database
 
     rake recreate_mysql_db
