@@ -40,54 +40,50 @@
 require 'cgi'
 
 
-helpers do
+#
+# swap from dots to underscores
+#
+#     swapdots "0_0_1" # => "0.0.1"
+#
+#     swapdots "0.0.1" # => "0_0_1"
+#
+def swapdots (s)
 
-    #
-    # swap from dots to underscores
-    #
-    #     swapdots "0_0_1" # => "0.0.1"
-    #
-    #     swapdots "0.0.1" # => "0_0_1"
-    #
-    def swapdots (s)
-    
-        return s.gsub(/\./, '_') if s.index(".")
-        s.gsub(/\_/, '.')
-    end
-    
-    
-    #
-    #     render_time(workitem, :dispatch_time)
-    #         # => Sat Mar 1 20:29:44 2008 (1d16h18m)
-    #
-    def display_time (object, accessor)
-    
-        t = object.send accessor
-    
-        return "" unless t
-    
-        d = Time.now - t
-    
-        "#{t.ctime} (#{Rufus::to_duration_string(d, :drop_seconds => true)})"
-    end
-    
-    #
-    # Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
-    # as well.
-    #
-    def uri_escape (s)
-
-        CGI.escape(s).gsub(/\./, '%2E')
-    end
-    
-    #--
-    # Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
-    # as well.
-    #
-    #def uri_unescape (s)
-    #    CGI.unescape s
-    #end
-    #++
-
+    return s.gsub(/\./, '_') if s.index(".")
+    s.gsub(/\_/, '.')
 end
+
+
+#
+#     render_time(workitem, :dispatch_time)
+#         # => Sat Mar 1 20:29:44 2008 (1d16h18m)
+#
+def display_time (object, accessor)
+
+    t = object.send accessor
+
+    return "" unless t
+
+    d = Time.now - t
+
+    "#{t.ctime} (#{Rufus::to_duration_string(d, :drop_seconds => true)})"
+end
+
+#
+# Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
+# as well.
+#
+def uri_escape (s)
+
+    CGI.escape(s).gsub(/\./, '%2E')
+end
+
+#--
+# Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
+# as well.
+#
+#def uri_unescape (s)
+#    CGI.unescape s
+#end
+#++
 

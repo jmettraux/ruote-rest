@@ -45,7 +45,8 @@ class StParticipantsTest < Test::Unit::TestCase
 
         #puts @response.body
 
-        assert_not_nil @response.body.index(' count="3"')
+        assert_not_nil(
+            @response.body.index(' count="3"'), "expected 3 participants")
 
         get_it "/participants/toto"
 
@@ -74,7 +75,8 @@ class StParticipantsTest < Test::Unit::TestCase
 
         get_it "/participants"
 
-        assert_not_nil @response.body.index(' count="3"')
+        assert_not_nil(
+            @response.body.index(' count="3"'), "expected 3 participants")
 
         get_it "/participants?pname=toto"
 

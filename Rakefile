@@ -39,27 +39,6 @@ end
 
 
 #
-# dumps an initial version of conf/participants_test.yaml
-#
-task :reset_participants do
-
-    require 'yaml'
-
-    FileUtils.rm "conf/participants_test.yaml"
-
-    File.open "conf/participants_test.yaml", "w" do |f|
-        f.puts(YAML.dump([
-            [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
-            [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
-        ]))
-    end
-
-    puts
-    puts "file created ./conf/participants_test.yaml"
-    puts
-end
-
-#
 # other tasks
 
 load 'tasks/install_workflow_engine.rake'

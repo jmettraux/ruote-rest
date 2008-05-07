@@ -17,7 +17,20 @@ module TestBase
         OpenWFE::Extras::Workitem.delete_all
         OpenWFE::Extras::Field.delete_all
 
-        Participants.reset_participants_test_yaml
+        #
+        # resetting the participant file
+
+        FileUtils.rm "conf/participants_test.yaml"
+
+        File.open "conf/participants_test.yaml", "w" do |f|
+            f.puts(YAML.dump([
+                [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
+                [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
+            ]))
+        end
+        
+        #
+        # initting the participant
 
         $engine.get_participant_map.participants.clear
 

@@ -104,12 +104,6 @@ module Participants
         end
     end
 
-    #
-    # As the name implies...
-    #
-    def self.reset_participants_test_yaml
-    end
-
     protected
 
         def self.filename
