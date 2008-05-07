@@ -108,15 +108,6 @@ module Participants
     # As the name implies...
     #
     def self.reset_participants_test_yaml
-
-        FileUtils.rm "conf/participants_test.yaml"
-
-        File.open "conf/participants_test.yaml", "w" do |f|
-            f.puts(YAML.dump([
-                [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
-                [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
-            ]))
-        end
     end
 
     protected

@@ -5,9 +5,10 @@ RUFUSES = %w{
     dollar eval lru mnemo scheduler verbs }.collect { |e| "rufus-#{e}" }
 
 #
-# do use either :install_workflow_engine either :install_dependency_gems
+# do use either :install_workflow_engine or :install_dependency_gems
 # but not both
 #
+
 
 #
 # Installs under vendor/ the latest source of OpenWFEru (and required 
@@ -15,7 +16,7 @@ RUFUSES = %w{
 #
 task :install_workflow_engine do
 
-  FileUtils.mkdir "tmp" unless File.exists?("tmp")
+  FileUtils.mkdir 'tmp' unless File.exists?('tmp')
 
   sh "rm -fR vendor/ruote"
   sh "rm -fR vendor/rufus"
@@ -35,6 +36,7 @@ def git_clone (elt)
   sh "rm -fR tmp/#{elt}"
 end
 
+
 #
 # install OpenWFEru and its dependencies as gems
 #
@@ -42,11 +44,11 @@ task :gem_install_workflow_engine do
 
   GEMS = RUFUSES.dup
 
-  GEMS << "openwferu"
-  GEMS << "openwferu-extras"
+  GEMS << 'openwferu'
+  GEMS << 'openwferu-extras'
 
-  GEMS << "json_pure"
-  #GEMS << "xml_simple"
+  GEMS << 'json_pure'
+  #GEMS << 'xml_simple'
 
   sh "sudo gem install -y #{GEMS.join(' ')}"
   sh "sudo gem install -y -v 0.2.2 sinatra"
