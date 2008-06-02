@@ -28,7 +28,7 @@ module TestBase
                 [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
             ]))
         end
-        
+
         #
         # initting the participant
 

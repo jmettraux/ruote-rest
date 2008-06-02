@@ -40,73 +40,53 @@
 
 helpers do
 
-  #
-  # IN
+#
+# ERRORS
 
-  def parse_participant_json (json)
-
-    JSON.parse json
-  end
-
-  def parse_participant_form (x)
-
-    store_name = params[:store_name]
-    store_name = nil if store_name.strip == ''
-
-    [ params[:regex], params[:class], store_name ]
-  end
-
-  #
-  # OUT
-
-  def render_participants_xml (ps)
+  def render_errors_xml (errors)
 
     builder do |xml|
       xml.instruct!
-      xml.participants :count => ps.size do
-        ps.each do |part|
-          _render_participant_xml xml, part
-        end
+      xml.errors :count => errors.size do
+        errors.each { |error| _render_error_xml xml, error }
       end
     end
   end
 
-  def render_participants_html (ps)
+  def _render_error_xml (xml, error)
 
-    @participants = ps
-
-    _erb :participants, :layout => :html
+    xml.error do
+      #xml.raw error.inspect
+      xml.link error.error_id
+      xml.wfid error.fei.wfid
+      xml.fei error.fei
+      xml.call error.message.to_s
+      xml.date error.date
+      xml.text error.stacktrace.split("\n").first
+    end
   end
 
-  def render_participant_xml (part)
+  def render_error_xml (error)
 
     builder do |xml|
       xml.instruct!
-      _render_participant_xml xml, part
+      _render_error_xml xml, error
     end
   end
 
-  def render_participant_html (part, alone=true)
+  def render_errors_html (errors)
 
-    @participant = part
+    @errors = errors
 
-    layout = alone ? :html : nil
-
-    _erb :participant, :layout => layout
+    _erb :errors, :layout => :html
   end
 
-  def _render_participant_xml (xml, part)
+  def render_error_html (error, alone=true)
 
-    regex, participant = part
+    @error = error
+    @alone = alone
 
-    opts = {
-      :link =>
-      request.link(:participants, uri_escape(regex.original_string)) }
-
-    xml.participant opts do
-      xml.regex regex.original_string
-      xml.tag! :class, participant.class.name
-    end
+    _erb :error, :layout => alone ? :html : false
   end
 
 end

@@ -24,7 +24,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     include Sinatra::Builder
     include Sinatra::RenderingHelpers
-    
+
 
     def test_0
 

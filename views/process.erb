@@ -1,102 +1,102 @@
 
 <div class="process">
 
-    <div class="process_link"><a href="/processes/<%= @process.wfid %>">GET /processes/<%= @process.wfid %></a></div>
+  <div class="process_link"><a href="<%= @process.link %>">GET <%= @process.link %></a></div>
+
+  <br/>
+
+  <div>wfid : <span class="process_wfid"><%= @process.wfid %></div>
+  <div>
+    process : <span class="process_wfname"><%= @process.wfname %></span>
+    <span class="process_wfrevision"><%= @process.wfrevision %>
+  </div>
+  <div>launched : <span class="process_launch_time"><%= display_time(@process, :launch_time) %></div>
+  <div>paused : <span class="process_paused"><%= @process.paused %></div>
+  <div>tags : <span class="process_tags"><%= @process.tags.join(", ") %></div>
+  <div>branches : <span class="process_branches"><%= @process.branches %></div>
+  <div>all expressions : 
+    <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
+  </div>
+  <div>representation (json) : 
+    <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)
+  </div>
+  <div>workitems : <a href="/workitems?wfid=<%= @process.wfid %>">GET /workitems/<%= @process.wfid %></a></div>
+
+  <% if @detailed %>
 
     <br/>
 
-    <div>wfid : <span class="process_wfid"><%= @process.wfid %></div>
+    <div class="process_variables">
+      Process variables :
+      <% @process.variables.each do |k, v| %>
+        <div class="process_var">
+          <span class="process_var_key"><%= k.to_s %></span>
+          =&gt;
+          <span class="process_var_value"><%= v.to_json %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <br/>
+
+    <div class="process_expression">
+      Active expressions :
+      <% @process.expressions.each do |fexp| 
+          fei = fexp.fei
+      %>
+        <div class="process_exp">
+          <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.link %>">GET <%= fei.link %></a>
+        <div>
+      <% end %>
+    </div>
+
+    <br/>
+
+    <div class="process_errors">
+      Errors :
+      <% @process.errors.each do |k, error| %>
+        <div class="process_err">
+          <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
+          :
+          <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
+        </div>
+      <% end %>
+      <%= @process.errors.size == 0 ? "none" : "" %>
+    </div>
+
+    <br/>
+
+    <div class="process_representation">
+      Representation :<br/>
+      <span class="process_rep"><%= @process.process_stack.representation.to_json.to_s %></span>
+    </div>
+
+    <br/>
+
     <div>
-        process : <span class="process_wfname"><%= @process.wfname %></span>
-        <span class="process_wfrevision"><%= @process.wfrevision %>
+      <form action="<%= @process.link %>" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" name="_method" value="PUT"/>
+        <input type="hidden" name="paused" value="<%= ( ! @process.paused?) %>" />
+
+        <%= @process.paused? ? "resume" : "pause" %> process :
+        <input type="submit" value="PUT <%= @process.link %>"/> (with a 'paused=<%= !@process.paused? %>' flag)
+      </form>
     </div>
-    <div>launched : <span class="process_launch_time"><%= display_time(@process, :launch_time) %></div>
-    <div>paused : <span class="process_paused"><%= @process.paused %></div>
-    <div>tags : <span class="process_tags"><%= @process.tags.join(", ") %></div>
-    <div>branches : <span class="process_branches"><%= @process.branches %></div>
-    <div>all expressions : 
-        <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
+
+    <div>
+      <form action="<%= @process.link %>" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="DELETE"/>
+
+        terminate process :
+        <input type="submit" value="DELETE <%= @process.link %>" />
+      </form>
     </div>
-    <div>representation (json) : 
-        <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)
-    </div>
-    <div>workitems : <a href="/workitems?wfid=<%= @process.wfid %>">GET /workitems/<%= @process.wfid %></a></div>
 
-    <% if @detailed %>
+  <% else # not detailed %>
 
-        <br/>
+    <div>errors : <span class="process_errors_count"><%= @process.errors.size %></div>
 
-        <div class="process_variables">
-            Process variables :
-            <% @process.variables.each do |k, v| %>
-                <div class="process_var">
-                    <span class="process_var_key"><%= k.to_s %></span>
-                    =&gt;
-                    <span class="process_var_value"><%= v.to_json %></span>
-                </div>
-            <% end %>
-        </div>
-
-        <br/>
-
-        <div class="process_expression">
-            Active expressions :
-            <% @process.expressions.each do |fexp| 
-                  fei = fexp.fei
-            %>
-                <div class="process_exp">
-                    <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.link %>">GET <%= fei.link %></a>
-                <div>
-            <% end %>
-        </div>
-
-        <br/>
-
-        <div class="process_errors">
-            Errors :
-            <% @process.errors.each do |k, error| %>
-                <div class="process_err">
-                    <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
-                    :
-                    <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
-                </div>
-            <% end %>
-            <%= @process.errors.size == 0 ? "none" : "" %>
-        </div>
-
-        <br/>
-
-        <div class="process_representation">
-            Representation :<br/>
-            <span class="process_rep"><%= @process.process_stack.representation.to_json.to_s %></span>
-        </div>
-
-        <br/>
-
-        <div>
-            <form action="/processes/<%= @process.wfid %>" method="post" enctype="multipart/form-data">
-
-                <input type="hidden" name="_method" value="PUT"/>
-                <input type="hidden" name="paused" value="<%= ( ! @process.paused?) %>" />
-
-                <%= @process.paused? ? "resume" : "pause" %> process :
-                <input type="submit" value="PUT /processes/<%= @process.wfid %>"/>
-            </form>
-        </div>
-
-        <div>
-            <form action="/processes/<%= @process.wfid %>" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_method" value="DELETE"/>
-
-                terminate process :
-                <input type="submit" value="DELETE /processes/<%= @process.wfid %>" />
-            </form>
-        </div>
-
-    <% else # not detailed %>
-
-        <div>errors : <span class="process_errors_count"><%= @process.errors.size %></div>
-
-    <% end %>
+  <% end %>
 </div>
 

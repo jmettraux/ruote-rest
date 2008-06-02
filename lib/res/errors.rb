@@ -38,83 +38,36 @@
 #
 
 
-#
-# Returns the statuses of all the process currently running in this ruote_rest
-#
-get "/processes" do
+get "/errors" do
 
-  rrender :processes, $engine.list_process_status
+  logs = $engine.get_error_journal.get_error_logs
+
+  errors = logs.values.inject([]) { |r, log| r += log }
+  errors = errors.sort_by { |err| err.fei.wfid }
+
+  rrender :errors, errors
 end
 
-#
-# Launches a business process
-#
-post "/processes" do
-
-  launchitem = rparse :launchitem
-
-  fei = $engine.launch launchitem
-
-  rrender(
-    :fei, fei,
-    :status => 201, 'Location' => request.link(:processes, fei.wfid))
-end
-
-#
-# just return the process instance tree as JSON
-#
-get "/processes/:wfid/representation" do
-
-  pstack = $engine.process_stack params[:wfid], true
-
-  throw :halt, [ 404, "no such process" ] unless pstack
-
-  rrender :process_representation, pstack, :format => 'json'
-end
-
-#
-# Returns the detailed status of a process instance
-#
-get "/processes/:wfid" do
+get "/errors/:wfid" do
 
   wfid = params[:wfid]
 
-  pstatus = get_status_and_stack
-
-  rrender :process, pstatus
+  rrender :errors, $engine.get_error_journal.get_error_log(wfid)
 end
 
-#
-# Updates a process instance (pauses or resumes it).
-#
-put "/processes/:wfid" do
+get "/errors/:wfid/:error_id" do
 
-  pstatus = get_process_status
-  process = rparse :process
 
-  if process[:paused]
-    $engine.pause_process pstatus.wfid
-  else
-    $engine.resume_process pstatus.wfid
-  end
-
-  rrender :process, get_status_and_stack
+  rrender :error, find_error
 end
 
-#
-# Cancels a process instance
-#
-delete "/processes/:wfid" do
+delete "/errors/:wfid/:error_id" do
 
-  wfid = params[:wfid]
+  error = find_error
 
-  $engine.cancel_process wfid
+  $engine.replay_at_error error
 
-  sleep 0.350
-
-  response.status = 303
-  header "Location" => request.link(:processes)
-  "process #{wfid} deleted"
+  "replayed"
 end
 
 
@@ -123,25 +76,14 @@ end
 
 helpers do
 
-  def get_process_status
+  def find_error
 
     wfid = params[:wfid]
+    error_id = params[:error_id]
 
-    $engine.process_status(wfid) ||
-      throw(:halt, [ 404, "no process '#{wfid}'" ])
-  end
+    errors = $engine.get_error_journal.get_error_log(wfid)
 
-  def get_status_and_stack
-
-    pstatus = get_process_status
-
-    pstack = $engine.process_stack pstatus.wfid, true
-    class << pstatus
-      attr_accessor :process_stack
-    end
-    pstatus.process_stack = pstack
-
-    pstatus
+    errors.find { |e| e.error_id == error_id }
   end
 end
 

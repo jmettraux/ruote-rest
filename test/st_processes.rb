@@ -22,7 +22,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     include Sinatra::Builder
     include Sinatra::RenderingHelpers
-    
+
 
     def test_0
 
@@ -31,7 +31,7 @@ class StProcessesTest < Test::Unit::TestCase
         #p @response
 
         assert_equal(
-            "application/xml", 
+            "application/xml",
             @response.content_type)
 
         assert_equal(
@@ -56,7 +56,7 @@ class StProcessesTest < Test::Unit::TestCase
         #puts
 
         post_it(
-            "/processes", 
+            "/processes",
             OpenWFE::Xml.launchitem_to_xml(li, 2),
             { "CONTENT_TYPE" => "application/xml" })
 
@@ -114,7 +114,7 @@ class StProcessesTest < Test::Unit::TestCase
         EOS
 
         post_it(
-            "/processes", 
+            "/processes",
             OpenWFE::Xml.launchitem_to_xml(li, 2),
             { "CONTENT_TYPE" => "application/xml" })
 

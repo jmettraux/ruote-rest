@@ -8,3 +8,9 @@
 - - .*
   - OpenWFE::Extras::ActiveParticipant
   - 
+- - ""
+  - OpenWFE::Extras::ActiveParticipant
+  - 
+- - .*
+  - OpenWFE::Extras::ActiveParticipant
+  - 
