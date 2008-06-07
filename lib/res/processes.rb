@@ -53,7 +53,11 @@ post "/processes" do
 
   launchitem = rparse :launchitem
 
+  wait = (params[:wait] == 'true')
+
   fei = $engine.launch launchitem
+
+  $engine.wait_for(fei) if wait
 
   rrender(
     :fei, fei,
