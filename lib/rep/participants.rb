@@ -100,7 +100,7 @@ helpers do
     regex, participant = part
 
     opts = {
-      :link =>
+      :href =>
       request.link(:participants, uri_escape(regex.original_string)) }
 
     xml.participant opts do
