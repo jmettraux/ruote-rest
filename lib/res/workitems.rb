@@ -64,7 +64,7 @@ put "/workitems/:wid" do
     $engine.reply owi
     wi.destroy
 
-    header 'Location' => request.link(:workitems)
+    header 'Location' => request.href(:workitems)
     rrender :workitems, find_workitems
   else
 

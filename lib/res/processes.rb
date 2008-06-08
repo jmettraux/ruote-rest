@@ -57,7 +57,7 @@ post "/processes" do
 
   rrender(
     :fei, fei,
-    :status => 201, 'Location' => request.link(:processes, fei.wfid))
+    :status => 201, 'Location' => request.href(:processes, fei.wfid))
 end
 
 #
@@ -113,7 +113,7 @@ delete "/processes/:wfid" do
   sleep 0.350
 
   response.status = 303
-  header "Location" => request.link(:processes)
+  header "Location" => request.href(:processes)
   "process #{wfid} deleted"
 end
 

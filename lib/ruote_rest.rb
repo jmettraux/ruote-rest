@@ -88,7 +88,7 @@ load 'res/workitems.rb'
 get "/" do
 
   response.status = 303
-  header "Location" => request.link(:processes)
+  header "Location" => request.href(:processes)
   ""
 end
 

@@ -53,7 +53,7 @@ end
 
 def render_fei_xml (fei)
 
-  #header 'Location' => request.link(:processes, fei.wfid)
+  #header 'Location' => request.href(:processes, fei.wfid)
 
   OpenWFE::Xml.fei_to_xml fei
 end

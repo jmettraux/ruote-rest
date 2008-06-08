@@ -91,7 +91,7 @@ helpers do
 
   def _render_process_xml (xml, p, detailed=false)
 
-    xml.process :href => request.link(:processes, p.wfid) do
+    xml.process :href => request.href(:processes, p.wfid) do
 
       xml.wfid p.wfid
       xml.wfname p.wfname
@@ -110,7 +110,7 @@ helpers do
 
         hash_to_xml xml, :variables, p, :variables
 
-        xml.active_expressions :href => request.link(:expressions, p.wfid) do
+        xml.active_expressions :href => request.href(:expressions, p.wfid) do
 
           p.expressions.each do |fexp|
 
@@ -119,7 +119,7 @@ helpers do
             xml.expression(
               "#{fei.to_s}",
               :short => fei.to_web_s,
-              :href => fei.link(request))
+              :href => fei.href(request))
           end
         end
 
@@ -137,7 +137,7 @@ helpers do
 
         xml.representation(
           p.process_stack.representation.to_json.to_s,
-          :href => request.link(:processes, p.wfid, :representation))
+          :href => request.href(:processes, p.wfid, :representation))
 
       else
 

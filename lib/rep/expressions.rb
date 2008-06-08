@@ -126,7 +126,7 @@ def _expression_link (xml, tagname, fei, env=false)
   xml.tag!(
     tagname,
     fei.to_s,
-    :href => request.link(
+    :href => request.href(
       :expressions,
       fei.wfid,
       swapdots(expid)))
@@ -136,7 +136,7 @@ def _render_expression_xml (xml, e, detailed=false)
 
   params = {}
 
-  params[:href] = request.link(
+  params[:href] = request.href(
     :expressions, e.fei.wfid, swapdots(e.fei.expid)) unless detailed
 
   xml.expression params do

@@ -57,7 +57,7 @@ helpers do
 
     xml.error do
       #xml.raw error.inspect
-      xml.link error.error_id
+      xml.href error.error_id
       xml.wfid error.fei.wfid
       xml.fei error.fei
       xml.call error.message.to_s

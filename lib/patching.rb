@@ -44,10 +44,10 @@
 class Rack::Request
 
   #
-  #   request.link(:expressions, "abc", "0_0_1")
+  #   request.href(:expressions, "abc", "0_0_1")
   #   #=> "http://example.org:4567/expressions/abc/0_0_1"
   #
-  def link (*args)
+  def href (*args)
 
     base = "#{scheme}://#{host}"
 
@@ -71,23 +71,23 @@ class OpenWFE::FlowExpressionId
   # Returns the relative link to the expression pointed at by this
   # FlowExpressionId.
   #
-  #   fei.link
+  #   fei.href
   #     # => "/expressions/{wfid}/{expid}"
   #
-  #   fei.link(request)
+  #   fei.href(request)
   #     # => "http://host:port/expressions/{wfid}/{expid}"
   #
-  #   fei.link(request, 'smurfs')
+  #   fei.href(request, 'smurfs')
   #     # => "http://host:port/smurfs/{wfid}/{expid}"
   #
-  #   fei.link(nil, 'smurfs')
+  #   fei.href(nil, 'smurfs')
   #     # => "smurfs/{wfid}/{expid}"
   #
-  def link (req=nil, resource_name='expressions')
+  def href (req=nil, resource_name='expressions')
 
     ei = swapdots self.expid
 
-    return req.link(resource_name, wfid, ei) if req
+    return req.href(resource_name, wfid, ei) if req
 
     env = self.expname == "environment" ? "e" : ""
 
@@ -98,11 +98,11 @@ end
 class OpenWFE::ProcessStatus
 
   #
-  # Returns the 'ruote-rest' link for this ProcessError instance
+  # Returns the 'ruote-rest' href for this ProcessError instance
   #
-  def link (request=nil)
+  def href (request=nil)
 
-    return request.link(:processes, wfid) if request
+    return request.href(:processes, wfid) if request
 
     "/processes/#{wfid}"
   end
@@ -113,22 +113,22 @@ class OpenWFE::FlowExpression
   #
   # a shortcut for
   #
-  #   self.fei.link(req)
+  #   self.fei.href(req)
   #
-  def link (request=nil)
+  def href (request=nil)
 
-    self.fei.link(request)
+    self.fei.href(request)
   end
 end
 
 class OpenWFE::InFlowWorkItem
 
   #
-  # Returns the 'ruote-rest' link for this workitem
+  # Returns the 'ruote-rest' href for this workitem
   #
-  def link (request=nil)
+  def href (request=nil)
 
-    return request.link(:workitems, db_id) if request
+    return request.href(:workitems, db_id) if request
 
     "/workitems/#{db_id}"
   end
@@ -145,11 +145,11 @@ class OpenWFE::ProcessError
   end
 
   #
-  # Returns the 'ruote-rest' link for this ProcessError instance
+  # Returns the 'ruote-rest' href for this ProcessError instance
   #
-  def link (request=nil)
+  def href (request=nil)
 
-    return request.link(:errors, wfid, expid) if request
+    return request.href(:errors, wfid, expid) if request
 
     "/errors/#{wfid}/#{error_id}"
   end

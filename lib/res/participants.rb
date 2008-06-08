@@ -63,7 +63,7 @@ delete "/participants/:pid" do
   Participants.remove pid
 
   response.status = 303
-  header "Location" => request.link(:participants)
+  header "Location" => request.href(:participants)
   "participant #{pid} removed"
 end
 

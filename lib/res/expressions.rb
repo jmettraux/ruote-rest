@@ -54,7 +54,7 @@ put "/expressions/:wfid/:expid" do
 
   $engine.update_expression expression
 
-  header "Location" => expression.link(request)
+  header "Location" => expression.href(request)
   rrender :expression, find_expression
 end
 
@@ -70,8 +70,8 @@ delete "/expressions/:wfid/:expid" do
   $engine.cancel_expression e
 
   response.status = 303
-  header "Location" => request.link(:expressions, params[:wfid])
-  "expression at #{e.link} cancelled (terminated)"
+  header "Location" => request.href(:expressions, params[:wfid])
+  "expression at #{e.href} cancelled (terminated)"
 end
 
 

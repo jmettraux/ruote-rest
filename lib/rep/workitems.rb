@@ -70,7 +70,7 @@ helpers do
       xml.workitems :count => wis.size do
         wis.each do |wi|
           owi = wi.as_owfe_workitem
-          owi._uri = request.link(:workitems, wi.id)
+          owi._uri = request.href(:workitems, wi.id)
           OpenWFE::Xml._workitem_to_xml xml, owi
         end
       end
@@ -82,7 +82,7 @@ helpers do
     builder do |xml|
       xml.instruct!
       owi = wi.as_owfe_workitem
-      owi._uri = request.link(:workitems, wi.id)
+      owi._uri = request.href(:workitems, wi.id)
       OpenWFE::Xml._workitem_to_xml xml, owi
     end
   end
