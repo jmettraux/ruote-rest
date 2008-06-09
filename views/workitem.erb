@@ -1,7 +1,7 @@
 
 <div class="workitem">
 
-  <div class="workitem_link"><a href="<%= @workitem.link %>">GET <%= @workitem.link %></a></div>
+  <div class="workitem_link"><a href="<%= @workitem.href %>">GET <%= @workitem.href %></a></div>
 
   <%= @detailed ? "<br/>" : "" %>
 
@@ -14,7 +14,7 @@
 
     <br/>
 
-    <form action="<%= @workitem.link %>" method="POST" enctype="multipart/form-data">
+    <form action="<%= @workitem.href %>" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="_method" value="PUT" />
 
       attributes :<br/>
@@ -24,7 +24,7 @@
 
       <br/>
 
-      <input type="submit" value="PUT <%= @workitem.link %>" />
+      <input type="submit" value="PUT <%= @workitem.href %>" />
     </form>
 
   <% end %>

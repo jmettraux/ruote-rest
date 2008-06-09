@@ -1,7 +1,7 @@
 
 <div class="process">
 
-  <div class="process_link"><a href="<%= @process.link %>">GET <%= @process.link %></a></div>
+  <div class="process_link"><a href="<%= @process.href %>">GET <%= @process.href %></a></div>
 
   <br/>
 
@@ -45,7 +45,7 @@
           fei = fexp.fei
       %>
         <div class="process_exp">
-          <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.link %>">GET <%= fei.link %></a>
+          <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.href %>">GET <%= fei.href %></a>
         <div>
       <% end %>
     </div>
@@ -74,22 +74,22 @@
     <br/>
 
     <div>
-      <form action="<%= @process.link %>" method="post" enctype="multipart/form-data">
+      <form action="<%= @process.href %>" method="post" enctype="multipart/form-data">
 
         <input type="hidden" name="_method" value="PUT"/>
         <input type="hidden" name="paused" value="<%= ( ! @process.paused?) %>" />
 
         <%= @process.paused? ? "resume" : "pause" %> process :
-        <input type="submit" value="PUT <%= @process.link %>"/> (with a 'paused=<%= !@process.paused? %>' flag)
+        <input type="submit" value="PUT <%= @process.href %>"/> (with a 'paused=<%= !@process.paused? %>' flag)
       </form>
     </div>
 
     <div>
-      <form action="<%= @process.link %>" method="post" enctype="multipart/form-data">
+      <form action="<%= @process.href %>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="_method" value="DELETE"/>
 
         terminate process :
-        <input type="submit" value="DELETE <%= @process.link %>" />
+        <input type="submit" value="DELETE <%= @process.href %>" />
       </form>
     </div>
 

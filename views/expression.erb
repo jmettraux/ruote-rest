@@ -1,7 +1,7 @@
 
 <div class="expression">
 
-    <div class="expression_link"><a href="<%= @expression.link %>">GET <%= @expression.link %></a></div>
+    <div class="expression_link"><a href="<%= @expression.href %>">GET <%= @expression.href %></a></div>
 
     <%= @detailed ? "<br/>" : "" %>
 
@@ -21,18 +21,18 @@
         <br/>
 
         <% if @expression.parent_id %>
-            <div>parent : <a href="<%= @expression.parent_id.link %>">GET <%= @expression.parent_id.link %></a></div>
+            <div>parent : <a href="<%= @expression.parent_id.href %>">GET <%= @expression.parent_id.href %></a></div>
         <% end %>
 
         <% if @expression.environment_id %>
-            <div>environment : <a href="<%= @expression.environment_id.link %>">GET <%= @expression.environment_id.link %></a></div>
+            <div>environment : <a href="<%= @expression.environment_id.href %>">GET <%= @expression.environment_id.href %></a></div>
         <% end %>
 
         <% if @expression.children %>
             children :
             <% @expression.children.each do |eid| %>
                 <% next unless eid.respond_to?(:link) %>
-                <div>&nbsp;&nbsp;<a href="<%= eid.link %>">GET <%= eid.link %></a></div>
+                <div>&nbsp;&nbsp;<a href="<%= eid.href %>">GET <%= eid.href %></a></div>
             <% end %>
         <% end %>
 
@@ -49,22 +49,22 @@
 
         <br/>
 
-        <div>yaml : <a href="<%= @expression.link %>?format=yaml">GET <%= @expression.link %>?format=yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
+        <div>yaml : <a href="<%= @expression.href %>?format=yaml">GET <%= @expression.href %>?format=yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
 
         <div id="put_yaml" style="display: none">
             <br/>
-            <form action="<%= @expression.link %>" method="POST" enctype="multipart/form-data">
+            <form action="<%= @expression.href %>" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="PUT" />
                 <textarea name="yaml" cols="80" rows="24"><%= @expression.to_yaml %></textarea>
-                <input type="submit" value="PUT <%= @expression.link %>" />
+                <input type="submit" value="PUT <%= @expression.href %>" />
             </form>
         </div>
 
         <div>
-            <form action="<%= @expression.link %>" method="post" enctype="multipart/form-data">
+            <form action="<%= @expression.href %>" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="DELETE"/>
                 terminate expression :
-                <input type="submit" value="DELETE <%= @expression.link %>" />
+                <input type="submit" value="DELETE <%= @expression.href %>" />
             </form>
         </div>
 
