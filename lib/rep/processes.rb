@@ -110,6 +110,19 @@ helpers do
 
         hash_to_xml xml, :variables, p, :variables
 
+        xml.scheduled_jobs do
+          p.scheduled_jobs.each do |j|
+            xml.job do
+              xml.type j.class.name
+              xml.schedule_info j.schedule_info
+              xml.next_time j.next_time.to_s
+              xml.tags do
+                j.tags.each { |t| xml.tag t }
+              end
+            end
+          end
+        end
+
         xml.active_expressions :href => request.href(:expressions, p.wfid) do
 
           p.expressions.each do |fexp|

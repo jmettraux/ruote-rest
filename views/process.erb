@@ -39,9 +39,20 @@
 
     <br/>
 
+    <div class="process_scheduled_jobs">
+      Scheduled jobs :
+      <% @process.scheduled_jobs.each do |sj| %>
+        <div class="process_scheduled_jobs">
+          <%= sj.class.name %> / info : <%= sj.schedule_info %> / next time : <%= sj.next_time.to_s %><br/>
+        </div>
+      <% end %>
+    </div>
+
+    <br/>
+
     <div class="process_expression">
       Active expressions :
-      <% @process.expressions.each do |fexp| 
+      <% @process.expressions.each do |fexp|
           fei = fexp.fei
       %>
         <div class="process_exp">

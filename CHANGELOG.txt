@@ -1,5 +1,7 @@
 
 = ruote-rest CHANGELOG.txt
 
-== ruote-rest - 0.9.18    not yet released
+== ruote-rest - 0.9.19    not yet released
+
+- todo    #20647 : showing scheduled jobs for /processes
 

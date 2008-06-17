@@ -146,13 +146,13 @@ class StProcessesTest < Test::Unit::TestCase
   #
   # schedules
   #
-  def _test_3
+  def test_3
 
     $engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses < OpenWFE::ProcessDefinition
-        alpha
+        _sleep "1h"
       end
     EOS
 
@@ -166,5 +166,8 @@ class StProcessesTest < Test::Unit::TestCase
     sleep 0.350
 
     get_it "/processes/#{fei.wfid}"
+
+    #puts @response.body
+    assert_match(/Rufus::AtJob/, @response.body)
   end
 end
