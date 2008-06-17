@@ -9,34 +9,34 @@
 
 module TestBase
 
-    def setup
+  def setup
 
-        FileUtils.rm_rf 'work_test'
-        FileUtils.mkdir 'logs' unless File.exist?('logs')
+    FileUtils.rm_rf 'work_test'
+    FileUtils.mkdir 'logs' unless File.exist?('logs')
 
-        OpenWFE::Extras::Workitem.delete_all
-        OpenWFE::Extras::Field.delete_all
+    OpenWFE::Extras::Workitem.delete_all
+    OpenWFE::Extras::Field.delete_all
 
-        #
-        # resetting the participant file
+    #
+    # resetting the participant file
 
-        FileUtils.rm "conf/participants_test.yaml"
+    FileUtils.rm "conf/participants_test.yaml"
 
-        File.open "conf/participants_test.yaml", "w" do |f|
-            f.puts(YAML.dump([
-                [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
-                [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
-            ]))
-        end
-
-        #
-        # initting the participant
-
-        $engine.get_participant_map.participants.clear
-
-        Participants.init_all
+    File.open "conf/participants_test.yaml", "w" do |f|
+      f.puts(YAML.dump([
+        [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
+        [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
+      ]))
     end
 
-    #def teardown
-    #end
+    #
+    # initting the participant
+
+    $engine.get_participant_map.participants.clear
+
+    Participants.init_all
+  end
+
+  #def teardown
+  #end
 end

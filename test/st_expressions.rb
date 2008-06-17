@@ -21,117 +21,117 @@ require 'testbase'
 
 class StExpressionsTest < Test::Unit::TestCase
 
-    include TestBase
+  include TestBase
 
-    include Sinatra::Builder
-    include Sinatra::RenderingHelpers
-    
-
-    def test_0
-
-        li = OpenWFE::LaunchItem.new <<-EOS
-            class TestStExpressions < OpenWFE::ProcessDefinition
-                sequence do
-                    alpha
-                    bravo
-                end
-            end
-        EOS
-
-        post_it(
-            "/processes", 
-            OpenWFE::Xml.launchitem_to_xml(li),
-            { "CONTENT_TYPE" => "application/xml" })
-
-        fei = OpenWFE::Xml.fei_from_xml @response.body
-
-        sleep 0.350
-
-        get_it "/expressions/#{fei.wfid}"
-        #puts
-        #puts @response.body
-        #puts
-        assert_not_nil @response.body.index(' count="5"')
+  include Sinatra::Builder
+  include Sinatra::RenderingHelpers
 
 
-        get_it "/expressions/#{fei.wfid}/0_0"
+  def test_0
 
-        assert_not_nil @response.body.index(
-            '<class>OpenWFE::SequenceExpression</class>')
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStExpressions < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    EOS
 
-        get_it "/expressions/#{fei.wfid}/0e"
-        #puts
-        #puts @response.body
-        #puts
-        assert_not_nil(
-            @response.body.index('<class>OpenWFE::Environment</class>'), 
-            "GET /0e --> not an environment")
+    post_it(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li),
+      { "CONTENT_TYPE" => "application/xml" })
+
+    fei = OpenWFE::Xml.fei_from_xml @response.body
+
+    sleep 0.350
+
+    get_it "/expressions/#{fei.wfid}"
+    #puts
+    #puts @response.body
+    #puts
+    assert_not_nil @response.body.index(' count="5"')
 
 
-        get_it "/expressions/#{fei.wfid}/0"
+    get_it "/expressions/#{fei.wfid}/0_0"
 
-        assert_not_nil(
-            @response.body.index('<class>OpenWFE::DefineExpression</class>'),
-            "GET /0e --> not an 'process-definition'")
+    assert_not_nil @response.body.index(
+      '<class>OpenWFE::SequenceExpression</class>')
 
-        #
-        # cancel process
+    get_it "/expressions/#{fei.wfid}/0e"
+    #puts
+    #puts @response.body
+    #puts
+    assert_not_nil(
+      @response.body.index('<class>OpenWFE::Environment</class>'),
+      "GET /0e --> not an environment")
 
-        delete_it "/expressions/#{fei.wfid}/0"
 
-        assert_equal 303, @response.status
+    get_it "/expressions/#{fei.wfid}/0"
 
-        sleep 0.350
+    assert_not_nil(
+      @response.body.index('<class>OpenWFE::DefineExpression</class>'),
+      "GET /0e --> not an 'process-definition'")
 
-        # done.
-    end
+    #
+    # cancel process
 
-    def test_1
+    delete_it "/expressions/#{fei.wfid}/0"
 
-        li = OpenWFE::LaunchItem.new <<-EOS
-            class TestStExpressions < OpenWFE::ProcessDefinition
-                nada
-            end
-        EOS
+    assert_equal 303, @response.status
 
-        post_it(
-            "/processes", 
-            OpenWFE::Xml.launchitem_to_xml(li),
-            { "CONTENT_TYPE" => "application/xml" })
+    sleep 0.350
 
-        fei = OpenWFE::Xml.fei_from_xml @response.body
+    # done.
+  end
 
-        sleep 0.350
+  def test_1
 
-        get_it "/expressions/#{fei.wfid}/0_0?format=yaml"
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStExpressions < OpenWFE::ProcessDefinition
+        nada
+      end
+    EOS
 
-        assert_equal "application/yaml", @response["Content-Type"]
+    post_it(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li),
+      { "CONTENT_TYPE" => "application/xml" })
 
-        exp = YAML.load @response.body
-        assert_kind_of OpenWFE::FlowExpression, exp
+    fei = OpenWFE::Xml.fei_from_xml @response.body
 
-        exp.attributes = { :toto => :surf }
+    sleep 0.350
 
-        put_it(
-            "/expressions/#{fei.wfid}/0_0",
-            exp.to_yaml,
-            { "CONTENT_TYPE" => "application/yaml" })
+    get_it "/expressions/#{fei.wfid}/0_0?format=yaml"
 
-        assert_equal(
-            "http://example.org/expressions/#{fei.wfid}/0_0", 
-            @response["Location"])
+    assert_equal "application/yaml", @response["Content-Type"]
 
-        get_it(
-            "/expressions/#{fei.wfid}/0_0",
-            :env => { 'HTTP_ACCEPT' => "application/yaml" })
+    exp = YAML.load @response.body
+    assert_kind_of OpenWFE::FlowExpression, exp
 
-        exp = YAML.load @response.body
+    exp.attributes = { :toto => :surf }
 
-        assert_equal :surf, exp.attributes[:toto]
+    put_it(
+      "/expressions/#{fei.wfid}/0_0",
+      exp.to_yaml,
+      { "CONTENT_TYPE" => "application/yaml" })
 
-        $engine.cancel_process fei
+    assert_equal(
+      "http://example.org/expressions/#{fei.wfid}/0_0",
+      @response["Location"])
 
-        sleep 0.350
-    end
+    get_it(
+      "/expressions/#{fei.wfid}/0_0",
+      :env => { 'HTTP_ACCEPT' => "application/yaml" })
+
+    exp = YAML.load @response.body
+
+    assert_equal :surf, exp.attributes[:toto]
+
+    $engine.cancel_process fei
+
+    sleep 0.350
+  end
 end
 

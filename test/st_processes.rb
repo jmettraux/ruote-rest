@@ -18,128 +18,153 @@ require 'testbase'
 
 class StProcessesTest < Test::Unit::TestCase
 
-    include TestBase
+  include TestBase
 
-    include Sinatra::Builder
-    include Sinatra::RenderingHelpers
+  include Sinatra::Builder
+  include Sinatra::RenderingHelpers
 
 
-    def test_0
+  def test_0
 
-        get_it "/processes"
+    get_it "/processes"
 
-        #p @response
+    #p @response
 
-        assert_equal(
-            "application/xml",
-            @response.content_type)
+    assert_equal(
+      "application/xml",
+      @response.content_type)
 
-        assert_equal(
-            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\">\n</processes>\n",
-            @response.body)
-    end
+    assert_equal(
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\">\n</processes>\n",
+      @response.body)
+  end
 
-    def test_1
+  def test_1
 
-        li = OpenWFE::LaunchItem.new <<-EOS
-            class TestStProcesses < OpenWFE::ProcessDefinition
-                sequence do
-                    alpha
-                    bravo
-                end
-            end
-        EOS
-        #li.attributes.merge!(
-        #    "customer" => "toto", "amount" => 5, "discount" => false )
-        #puts
-        #puts OpenWFE::Xml.launchitem_to_xml(li, 2)
-        #puts
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStProcesses < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    EOS
+    #li.attributes.merge!(
+    #  "customer" => "toto", "amount" => 5, "discount" => false )
+    #puts
+    #puts OpenWFE::Xml.launchitem_to_xml(li, 2)
+    #puts
 
-        post_it(
-            "/processes",
-            OpenWFE::Xml.launchitem_to_xml(li, 2),
-            { "CONTENT_TYPE" => "application/xml" })
+    post_it(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      { "CONTENT_TYPE" => "application/xml" })
 
-        fei = OpenWFE::Xml.fei_from_xml @response.body
+    fei = OpenWFE::Xml.fei_from_xml @response.body
 
-        assert_equal 201, @response.status
-        assert_equal "TestStProcesses", fei.workflow_definition_name
-        assert_not_nil @response["Location"]
+    assert_equal 201, @response.status
+    assert_equal "TestStProcesses", fei.workflow_definition_name
+    assert_not_nil @response["Location"]
 
-        sleep 0.350
+    sleep 0.350
 
-        get_it "/processes"
+    get_it "/processes"
 
-        assert_not_nil @response.body.index(fei.wfid)
+    assert_not_nil @response.body.index(fei.wfid)
 
-        get_it "/processes/#{fei.wfid}"
-        #puts
-        #puts @response.body
-        #puts
+    get_it "/processes/#{fei.wfid}"
+    #puts
+    #puts @response.body
+    #puts
 
-        assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
+    assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 
-        get_it "/processes/#{fei.wfid}/representation"
+    get_it "/processes/#{fei.wfid}/representation"
 
-        js = JSON.parse(@response.body)
-        assert_kind_of Array, js
-        assert_equal "application/json", @response["Content-Type"]
+    js = JSON.parse(@response.body)
+    assert_kind_of Array, js
+    assert_equal "application/json", @response["Content-Type"]
 
-        delete_it "/processes/#{fei.wfid}"
+    delete_it "/processes/#{fei.wfid}"
 
-        assert_equal 303, @response.status
+    assert_equal 303, @response.status
 
-        sleep 0.350
+    sleep 0.350
 
-        get_it "/processes"
+    get_it "/processes"
 
-        assert_not_nil @response.body.index('count="0"')
+    assert_not_nil @response.body.index('count="0"')
 
-        get_it "/processes/#{fei.wfid}"
+    get_it "/processes/#{fei.wfid}"
 
-        assert_equal 404, @response.status
-    end
+    assert_equal 404, @response.status
+  end
 
-    #
-    # pause / resume
-    #
-    def test_2
+  #
+  # pause / resume
+  #
+  def test_2
 
-        $engine.register_participant :alpha, OpenWFE::HashParticipant
+    $engine.register_participant :alpha, OpenWFE::HashParticipant
 
-        li = OpenWFE::LaunchItem.new <<-EOS
-            class TestStProcesses < OpenWFE::ProcessDefinition
-                alpha
-            end
-        EOS
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStProcesses < OpenWFE::ProcessDefinition
+        alpha
+      end
+    EOS
 
-        post_it(
-            "/processes",
-            OpenWFE::Xml.launchitem_to_xml(li, 2),
-            { "CONTENT_TYPE" => "application/xml" })
+    post_it(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      { "CONTENT_TYPE" => "application/xml" })
 
-        fei = OpenWFE::Xml.fei_from_xml @response.body
+    fei = OpenWFE::Xml.fei_from_xml @response.body
 
-        sleep 0.350
+    sleep 0.350
 
-        get_it "/processes/#{fei.wfid}"
+    get_it "/processes/#{fei.wfid}"
 
-        put_it(
-            "/processes/#{fei.wfid}",
-            "<process><paused>true</paused></process>",
-            { "CONTENT_TYPE" => "application/xml" })
+    put_it(
+      "/processes/#{fei.wfid}",
+      "<process><paused>true</paused></process>",
+      { "CONTENT_TYPE" => "application/xml" })
 
-        assert_not_nil @response.body.index('<paused>true</paused>')
+    assert_not_nil @response.body.index('<paused>true</paused>')
 
-        put_it(
-            "/processes/#{fei.wfid}",
-            "<process><paused>false</paused></process>",
-            { "CONTENT_TYPE" => "application/xml" })
+    put_it(
+      "/processes/#{fei.wfid}",
+      "<process><paused>false</paused></process>",
+      { "CONTENT_TYPE" => "application/xml" })
 
-        assert_not_nil @response.body.index('<paused>false</paused>')
+    assert_not_nil @response.body.index('<paused>false</paused>')
 
-        $engine.cancel_process fei
+    $engine.cancel_process fei
 
-        sleep 0.350
-    end
+    sleep 0.350
+  end
+
+  #
+  # schedules
+  #
+  def _test_3
+
+    $engine.register_participant :alpha, OpenWFE::HashParticipant
+
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStProcesses < OpenWFE::ProcessDefinition
+        alpha
+      end
+    EOS
+
+    post_it(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      { "CONTENT_TYPE" => "application/xml" })
+
+    fei = OpenWFE::Xml.fei_from_xml @response.body
+
+    sleep 0.350
+
+    get_it "/processes/#{fei.wfid}"
+  end
 end

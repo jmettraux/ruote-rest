@@ -16,10 +16,10 @@ require 'misc'
 
 class MiscTest < Test::Unit::TestCase
 
-    def test_0
+  def test_0
 
-        assert_equal "0.0.1", swapdots("0_0_1")
-        assert_equal "0_0_1", swapdots("0.0.1")
-        assert_equal "nada", swapdots("nada")
-    end
+    assert_equal "0.0.1", swapdots("0_0_1")
+    assert_equal "0_0_1", swapdots("0.0.1")
+    assert_equal "nada", swapdots("nada")
+  end
 end

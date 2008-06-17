@@ -20,69 +20,69 @@ require 'testbase'
 
 class StParticipantsTest < Test::Unit::TestCase
 
-    include TestBase
+  include TestBase
 
-    include Sinatra::Builder
-    include Sinatra::RenderingHelpers
+  include Sinatra::Builder
+  include Sinatra::RenderingHelpers
 
 
-    def test_0
+  def test_0
 
-        get_it "/participants"
+    get_it "/participants"
 
-        assert_equal 200, @response.status
-        assert_equal "application/xml", @response["Content-Type"]
+    assert_equal 200, @response.status
+    assert_equal "application/xml", @response["Content-Type"]
 
-        post_it(
-            "/participants",
-            '["toto","OpenWFE::HashParticipant"]',
-            { "CONTENT_TYPE" => "application/json" })
+    post_it(
+      "/participants",
+      '["toto","OpenWFE::HashParticipant"]',
+      { "CONTENT_TYPE" => "application/json" })
 
-        assert_equal 201, @response.status
-        assert_not_equal "", @response.body
+    assert_equal 201, @response.status
+    assert_not_equal "", @response.body
 
-        get_it "/participants"
+    get_it "/participants"
 
-        #puts @response.body
+    #puts @response.body
 
-        assert_not_nil(
-            @response.body.index(' count="3"'), "expected 3 participants")
+    assert_not_nil(
+      @response.body.index(' count="3"'), "expected 3 participants")
 
-        get_it "/participants/toto"
+    get_it "/participants/toto"
 
-        assert_not_nil @response.body.index('>toto<')
+    assert_not_nil @response.body.index('>toto<')
 
-        delete_it "/participants/toto"
+    delete_it "/participants/toto"
 
-        assert_equal 303, @response.status
+    assert_equal 303, @response.status
 
-        get_it "/participants"
+    get_it "/participants"
 
-        #puts @response.body
+    #puts @response.body
 
-        assert_not_nil @response.body.index(' count="2"')
-    end
+    assert_not_nil @response.body.index(' count="2"')
+  end
 
-    def test_1
+  def test_1
 
-        post_it(
-            "/participants",
-            '["toto","OpenWFE::Extras::ActiveStoreParticipant", "totostore"]',
-            { "CONTENT_TYPE" => "application/json" })
+    post_it(
+      "/participants",
+      '["toto","OpenWFE::Extras::ActiveStoreParticipant", "totostore"]',
+      { "CONTENT_TYPE" => "application/json" })
 
-        assert_equal 201, @response.status
-        assert_not_equal "", @response.body
+    assert_equal 201, @response.status
+    assert_not_equal "", @response.body
 
-        get_it "/participants"
+    get_it "/participants"
 
-        assert_not_nil(
-            @response.body.index(' count="3"'), "expected 3 participants")
+    assert_not_nil(
+      @response.body.index(' count="3"'), "expected 3 participants")
 
-        get_it "/participants?pname=toto"
+    get_it "/participants?pname=toto"
 
-        assert_equal 200, @response.status
-        assert_not_nil @response.body.index('toto')
-    end
+    assert_equal 200, @response.status
+    assert_not_nil @response.body.index('toto')
+  end
 
 end
 

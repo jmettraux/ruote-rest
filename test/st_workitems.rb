@@ -21,99 +21,99 @@ require 'testbase'
 
 class StWorkitemsTest < Test::Unit::TestCase
 
-    include TestBase
+  include TestBase
 
-    include Sinatra::Builder
-    include Sinatra::RenderingHelpers
-    
+  include Sinatra::Builder
+  include Sinatra::RenderingHelpers
 
-    def test_0
 
-        fei = $engine.launch <<-EOS
-            class Test0 < OpenWFE::ProcessDefinition
-                sequence do
-                    alpha
-                    bravo
-                end
-            end
-        EOS
+  def test_0
 
-        sleep 0.200
+    fei = $engine.launch <<-EOS
+      class Test0 < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    EOS
 
-        assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
+    sleep 0.200
 
-        get_it '/workitems'
+    assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
 
-        #p @response.status
-        #puts @response.body
+    get_it '/workitems'
 
-        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    #p @response.status
+    #puts @response.body
 
-        assert_equal 1, workitems.size
+    workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
-        get_it workitems.first._uri
+    assert_equal 1, workitems.size
 
-        workitem = OpenWFE::Xml.workitem_from_xml @response.body
+    get_it workitems.first._uri
 
-        assert_equal workitems.first._uri, workitem._uri
+    workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
-        #
-        # get /workitems?wfid=x
+    assert_equal workitems.first._uri, workitem._uri
 
-        get_it "/workitems?wfid=#{fei.wfid}"
+    #
+    # get /workitems?wfid=x
 
-        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    get_it "/workitems?wfid=#{fei.wfid}"
 
-        assert_equal 1, workitems.size
+    workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
-        get_it "/workitems?wfid=#{fei.wfid}nada"
+    assert_equal 1, workitems.size
 
-        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    get_it "/workitems?wfid=#{fei.wfid}nada"
 
-        assert_equal 0, workitems.size
+    workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
-        #
-        # save workitem
+    assert_equal 0, workitems.size
 
-        workitem.owner = "toto"
+    #
+    # save workitem
 
-        put_it(
-            workitem._uri,
-            OpenWFE::Xml.workitem_to_xml(workitem),
-            { "CONTENT_TYPE" => "application/xml" })
-        
-        get_it workitem._uri
+    workitem.owner = "toto"
 
-        workitem = OpenWFE::Xml.workitem_from_xml @response.body
+    put_it(
+      workitem._uri,
+      OpenWFE::Xml.workitem_to_xml(workitem),
+      { "CONTENT_TYPE" => "application/xml" })
 
-        assert_equal "toto", workitem.owner
+    get_it workitem._uri
 
-        #
-        # proceed workitem
+    workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
-        workitem._state = "proceeded"
+    assert_equal "toto", workitem.owner
 
-        put_it(
-            workitem._uri,
-            OpenWFE::Xml.workitem_to_xml(workitem),
-            { "CONTENT_TYPE" => "application/xml" })
+    #
+    # proceed workitem
 
-        sleep 0.350
+    workitem._state = "proceeded"
 
-        get_it workitem._uri
+    put_it(
+      workitem._uri,
+      OpenWFE::Xml.workitem_to_xml(workitem),
+      { "CONTENT_TYPE" => "application/xml" })
 
-        assert_equal 404, @response.status
+    sleep 0.350
 
-        #
-        # proceeded ?
+    get_it workitem._uri
 
-        get_it '/workitems'
+    assert_equal 404, @response.status
 
-        workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    #
+    # proceeded ?
 
-        assert_equal 1, workitems.size
-        assert_equal "bravo", workitems.first.participant_name
-    end
+    get_it '/workitems'
+
+    workitems = OpenWFE::Xml.workitems_from_xml @response.body
+
+    assert_equal 1, workitems.size
+    assert_equal "bravo", workitems.first.participant_name
+  end
 
 end
 
