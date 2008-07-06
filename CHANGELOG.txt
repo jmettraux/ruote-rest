@@ -3,5 +3,6 @@
 
 == ruote-rest - 0.9.19    not yet released
 
-- todo    #20647 : showing scheduled jobs for /processes
+- bug   #21096 : reordered participant load order in conf/participants.rb
+- todo  #20647 : showing scheduled jobs for /processes
 
