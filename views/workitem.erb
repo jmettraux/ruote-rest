@@ -1,4 +1,12 @@
 
+<% if @detailed %>
+
+<div>
+<div style="float: left; width: 63%;">
+
+<% end %>
+
+
 <div class="workitem">
 
   <div class="workitem_link"><a href="<%= @workitem.href %>">GET <%= @workitem.href %></a></div>
@@ -31,4 +39,29 @@
   <% end %>
 
 </div>
+
+
+<% if @detailed %>
+
+</div>
+
+<script src="/js/fluo-json.js"></script>
+<script src="/js/fluo-can.js"></script>
+
+<div style="float: right;">
+
+  <!-- fluo -->
+
+  <canvas id="fluo" width="50" height="50"></canvas>
+  <script src="/processes/<%= @workitem.fei.wfid %>/representation?format=js"></script><!-- sets the 'proc_rep' var -->
+  <script>
+    FluoCan.renderFlow('fluo', proc_rep, []);
+    FluoCan.crop('fluo');
+    FluoCan.highlight('fluo', '<%= @workitem.fei.expid %>');
+  </script>
+
+</div>
+<div style="clear: both;"></div>
+
+<% end %>
 
