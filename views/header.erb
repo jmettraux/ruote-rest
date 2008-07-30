@@ -1,45 +1,46 @@
+
 <html>
 
-    <head>
-        <title><%= request.path_info %></title>
-        <style>
-            body {
-                /*text-align: center;*/
-                color: #888;
-                font-family: Helvetica;
-                font-size: 14px;
-                margin: 20px 70px;
-            }
-            #content {
-                margin: 0 auto;
-                width: 500px;
-                text-align: left;
-            }
-            .explanation {
-                font-size: 12px;
-                font-style: italic;
-            }
-            .process {
-                margin-top: 10px;
-            }
-            .error {
-                margin-top: 10px;
-            }
-            .expression {
-                margin-top: 10px;
-            }
-            .participant {
-                margin-top: 10px;
-            }
-            .workitem {
-                margin-top: 10px;
-            }
-        </style>
-    </head>
+  <head>
+    <title><%= request.path_info %></title>
+    <style>
+body {
+    /*text-align: center;*/
+    color: #888;
+    font-family: Helvetica;
+    font-size: 14px;
+    margin: 20px 70px;
+}
+/* #content {
+    margin: 0 auto;
+    width: 500px;
+    text-align: left;
+} */
+.explanation {
+    font-size: 12px;
+    font-style: italic;
+}
+.process {
+    margin-top: 10px;
+}
+.error {
+    margin-top: 10px;
+}
+.expression {
+    margin-top: 10px;
+}
+.participant {
+    margin-top: 10px;
+}
+.workitem {
+    margin-top: 10px;
+}
+    </style>
+  </head>
 
 <body>
 
-<div class="header">
+  <div class="header">
     <div class="h_left" style="float: left;">
         <a href="http://openwferu.rubyforge.org/index.html#rr">OpenWFEru</a> ruote-rest
     </div>
@@ -47,6 +48,7 @@
         <span><%= response.status %></span>
     </div>
     <div style="clear: both;"></div>
-</div>
+  </div>
+
 <hr/>
 
