@@ -37,7 +37,7 @@ To prepare the dev database with the admin 'toto'
 
 == starting it
 
-    bin/start
+    ruby lib/start.rb
 
 
 Then head to

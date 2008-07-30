@@ -1,7 +1,7 @@
-#!/usr/bin/env ruby
 
 dir = File.dirname(__FILE__)
-$:.unshift "#{dir}/../lib"
+
+$:.unshift "#{dir}"
 $:.unshift "#{dir}/../conf"
 
 $:.unshift "#{dir}/../vendor" # if any
