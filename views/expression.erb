@@ -1,73 +1,81 @@
 
+<% if @detailed %>
 <div class="expression">
+<% else %>
+<div 
+  class="expression" 
+  onmouseover="FluoCan.highlight('fluo', '<%= @expression.fei.expid %>');"
+  onmouseout="FluoCan.highlight('fluo', null);"
+>
+<% end %>
 
-    <div class="expression_link"><a href="<%= @expression.href %>">GET <%= @expression.href %></a></div>
+  <div class="expression_link"><a href="<%= @expression.href %>">GET <%= @expression.href %></a></div>
 
-    <%= @detailed ? "<br/>" : "" %>
+  <%= @detailed ? "<br/>" : "" %>
 
-    <div>fei : <span class="expression_fei"><%= @expression.fei.to_s %></div>
-    <div>class : <span class="expression_class"><%= @expression.class.name %></div>
-    <div>name : <span class="expression_name"><%= @expression.fei.expname %></div>
-    <div>apply time : <span class="expression_apply_time"><%= display_time(@expression, :apply_time) %></div>
+  <div>fei : <span class="expression_fei"><%= @expression.fei.to_s %></div>
+  <div>class : <span class="expression_class"><%= @expression.class.name %></div>
+  <div>name : <span class="expression_name"><%= @expression.fei.expname %></div>
+  <div>apply time : <span class="expression_apply_time"><%= display_time(@expression, :apply_time) %></div>
 
-    <% if @detailed %>
+  <% if @detailed %>
 
-        <%= some_javascript %>
+    <%= some_javascript %>
 
-        <div>process : <a href="/processes/<%= @expression.fei.wfid %>">GET /processes/<%= @expression.fei.wfid %></a></div>
+    <div>process : <a href="/processes/<%= @expression.fei.wfid %>">GET /processes/<%= @expression.fei.wfid %></a></div>
 
-        <div>process expressions : <a href="/expressions/<%= @expression.fei.wfid %>">GET /expressions/<%= @expression.fei.wfid %></a></div>
+    <div>process expressions : <a href="/expressions/<%= @expression.fei.wfid %>">GET /expressions/<%= @expression.fei.wfid %></a></div>
 
-        <br/>
+    <br/>
 
-        <% if @expression.parent_id %>
-            <div>parent : <a href="<%= @expression.parent_id.href %>">GET <%= @expression.parent_id.href %></a></div>
-        <% end %>
-
-        <% if @expression.environment_id %>
-            <div>environment : <a href="<%= @expression.environment_id.href %>">GET <%= @expression.environment_id.href %></a></div>
-        <% end %>
-
-        <% if @expression.children %>
-            children :
-            <% @expression.children.each do |eid| %>
-                <% next unless eid.respond_to?(:link) %>
-                <div>&nbsp;&nbsp;<a href="<%= eid.href %>">GET <%= eid.href %></a></div>
-            <% end %>
-        <% end %>
-
-        <% if @expression.raw_representation %>
-            <br/>
-            raw representation :
-            <div class="expression_raw_representation"><%= @expression.raw_representation.to_json.to_s %></div>
-        <% end %>
-
-        <% if @expression.raw_rep_updated %>
-            raw representation (updated) :
-            <div class="expression_raw_rep_updated"><%= @expression.raw_rep_updated.to_json.to_s %></div>
-        <% end %>
-
-        <br/>
-
-        <div>yaml : <a href="<%= @expression.href %>?format=yaml">GET <%= @expression.href %>?format=yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
-
-        <div id="put_yaml" style="display: none">
-            <br/>
-            <form action="<%= @expression.href %>" method="POST" enctype="multipart/form-data">
-                <input type="hidden" name="_method" value="PUT" />
-                <textarea name="yaml" cols="80" rows="24"><%= @expression.to_yaml %></textarea>
-                <input type="submit" value="PUT <%= @expression.href %>" />
-            </form>
-        </div>
-
-        <div>
-            <form action="<%= @expression.href %>" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="_method" value="DELETE"/>
-                terminate expression :
-                <input type="submit" value="DELETE <%= @expression.href %>" />
-            </form>
-        </div>
-
+    <% if @expression.parent_id %>
+      <div>parent : <a href="<%= @expression.parent_id.href %>">GET <%= @expression.parent_id.href %></a></div>
     <% end %>
+
+    <% if @expression.environment_id %>
+      <div>environment : <a href="<%= @expression.environment_id.href %>">GET <%= @expression.environment_id.href %></a></div>
+    <% end %>
+
+    <% if @expression.children %>
+      children :
+      <% @expression.children.each do |eid| %>
+        <% next unless eid.respond_to?(:link) %>
+        <div>&nbsp;&nbsp;<a href="<%= eid.href %>">GET <%= eid.href %></a></div>
+      <% end %>
+    <% end %>
+
+    <% if @expression.raw_representation %>
+      <br/>
+      raw representation :
+      <div class="expression_raw_representation"><%= @expression.raw_representation.to_json.to_s %></div>
+    <% end %>
+
+    <% if @expression.raw_rep_updated %>
+      raw representation (updated) :
+      <div class="expression_raw_rep_updated"><%= @expression.raw_rep_updated.to_json.to_s %></div>
+    <% end %>
+
+    <br/>
+
+    <div>yaml : <a href="<%= @expression.href %>?format=yaml">GET <%= @expression.href %>?format=yaml</a><span id="show_button"> (<a href="" onclick="show('put_yaml'); hide('show_button'); return false;">show</a>)</span></div>
+
+    <div id="put_yaml" style="display: none">
+      <br/>
+      <form action="<%= @expression.href %>" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="PUT" />
+        <textarea name="yaml" cols="80" rows="24"><%= @expression.to_yaml %></textarea>
+        <input type="submit" value="PUT <%= @expression.href %>" />
+      </form>
+    </div>
+
+    <div>
+      <form action="<%= @expression.href %>" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="_method" value="DELETE"/>
+        terminate expression :
+        <input type="submit" value="DELETE <%= @expression.href %>" />
+      </form>
+    </div>
+
+  <% end %>
 </div>
 

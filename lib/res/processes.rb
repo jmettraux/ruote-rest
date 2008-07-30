@@ -69,7 +69,10 @@ get "/processes/:wfid/representation" do
 
   throw :halt, [ 404, "no such process" ] unless pstack
 
-  rrender :process_representation, pstack, :format => 'json'
+  format = params[:format] || 'json'
+
+  #rrender :process_representation, pstack, :format => 'json'
+  rrender :process_representation, pstack, :format => format
 end
 
 #

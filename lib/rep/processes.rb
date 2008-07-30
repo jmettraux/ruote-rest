@@ -190,4 +190,9 @@ helpers do
     pstack.representation.to_json.to_s
   end
 
+  def render_process_representation_js (pstack)
+
+    "var proc_rep = #{pstack.representation.to_json.to_s};"
+  end
+
 end

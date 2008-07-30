@@ -1,7 +1,36 @@
 
-<div class="expressions">
+<script src="/js/fluo-json.js"></script>
+<script src="/js/fluo-can.js"></script>
+
+<div style="float: left;">
+
+  <!-- the expressions -->
+
+  <div class="expressions">
     <% @expressions.each do |fexp| %>
-        <%= render_expression_html(fexp, false) %>
+      <%= render_expression_html(fexp, false) %>
     <% end %>
+  </div>
+  
+  <br/>
+  
+  <div>process : <a href="/processes/<%= @expressions.first.fei.wfid %>">GET /processes/<%= @expressions.first.fei.wfid %></a></div>
+
 </div>
 
+
+<div style="float: right;">
+
+  <!-- fluo -->
+
+  <canvas id="fluo" width="50" height="50"></canvas>
+  <script src="/processes/<%= @expressions.first.fei.wfid %>/representation?format=js"></script><!-- sets the 'proc_rep' var -->
+  <script>
+    FluoCan.renderFlow('fluo', proc_rep, []);
+    FluoCan.crop('fluo');
+  </script>
+
+</div>
+
+<div style="clear: both;"></div>
+  
