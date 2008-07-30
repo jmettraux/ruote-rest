@@ -26,8 +26,11 @@
         or
         <div><textarea name="pdef" cols="40" rows="7">class Test0 &lt; OpenWFE::ProcessDefinition
   sequence do
-    participant ref="alpha"
-    participant ref="bravo"
+    participant :ref =&gt; "alpha"
+    concurrence do
+      participant :ref =&gt; "bravo"
+      participant :ref =&gt; "charly"
+    end
   end
 end</textarea> (definition)</div>
     </div>
