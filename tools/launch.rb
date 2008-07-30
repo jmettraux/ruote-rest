@@ -26,40 +26,40 @@ opts.separator("")
 opts.separator("options:")
 
 opts.on(
-    "-j", "--json", 
-    "outputs the launchitem in JSON (default is XML)") do
+  "-j", "--json",
+  "outputs the launchitem in JSON (default is XML)") do
 
-    json = true
+  json = true
 end
 
 opts.on(
-    "-x", "--xml", 
-    "outputs the launchitem in XML (already the default)") do
+  "-x", "--xml",
+  "outputs the launchitem in XML (already the default)") do
 
-    json = false
+  json = false
 end
 
 opts.on(
-    "-u", "--url {url}", 
-    "points to the URL of a process defintion") do |u|
+  "-u", "--url {url}",
+  "points to the URL of a process defintion") do |u|
 
-    url = u
+  url = u
 end
 
 opts.on(
-    "-l", "--launch", 
-    "generates the launchitem and use it to launch a process locally") do
+  "-l", "--launch",
+  "generates the launchitem and use it to launch a process locally") do
 
-    launch = true
+  launch = true
 end
 
 # help
 
 opts.on("-h", "--help", "display this help content") do
-    puts
-    puts opts.to_s()
-    puts
-    exit 0
+  puts
+  puts opts.to_s()
+  puts
+  exit 0
 end
 
 opts_rest = opts.parse(ARGV)
@@ -70,21 +70,21 @@ opts_rest = opts.parse(ARGV)
 
 li = OpenWFE::LaunchItem.new
 li.workflow_definition_url = url
-li.attributes.merge!({ 
-    'my_field' => 'my_value',
-    'my_other_field' => 1234567,
-    'yet_another?' => true
+li.attributes.merge!({
+  'my_field' => 'my_value',
+  'my_other_field' => 1234567,
+  'yet_another?' => true
 })
 
-sli = if json 
-    li.to_h.to_json
+sli = if json
+  li.to_h.to_json
 else
-    OpenWFE::Xml.launchitem_to_xml li, 2
+  OpenWFE::Xml.launchitem_to_xml li, 2
 end
 
 unless launch
-    puts sli
-    exit 0
+  puts sli
+  exit 0
 end
 
 # launch
@@ -92,8 +92,8 @@ end
 require 'rufus/verbs'
 
 res = Rufus::Verbs::post "http://localhost:4567/processes" do |request|
-    request['Content-Type'] = json ? 'application/json' : 'application/xml'
-    sli
+  request['Content-Type'] = json ? 'application/json' : 'application/xml'
+  sli
 end
 
 puts res.body

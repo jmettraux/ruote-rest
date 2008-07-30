@@ -5,6 +5,7 @@
 
   <%= @detailed ? "<br/>" : "" %>
 
+  <div>fei : <span class="workitem_fei"><%= @workitem.fei.to_s %></span></div>
   <div>participant : <span class="workitem_participant"><%= @workitem.participant_name %></span></div>
   <div>dispatch time : <span class="workitem_dispatch_time"><%= display_time @workitem, :dispatch_time %></span></div>
 

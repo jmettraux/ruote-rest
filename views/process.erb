@@ -1,7 +1,8 @@
 
 <div class="process">
 
-  <div style="float: left">
+  <div style="float: left; width: 63%;">
+
     <div class="process_link"><a href="<%= @process.href %>">GET <%= @process.href %></a></div>
   
     <br/>
@@ -120,11 +121,13 @@
   <script src="/js/fluo-can.js"></script>
 
   <div style="float: right;">
+
     <canvas id="fluo" width="50" height="50"></canvas>
     <script>
       FluoCan.renderFlow('fluo', <%= @process.process_stack.representation.to_json.to_s %>, []);
       FluoCan.crop('fluo');
     </script>
+
   </div>
 
   <% end %><!-- end of fluo -->
