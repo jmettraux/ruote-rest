@@ -37,64 +37,20 @@
 # John Mettraux at openwfe.org
 #
 
-require 'sinatra'
+helpers do
 
-require 'rexml/document'
-require 'json'
+  def rlink (*args)
 
-#
-# conf
+    # rel= ?
+    # http://microformats.org/wiki/rel-design-pattern
 
-load 'auth.rb'
-require 'part.rb'
+    return args.first.link(request) \
+      if args.size == 1 and args.first.respond_to?(:link)
 
-require 'db'
-require 'engine'
-require 'participants'
+    args = args.collect { |a| swapdots(a) }
 
-#
-# misc
+    "<a href=\"#{request.href(*args)}\">GET /#{args.join('/')}</a>"
+  end
 
-require 'patching'
-require 'misc'
-
-#
-# representations (I'd prefer another name...)
-
-load 'inout.rb'
-load 'rep/html.rb'
-load 'rep/xml.rb'
-
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-
-#
-# resources
-
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-
-#
-# helpers
-
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# "/" redirection
-
-get "/" do
-
-  response.status = 303
-  header "Location" => request.href(:processes)
-  ""
 end
 

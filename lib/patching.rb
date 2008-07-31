@@ -54,18 +54,32 @@ class Rack::Request
     if (scheme == 'https' && port != 443) ||
        (scheme == 'http' && port != 80)
 
-       base << ":#{port}"
+      base << ":#{port}"
     end
 
     base + "/" + args.collect {|a| a.to_s }.join("/")
   end
 end
 
+
+#
+# assumes the including class has a href() method, provides a link(req)
+# method.
+#
+module RuoteLinkable
+
+  def link (request)
+    "<a href=\"#{href(request)}\">GET #{href}</a>"
+  end
+end
+
+
 #
 # reopening some OpenWFE classes to add some link magic
 #
 
 class OpenWFE::FlowExpressionId
+  include RuoteLinkable
 
   #
   # Returns the relative link to the expression pointed at by this
@@ -96,6 +110,7 @@ class OpenWFE::FlowExpressionId
 end
 
 class OpenWFE::ProcessStatus
+  include RuoteLinkable
 
   #
   # Returns the 'ruote-rest' href for this ProcessError instance
@@ -109,6 +124,7 @@ class OpenWFE::ProcessStatus
 end
 
 class OpenWFE::FlowExpression
+  include RuoteLinkable
 
   #
   # a shortcut for
@@ -117,11 +133,12 @@ class OpenWFE::FlowExpression
   #
   def href (request=nil)
 
-    self.fei.href(request)
+    fei.href(request)
   end
 end
 
 class OpenWFE::InFlowWorkItem
+  include RuoteLinkable
 
   #
   # Returns the 'ruote-rest' href for this workitem
@@ -135,6 +152,7 @@ class OpenWFE::InFlowWorkItem
 end
 
 class OpenWFE::ProcessError
+  include RuoteLinkable
 
   def error_id
 

@@ -46,7 +46,7 @@ helpers do
     }
   end
 
-  def render_fluo_foot (wfid, expid=nil)
+  def render_fluo_foot (wfid, expid=nil, workitems=[])
 
     rep = if wfid.is_a?(Array)
       "<script>var proc_rep = #{wfid.to_json}</script>"
@@ -69,7 +69,7 @@ helpers do
     <canvas id="fluo" width="50" height="50"></canvas>
     #{rep}
     <script>
-      FluoCan.renderFlow('fluo', proc_rep, []);
+      FluoCan.renderFlow('fluo', proc_rep, #{Array(workitems).inspect});
       FluoCan.crop('fluo');
       #{hl}
     </script>

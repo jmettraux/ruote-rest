@@ -3,7 +3,7 @@
 
 <div class="process">
 
-  <div class="process_link"><a href="<%= @process.href %>">GET <%= @process.href %></a></div>
+  <div class="process_link"><%= rlink(@process) %></div>
 
   <br/>
 
@@ -16,12 +16,8 @@
   <div>paused : <span class="process_paused"><%= @process.paused %></div>
   <div>tags : <span class="process_tags"><%= @process.tags.join(", ") %></div>
   <div>branches : <span class="process_branches"><%= @process.branches %></div>
-  <div>all expressions : 
-    <a href="/expressions/<%= @process.wfid %>">GET /expressions/<%= @process.wfid %></a>
-  </div>
-  <div>representation (json) : 
-    <a href="/processes/<%= @process.wfid %>/representation">GET /processes/<%= @process.wfid %>/representation</a> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)
-  </div>
+  <div>all expressions : <%= rlink('expressions', @process.wfid) %></div>
+  <div>representation (json) : <%= rlink('processes', @process.wfid, 'representation') %> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)</div>
   <div>workitems : <a href="/workitems?wfid=<%= @process.wfid %>">GET /workitems/<%= @process.wfid %></a></div>
 
   <% if @detailed %>
@@ -57,8 +53,12 @@
       <% @process.expressions.each do |fexp|
           fei = fexp.fei
       %>
-        <div class="process_exp">
-          <%= fei.expname + " " + fei.expid %> : <a href="<%= fei.href %>">GET <%= fei.href %></a>
+        <div 
+          class="process_exp"
+          onmouseover="FluoCan.highlight('fluo', '<%= fei.expid %>');"
+          onmouseout="FluoCan.highlight('fluo', null);"
+        >
+          <%= fei.expname + " " + fei.expid %> : <%= rlink(fexp) %>
         </div>
       <% end %>
     </div>

@@ -15,7 +15,7 @@
 
 <% end %>
 
-  <div class="expression_link"><a href="<%= @expression.href %>">GET <%= @expression.href %></a></div>
+  <div class="expression_link"><%= rlink(@expression) %></div>
 
   <%= @detailed ? "<br/>" : "" %>
 
@@ -28,25 +28,24 @@
 
     <%= some_javascript %>
 
-    <div>process : <a href="/processes/<%= @expression.fei.wfid %>">GET /processes/<%= @expression.fei.wfid %></a></div>
-
-    <div>process expressions : <a href="/expressions/<%= @expression.fei.wfid %>">GET /expressions/<%= @expression.fei.wfid %></a></div>
+    <div>process : <%= rlink('processes', @expression.fei.wfid) %></div>
+    <div>process expressions : <%= rlink('expressions', @expression.fei.wfid) %></div>
 
     <br/>
 
     <% if @expression.parent_id %>
-      <div>parent : <a href="<%= @expression.parent_id.href %>">GET <%= @expression.parent_id.href %></a></div>
+      <div>parent : <%= rlink(@expression.parent_id) %></div>
     <% end %>
 
     <% if @expression.environment_id %>
-      <div>environment : <a href="<%= @expression.environment_id.href %>">GET <%= @expression.environment_id.href %></a></div>
+      <div>environment : <%= rlink(@expression.environment_id) %></div>
     <% end %>
 
     <% if @expression.children %>
       children :
       <% @expression.children.each do |eid| %>
         <% next unless eid.respond_to?(:link) %>
-        <div>&nbsp;&nbsp;<a href="<%= eid.href %>">GET <%= eid.href %></a></div>
+        <div>&nbsp;&nbsp;<%= rlink(eid) %></div>
       <% end %>
     <% end %>
 
