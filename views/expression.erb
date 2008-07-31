@@ -1,9 +1,9 @@
 
-<% if @detailed %>
-  <!-- I somehow wished this @detailed business were simpler -->
+<%= render_fluo_head if @detailed %>
 
-<div>
-<div class="expression" style="float: left; width: 63%;">
+<% if @detailed %>
+
+<div class="expression">
 
 <% else %>
 
@@ -84,33 +84,7 @@
 
   <% end %>
 
-
-<% if @detailed %>
-
 </div>
 
-<script src="/js/fluo-json.js"></script>
-<script src="/js/fluo-can.js"></script>
-
-<div style="float: right;">
-
-  <!-- fluo -->
-
-  <canvas id="fluo" width="50" height="50"></canvas>
-  <script src="/processes/<%= @expression.fei.wfid %>/representation?format=js"></script><!-- sets the 'proc_rep' var -->
-  <script>
-    FluoCan.renderFlow('fluo', proc_rep, []);
-    FluoCan.crop('fluo');
-    FluoCan.highlight('fluo', '<%= @expression.fei.expid %>');
-  </script>
-
-</div>
-<div style="clear: both;"></div>
-</div>
-
-<% else %>
-
-</div>
-
-<% end %>
+<%= render_fluo_foot(@expression.fei.wfid, @expression.fei.expid) if @detailed %>
 

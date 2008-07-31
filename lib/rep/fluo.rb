@@ -37,60 +37,48 @@
 # John Mettraux at openwfe.org
 #
 
-require 'sinatra'
+helpers do
 
-require 'rexml/document'
-require 'json'
+  def render_fluo_head
+    %{
+<div>
+  <div style="float: left; width: 63%;">
+    }
+  end
 
-#
-# conf
+  def render_fluo_foot (wfid, expid=nil)
 
-load 'auth.rb'
-require 'part.rb'
+    rep = if wfid.is_a?(Array)
+      "<script>var proc_rep = #{wfid.to_json}</script>"
+    else
+      "<script src=\"/processes/#{wfid}/representation?format=js\"></script>"
+    end
 
-require 'db'
-require 'engine'
-require 'participants'
+    hl = expid ? "FluoCan.highlight('fluo', '#{expid}');" : ""
 
-#
-# misc
+    %{
+  </div>
 
-require 'patching'
-require 'misc'
+  <script src="/js/fluo-json.js"></script>
+  <script src="/js/fluo-can.js"></script>
 
-#
-# representations (I'd prefer another name...)
+  <div style="float: right;">
 
-load 'inout.rb'
-load 'rep/html.rb'
-load 'rep/xml.rb'
+  <!-- fluo -->
 
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
+    <canvas id="fluo" width="50" height="50"></canvas>
+    #{rep}
+    <script>
+      FluoCan.renderFlow('fluo', proc_rep, []);
+      FluoCan.crop('fluo');
+      #{hl}
+    </script>
 
-load 'rep/fluo.rb'
+  </div>
+  <div style="clear: both;"></div>
+</div>
+    }
+  end
 
-#
-# resources
-
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-
-#
-# "/" redirection
-
-get "/" do
-
-  response.status = 303
-  header "Location" => request.href(:processes)
-  ""
 end
 
