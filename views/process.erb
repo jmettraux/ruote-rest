@@ -18,7 +18,7 @@
   <div>branches : <span class="process_branches"><%= @process.branches %></div>
   <div>all expressions : <%= rlink('expressions', @process.wfid) %></div>
   <div>representation (json) : <%= rlink('processes', @process.wfid, 'representation') %> (<a href="/processes/<%= @process.wfid %>/representation?plain=true">plain/text</a>)</div>
-  <div>workitems : <a href="/workitems?wfid=<%= @process.wfid %>">GET /workitems/<%= @process.wfid %></a></div>
+  <div>workitems : <%= rlink('workitems', { 'wfid' => @process.wfid }) %></div>
 
   <% if @detailed %>
 

@@ -1,7 +1,15 @@
 
 <%= render_fluo_head if @detailed %>
 
+<% if @wfid %>
+<div 
+  class="workitem"
+  onmouseover="FluoCan.highlight('fluo', '<%= @workitem.fei.expid %>');"
+  onmouseout="FluoCan.highlight('fluo', null);"
+>
+<% else %>
 <div class="workitem">
+<% end %>
 
   <div class="workitem_link"><%= rlink(@workitem) %></div>
 
@@ -16,6 +24,7 @@
     <div>last modified : <span class="workitem_last_modified"><%= display_time @workitem, :last_modified %></span></div>
     <div>process : <%= rlink('processes', @workitem.fei.wfid) %></div>
     <div>expression : <%= rlink('expressions', @workitem.fei.wfid, @workitem.fei.expid) %></div>
+    <div>workitems of this process : <%= rlink('workitems', { 'wfid' => @workitem.fei.wfid }) %></div>
 
     <br/>
 

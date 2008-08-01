@@ -94,15 +94,15 @@ helpers do
 
     #pname = params[:pname]
     sn = get_store_names
-    wfid = params[:wfid]
+    @wfid = params[:wfid]
     q = params[:q]
 
     workitems = if q
       OpenWFE::Extras::Workitem.search q, sn
     elsif sn
       OpenWFE::Extras::Workitem.find_in_stores sn
-    elsif wfid
-      OpenWFE::Extras::Workitem.find_all_by_wfid wfid
+    elsif @wfid
+      OpenWFE::Extras::Workitem.find_all_by_wfid @wfid
     else
       OpenWFE::Extras::Workitem.find :all
     end

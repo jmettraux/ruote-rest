@@ -1,9 +1,15 @@
 
+<%= render_fluo_head if @wfid %>
+
 <h4>GET /workitems</h4>
 
 <div class="explanation">the workitems waiting for [human] intervention</div>
 
 <% @workitems.each do |wi| %>
-    <%= render_workitem_html wi, false %>
+  <%= render_workitem_html wi, false %>
 <% end %>
+
+<br/>
+
+<%= render_fluo_foot(@wfid, nil, @workitems.collect { |wi| wi.fei.expid }) if @wfid %>
 

@@ -47,9 +47,15 @@ helpers do
     return args.first.link(request) \
       if args.size == 1 and args.first.respond_to?(:link)
 
+    params = args.last.is_a?(Hash) ? args.pop : nil
+    params = "?" + params.collect { |k, v| "#{k}=#{swapdots(v)}" }.join("&") if params
+    params = "" unless params
+
     args = args.collect { |a| swapdots(a) }
 
-    "<a href=\"#{request.href(*args)}\">GET /#{args.join('/')}</a>"
+    "<a href=\"#{request.href(*args)}#{params}\">" +
+    "GET /#{args.join('/')}#{params}" +
+    "</a>"
   end
 
 end
