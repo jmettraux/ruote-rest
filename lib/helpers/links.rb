@@ -39,6 +39,9 @@
 
 helpers do
 
+  #
+  # builds a GET link (<a ...>GET ...</a>)
+  #
   def rlink (*args)
 
     # rel= ?
@@ -56,6 +59,26 @@ helpers do
     "<a href=\"#{request.href(*args)}#{params}\">" +
     "GET /#{args.join('/')}#{params}" +
     "</a>"
+  end
+
+  #
+  # returns the current URI
+  #
+  def here
+
+    "#{request.scheme}://#{request.host}:#{request.port}" +
+    "#{request.fullpath}"
+  end
+
+  #
+  # returns the special href for debugging formats (plain=true)
+  #
+  def as_x_href (format)
+
+    href = here
+    href += href.index('?') ? '&' : '?'
+
+    href + "format=#{format}&plain=true"
   end
 
 end

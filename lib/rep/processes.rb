@@ -136,7 +136,7 @@ helpers do
           end
         end
 
-        xml.errors :count => p.errors.size do
+        xml.errors :href => request.href(:errors, p.wfid), :count => p.errors.size do
           p.errors.each do |k, v|
             xml.error do
               #xml.stacktrace do

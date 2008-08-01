@@ -2,12 +2,19 @@
 <hr/>
 
 <div class="footer">
+  <div class="h_left" style="float: left;">
     GET /definitions | 
     <a href="/processes">GET /processes</a> | 
     <a href="/workitems">GET /workitems</a> | 
     <a href="/errors">GET /errors</a> | 
     <a href="/participants">GET /participants</a>
+  </div>
+  <div class="h_right" style="float: right;">
+    <a href="<%= as_x_href('xml') %>">as xml</a> | as json
+  </div>
+  <div style="clear: both;"></div>
 </div>
 
 </body>
 </html>
+
