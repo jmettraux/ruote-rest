@@ -47,7 +47,7 @@ helpers do
 
     builder do |xml|
       xml.instruct!
-      xml.processes :count => ps.size do
+      xml.processes :href => request.href(:processes), :count => ps.size do
         ps.each do |fei, process_status|
           _render_process_xml xml, process_status
         end

@@ -264,7 +264,7 @@ var FluoCan = function() {
     }
     FluoCanvas.drawRoundedRect(c, width, height, 8);
     c.save();
-    c.translate(-width/2 + attWidth/2 + 7 , 7);
+    c.translate(-width/2 + attWidth/2 + 5 , 7);
     if (c.fluoVertical == false) c.translate(attHeight/2, 0);
     drawAttributes(c, exp, true, attWidth, attHeight);
     c.restore();

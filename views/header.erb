@@ -2,7 +2,12 @@
 <html>
 
   <head>
+
     <title><%= request.path_info %></title>
+
+    <link rel="alternate" type="application/xml" href="<%= "#{request.scheme}://#{request.host}:#{request.port}#{request.fullpath}" %>" />
+    <!-- TODO : add application/json alt link -->
+
     <style>
 body {
     /*text-align: center;*/
