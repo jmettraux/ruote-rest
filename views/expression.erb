@@ -52,12 +52,12 @@
     <% if @expression.raw_representation %>
       <br/>
       raw representation :
-      <div class="expression_raw_representation"><%= @expression.raw_representation.to_json.to_s %></div>
+      <div class="expression_raw_representation"><%= JSON.dump(@expression.raw_representation) %></div>
     <% end %>
 
     <% if @expression.raw_rep_updated %>
       raw representation (updated) :
-      <div class="expression_raw_rep_updated"><%= @expression.raw_rep_updated.to_json.to_s %></div>
+      <div class="expression_raw_rep_updated"><%= JSON.dump(@expression.raw_rep_updated) %></div>
     <% end %>
 
     <br/>

@@ -32,7 +32,7 @@
       <input type="hidden" name="_method" value="PUT" />
 
       attributes :<br/>
-      <textarea name="attributes" cols="60" rows="12"><%= @workitem.attributes.to_json.to_s %></textarea>(json)<br/>
+      <textarea name="attributes" cols="60" rows="12"><%= JSON.dump(@workitem.attributes) %></textarea>(json)<br/>
 
       proceed : <input type="checkbox" name="proceed" value="proceed" /><br/>
 

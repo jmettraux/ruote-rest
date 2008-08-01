@@ -55,11 +55,16 @@ helpers do
     end
   end
 
-  def render_processes_html (processes)
+  def render_processes_json (ps)
 
-    @processes = processes
+    JSON.dump(ps.collect { |fei, s| s.to_h })
+  end
 
-    #erb :processes, :locals => { "ps" => processes }
+  def render_processes_html (ps)
+
+    @processes = ps
+
+    #erb :processes, :locals => { "ps" => ps }
       #
       # sinatra 0.2.2 : locals seem not working
 
@@ -69,17 +74,18 @@ helpers do
 #
 # PROCESS
 
-# html
+  def render_process_html (p, detailed=true)
 
-  def render_process_html (process, detailed=true)
-
-    @process = process
+    @process = p
     @detailed = detailed
 
     _erb :process, :layout => detailed ? :html : false
   end
 
-# xml
+  def render_process_json (p)
+
+    JSON.dump(p.to_h)
+  end
 
   def render_process_xml (p)
 
@@ -149,7 +155,7 @@ helpers do
         end
 
         xml.representation(
-          p.process_stack.representation.to_json.to_s,
+          JSON.dump(p.process_stack.representation),
           :href => request.href(:processes, p.wfid, :representation))
 
       else
@@ -187,13 +193,8 @@ helpers do
   #
   def render_process_representation_json (pstack)
 
-    pstack.representation.to_json.to_s
-  end
-
-  def render_process_representation_js (pstack)
-
-    #pstack.representation.to_json.to_s
-    pstack.representation.to_json
+    JSON.dump(pstack.representation)
   end
 
 end
+

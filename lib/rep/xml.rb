@@ -51,7 +51,7 @@ def hash_to_xml (xml, tag, object, accessor)
     vars.each do |k, v|
       xml.entry do
         xml.string k.to_s
-        xml.string v.to_json
+        xml.string JSON.dump(v)
       end
     end
   end

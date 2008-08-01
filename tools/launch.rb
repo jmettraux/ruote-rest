@@ -5,7 +5,7 @@ require 'rubygems'
 
 require 'optparse'
 
-require 'json'
+require 'json/pure'
 
 require 'openwfe/workitem'
 require 'openwfe/util/xml'
@@ -77,7 +77,7 @@ li.attributes.merge!({
 })
 
 sli = if json
-  li.to_h.to_json
+  JSON.dump(li.to_h)
 else
   OpenWFE::Xml.launchitem_to_xml li, 2
 end

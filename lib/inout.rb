@@ -67,15 +67,12 @@ def rrender (type, object, options={})
   header 'Content-Type' => ctype
   options.each { |k, v| header(k => v) }
 
-  method_name = "render_#{type}_#{format}"
-
-  data = send method_name, object
-
-  return data unless format == 'js'
+  return send("render_#{type}_#{format}", object) unless format == 'js'
 
   varname = params[:var] || 'ruote_js'
+  method = "render_#{type}_json"
 
-  "var #{varname} = #{data};"
+  "var #{varname} = #{send(method, object)}"
 
   #begin
   #  send method_name, object

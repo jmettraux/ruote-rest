@@ -121,6 +121,16 @@ class OpenWFE::ProcessStatus
 
     "/processes/#{wfid}"
   end
+
+  def to_h
+
+    {
+      #'wfid' => wfid,
+      #'launch_time' => launch_time,
+      #'paused' => paused
+      #'variables' => variables
+    }
+  end
 end
 
 class OpenWFE::FlowExpression

@@ -87,6 +87,16 @@ helpers do
     end
   end
 
+  def render_workitems_json (wis)
+
+    JSON.dump(wis.collect { |wi| wi.as_owfe_workitem.to_h })
+  end
+
+  def render_workitem_json (wi)
+
+    JSON.dump(wi.as_owfe_workitem.to_h)
+  end
+
   def render_workitems_html (wis)
 
     @workitems = wis.sort_by { |wi| wi.participant_name }
