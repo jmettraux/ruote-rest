@@ -51,10 +51,10 @@ helpers do
     rep = if wfid.is_a?(Array)
       "<script>var proc_rep = #{wfid.to_json}</script>"
     else
-      "<script src=\"/processes/#{wfid}/representation?format=js\"></script>"
+      "<script src=\"/processes/#{wfid}/representation?format=js&var=proc_rep\"></script>"
     end
 
-    hl = expid ? "FluoCan.highlight('fluo', '#{expid}');" : ""
+    hl = expid ? "\nFluoCan.highlight('fluo', '#{expid}');" : ""
 
     %{
   </div>
@@ -70,9 +70,17 @@ helpers do
     #{rep}
     <script>
       FluoCan.renderFlow('fluo', proc_rep, #{Array(workitems).inspect});
-      FluoCan.crop('fluo');
-      #{hl}
+      FluoCan.crop('fluo');#{hl}
     </script>
+
+    <div style="text-align: right;">
+    <br/>
+    <a id="dataurl_link" href="">graph data url</a>
+    <script>
+      var a = document.getElementById('dataurl_link');
+      a.href = document.getElementById('fluo').toDataURL();
+    </script>
+    </div>
 
   </div>
   <div style="clear: both;"></div>

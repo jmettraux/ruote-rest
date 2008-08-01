@@ -43,7 +43,7 @@
 #
 def rparse (type)
 
-  representation = request.env["rack.input"].read
+  representation = request.env['rack.input'].read
 
   format = determine_in_format
 
@@ -69,7 +69,14 @@ def rrender (type, object, options={})
 
   method_name = "render_#{type}_#{format}"
 
-  send method_name, object
+  data = send method_name, object
+
+  return data unless format == 'js'
+
+  varname = params[:var] || 'ruote_js'
+
+  "var #{varname} = #{data};"
+
   #begin
   #  send method_name, object
   #rescue Exception => e
@@ -87,11 +94,11 @@ def determine_in_format
 
   ct = request.env['CONTENT_TYPE']
 
-  return "form" if ct.index("form-")
-  return "json" if ct.index("application/json")
-  return "yaml" if ct.index("application/yaml")
+  return 'form' if ct.index('form-')
+  return 'json' if ct.index('application/json')
+  return 'yaml' if ct.index('application/yaml')
 
-  "xml"
+  'xml'
 end
 
 
@@ -100,11 +107,11 @@ end
 #
 FORMATS = {
 
-  :xml => [ "xml", "application/xml" ],
-  :html => [ "html", "text/html" ],
-  :json => [ "json", "application/json" ],
-  :js => [ "js", "text/javascript" ],
-  :yaml => [ "yaml", "application/yaml" ]
+  :xml => [ 'xml', 'application/xml' ],
+  :html => [ 'html', 'text/html' ],
+  :json => [ 'json', 'application/json' ],
+  :js => [ 'js', 'text/javascript' ],
+  :yaml => [ 'yaml', 'application/yaml' ]
 
 } unless defined?(FORMATS)
 
@@ -114,19 +121,19 @@ FORMATS = {
 #
 def determine_out_format (options)
 
-  f = options[:format] || params["format"]
+  f = options[:format] || params['format']
 
-  return FORMATS[:xml] if f == "xml"
-  return FORMATS[:json] if f == "json"
-  return FORMATS[:js] if f == "js"
-  return FORMATS[:yaml] if f == "yaml"
+  return FORMATS[:xml] if f == 'xml'
+  return FORMATS[:json] if f == 'json'
+  return FORMATS[:js] if f == 'js'
+  return FORMATS[:yaml] if f == 'yaml'
 
-  accept = request.env['HTTP_ACCEPT'] || ""
+  accept = request.env['HTTP_ACCEPT'] || ''
 
-  return FORMATS[:html] if accept.index("text/html")
-  return FORMATS[:yaml] if accept.index("yaml")
-  return FORMATS[:json] if accept.index("json")
-  return FORMATS[:js] if accept.index("js")
+  return FORMATS[:html] if accept.index('text/html')
+  return FORMATS[:yaml] if accept.index('yaml')
+  return FORMATS[:json] if accept.index('json')
+  return FORMATS[:js] if accept.index('js')
 
   FORMATS[:xml]
 end
