@@ -80,6 +80,10 @@
         <input type="hidden" name="_method" value="DELETE"/>
         terminate (cancel) expression :
         <input type="submit" value="DELETE <%= @expression.href %>" />
+
+        <% if @expression.fei.expid == '0' %>
+          <br/>(will terminate (cancel) the whole process instance)
+        <% end %>
       </form>
     </div>
 

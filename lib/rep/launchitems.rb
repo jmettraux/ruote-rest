@@ -56,7 +56,7 @@ def parse_launchitem_form (x)
 
   url = request.params['pdef_url']
   pdef = request.params['pdef']
-  fields = JSON.parse(request.params['fields'])
+  fields = json_parse(request.params['fields'])
 
   if pdef.strip != ""
     li = OpenWFE::LaunchItem.new pdef

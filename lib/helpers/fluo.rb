@@ -49,7 +49,7 @@ helpers do
   def render_fluo_foot (wfid, expid=nil, workitems=[])
 
     rep = if wfid.is_a?(Array)
-      "<script>var proc_rep = #{JSON.dump(wfid)}</script>"
+      "<script>var proc_rep = #{wfid.to_json}</script>"
     else
       "<script src=\"/processes/#{wfid}/representation?format=js&var=proc_rep\"></script>"
     end

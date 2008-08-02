@@ -81,7 +81,7 @@ def render_expressions_xml (es)
         _render_expression_xml xml, fexp
       end
 
-      xml.process_representation JSON.dump(es.representation)
+      xml.process_representation es.representation.to_json
     end
   end
 end
@@ -171,9 +171,9 @@ def _render_expression_xml (xml, e, detailed=false)
       #
       # process/expression representations
 
-      xml.raw_representation(JSON.dump(e.raw_representation)) \
+      xml.raw_representation(e.raw_representation.to_json) \
         if e.raw_representation
-      xml.raw_rep_updated(JSON.dump(e.raw_rep_updated)) \
+      xml.raw_rep_updated(e.raw_rep_updated.to_json) \
         if e.raw_rep_updated
 
       #

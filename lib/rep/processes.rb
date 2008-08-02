@@ -57,7 +57,7 @@ helpers do
 
   def render_processes_json (ps)
 
-    JSON.dump(ps.collect { |fei, s| s.to_h })
+    ps.collect { |fei, s| s.to_h }.to_json
   end
 
   def render_processes_html (ps)
@@ -84,7 +84,7 @@ helpers do
 
   def render_process_json (p)
 
-    JSON.dump(p.to_h)
+    p.to_h.to_json
   end
 
   def render_process_xml (p)
@@ -155,7 +155,7 @@ helpers do
         end
 
         xml.representation(
-          JSON.dump(p.process_stack.representation),
+          p.process_stack.representation.to_json,
           :href => request.href(:processes, p.wfid, :representation))
 
       else
@@ -193,7 +193,7 @@ helpers do
   #
   def render_process_representation_json (pstack)
 
-    JSON.dump(pstack.representation)
+    pstack.representation.to_json
   end
 
 end

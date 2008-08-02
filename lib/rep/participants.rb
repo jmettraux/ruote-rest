@@ -45,7 +45,7 @@ helpers do
 
   def parse_participant_json (json)
 
-    JSON.parse json
+    json_parse(json)
   end
 
   def parse_participant_form (x)

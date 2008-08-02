@@ -125,10 +125,10 @@ class OpenWFE::ProcessStatus
   def to_h
 
     {
-      #'wfid' => wfid,
-      #'launch_time' => launch_time,
-      #'paused' => paused
-      #'variables' => variables
+      'wfid' => wfid,
+      'launch_time' => launch_time,
+      'paused' => paused,
+      'variables' => variables
     }
   end
 end

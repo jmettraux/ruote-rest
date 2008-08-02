@@ -35,7 +35,7 @@ class StProcessesTest < Test::Unit::TestCase
       @response.content_type)
 
     assert_equal(
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\">\n</processes>\n",
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\" href=\"http://example.org/processes\">\n</processes>\n",
       @response.body)
   end
 

@@ -40,7 +40,6 @@
 require 'sinatra'
 
 require 'rexml/document'
-require 'json/pure'
 
 #
 # conf
