@@ -9,9 +9,12 @@
     <a href="/errors">GET /errors</a> | 
     <a href="/participants">GET /participants</a>
   </div>
+
+  <% t = request.path_info.split('/')[1] %>
+
   <div class="h_right" style="float: right;">
     <a href="<%= as_x_href('xml') %>">as xml</a> |
-    <% if respond_to?("render_#{request.path_info.split('/')[1]}_json") %>
+    <% if respond_to?("render_#{t}_json") %>
       <a href="<%= as_x_href('json') %>">as json</a>
     <% else %>
       as json

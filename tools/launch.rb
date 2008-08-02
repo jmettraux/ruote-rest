@@ -5,7 +5,7 @@ require 'rubygems'
 
 require 'optparse'
 
-require 'json/pure'
+require 'json' # gem 'json' or 'json_pure'
 
 require 'openwfe/workitem'
 require 'openwfe/util/xml'

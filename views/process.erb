@@ -30,7 +30,7 @@
         <div class="process_var">
           <span class="process_var_key"><%= k.to_s %></span>
           =&gt;
-          <span class="process_var_value"><%= JSON.dump(v) %></span>
+          <span class="process_var_value"><%= v.to_json %></span>
         </div>
       <% end %>
     </div>
@@ -81,7 +81,7 @@
 
     <div class="process_representation">
       Representation :<br/>
-      <span class="process_rep"><%= JSON.dump(@process.process_stack.representation) %></span>
+      <span class="process_rep"><%= @process.process_stack.representation.to_json %></span>
     </div>
 
     <br/>

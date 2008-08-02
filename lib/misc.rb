@@ -95,7 +95,7 @@ end
 #
 unless {}.respond_to?(:to_json)
 
-  require 'json/pure'
+  require 'json'
 end
 
 #
