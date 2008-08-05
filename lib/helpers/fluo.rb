@@ -48,8 +48,10 @@ helpers do
 
   def render_fluo_foot (wfid, expid=nil, workitems=[])
 
-    rep = if wfid.is_a?(Array)
-      "<script>var proc_rep = #{wfid.to_json}</script>"
+    rep = if wfid == nil
+      "<script>var proc_rep = null;</script>"
+    elsif wfid.is_a?(Array)
+      "<script>var proc_rep = #{wfid.to_json};</script>"
     else
       "<script src=\"/processes/#{wfid}/representation?format=js&var=proc_rep\"></script>"
     end
@@ -69,8 +71,10 @@ helpers do
     <canvas id="fluo" width="50" height="50"></canvas>
     #{rep}
     <script>
-      FluoCan.renderFlow('fluo', proc_rep, #{Array(workitems).inspect});
-      FluoCan.crop('fluo');#{hl}
+      if (proc_rep) {
+        FluoCan.renderFlow('fluo', proc_rep, {'workitems': #{Array(workitems).inspect}});
+        FluoCan.crop('fluo');#{hl}
+      }
     </script>
 
     <div style="text-align: right;">

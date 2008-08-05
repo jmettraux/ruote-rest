@@ -31,7 +31,7 @@ var FluoCanvas = function() {
   function drawText (c, text, bwidth, bheight) {
 
     c.save();
-    if (c.fluoVertical == false) {
+    if (c.canvas.horizontal == true) {
       c.translate(bwidth/2, bheight/2);
       c.rotate(Math.PI/2);
     }
@@ -144,18 +144,20 @@ var FluoCan = function() {
   // MISC METHODS
 
   function childrenMax (c, exp, funcname) {
+    var children = getChildren(c, exp);
     var max = 0;
-    for (var i = 0; i < exp[2].length; i++) {
-      var val = FluoCan[funcname](c, exp[2][i]);
+    for (var i = 0; i < children.length; i++) {
+      var val = FluoCan[funcname](c, children[i]);
       if (val > max) max = val;
     }
     return max;
   }
 
   function childrenSum (c, exp, funcname) {
+    var children = getChildren(c, exp);
     var sum = 0;
-    for (var i = 0; i < exp[2].length; i++) {
-      sum += FluoCan[funcname](c, exp[2][i]);
+    for (var i = 0; i < children.length; i++) {
+      sum += FluoCan[funcname](c, children[i]);
     }
     return sum;
   }
@@ -189,7 +191,7 @@ var FluoCan = function() {
   function drawAttributes (c, exp, expname, width, height) {
     if (expname) {
       FluoCanvas.drawText(c, exp[0], width, height);
-      if (c.fluoVertical == false) c.translate(-20, 0);
+      if (c.canvas.horizontal == true) c.translate(-20, 0);
       else c.translate(0, 20);
     }
     //for (var attname in exp[1]) {
@@ -198,7 +200,7 @@ var FluoCan = function() {
     while (attname = attnames.shift()) {
       FluoCanvas.drawText(
         c, attname + ": " + fluoToJson(exp[1][attname], false), width, height);
-      if (c.fluoVertical == false) c.translate(-20, 0);
+      if (c.canvas.horizontal == true) c.translate(-20, 0);
       else c.translate(0, 20);
     }
   }
@@ -207,8 +209,13 @@ var FluoCan = function() {
   // the methods (and fields) shared by all handler are here
   //
   var Handler = {};
-  Handler.getChildOffset = function (exp) {
-    return exp.childOffset || 0;
+  Handler.getHeight = function (c, exp) {
+    if (c.canvas.horizontal == true) return this.getRealWidth(c, exp);
+    return this.getRealHeight(c, exp);
+  };
+  Handler.getWidth = function (c, exp) {
+    if (c.canvas.horizontal == true) return this.getRealHeight(c, exp);
+    return this.getRealWidth(c, exp);
   };
 
   //
@@ -223,11 +230,24 @@ var FluoCan = function() {
     return result;
   }
 
+  function getChildren (c, exp) {
+    var cs = exp[2];
+    if ( ! c.canvas.hideMinor) return cs;
+    if (exp.majorChildren) return exp.majorChildren;
+    var r = [];
+    for (var i = 0; i < cs.length; i++) {
+      var c = cs[i];
+      if (MINORS.indexOf(c[0]) < 0) r.push(c);
+    }
+    exp.majorChildren = r; // caching the result
+    return r;
+  }
+
   //
   // EXPRESSION HANDLERS
 
   var GenericHandler = newHandler();
-  GenericHandler.render = function (c, exp, expid) {
+  GenericHandler.render = function (c, exp) {
     var width = this.getWidth(c, exp);
     var height = this.getHeight(c, exp);
     FluoCanvas.drawRoundedRect(c, width, height, 8);
@@ -241,23 +261,18 @@ var FluoCan = function() {
   GenericHandler.getRealWidth = function (c, exp) {
     return 10 + attributeMaxWidth(c, exp, exp[0]);
   };
-  GenericHandler.getHeight = function (c, exp) {
-    if (c.fluoVertical == false) return this.getRealWidth(c, exp);
-    return this.getRealHeight(c, exp);
-  };
-  GenericHandler.getWidth = function (c, exp) {
-    if (c.fluoVertical == false) return this.getRealHeight(c, exp);
-    return this.getRealWidth(c, exp);
-  };
 
+  // TODO : fix rotated mode
+  // TODO : if there 1! child, delegate to GenericHandler
+  //
   var GenericWithChildrenHandler = newHandler();
-  GenericWithChildrenHandler.render = function (c, exp, expid) {
+  GenericWithChildrenHandler.render = function (c, exp) {
     var width = this.getWidth(c, exp);
     var height = this.getHeight(c, exp);
     var attWidth = attributeMaxWidth(c, exp, exp[0]) + 7;
     var attHeight = attributeCount(exp) * 20;
-    var o = this.getChildOffset(exp);
-    if (c.fluoVertical == false) {
+    var children = getChildren(c, exp);
+    if (c.canvas.horizontal == true) {
       var w = attWidth;
       attWidth = attHeight;
       attHeight = w;
@@ -265,21 +280,21 @@ var FluoCan = function() {
     FluoCanvas.drawRoundedRect(c, width, height, 8);
     c.save();
     c.translate(-width/2 + attWidth/2 + 5 , 7);
-    if (c.fluoVertical == false) c.translate(attHeight/2, 0);
+    if (c.canvas.horizontal == true) c.translate(attHeight/2, 0);
     drawAttributes(c, exp, true, attWidth, attHeight);
     c.restore();
     c.save();
     c.translate(width/2 - childrenMax(c, exp, 'getWidth')/2 - 7, 8);
-    for (var i = 0; i < exp[2].length; i++) {
-      var child = exp[2][i];
-      renderExp(c, child, expid + "." + (o + i));
+    for (var i = 0; i < children.length; i++) {
+      var child = children[i];
+      renderExp(c, child);
       c.translate(0, 7 + FluoCan.getHeight(c, child));
     }
     c.restore();
   };
   GenericWithChildrenHandler.getHeight = function (c, exp) {
     var rightHeight = 
-      (exp[2].length + 1) * 7 + childrenSum(c, exp, 'getHeight');
+      (getChildren(c, exp).length + 1) * 7 + childrenSum(c, exp, 'getHeight');
     var leftHeight = 
       GenericHandler.getHeight(c, exp);
     return (rightHeight > leftHeight) ? rightHeight : leftHeight;
@@ -292,7 +307,7 @@ var FluoCan = function() {
   };
 
   var TextHandler = newHandler();
-  TextHandler.render = function (c, exp, expid) {
+  TextHandler.render = function (c, exp) {
     var h = getHeight(c, exp);
     var w = getWidth(c, exp);
     FluoCanvas.drawText(c, this.getText(exp), h, w);
@@ -304,10 +319,10 @@ var FluoCan = function() {
     }
     return t;
   };
-  TextHandler.getHeight = function (c, exp) {
+  TextHandler.getRealHeight = function (c, exp) {
     return 20;
   };
-  TextHandler.getWidth = function (c, exp) {
+  TextHandler.getRealWidth = function (c, exp) {
     return c.mozMeasureText(this.getText(exp));
   };
 
@@ -317,13 +332,12 @@ var FluoCan = function() {
   };
 
   var VerticalHandler = newHandler();
-  VerticalHandler.render = function (c, exp, expid) {
+  VerticalHandler.render = function (c, exp) {
     c.save();
-    var children = exp[2];
-    var o = this.getChildOffset(exp);
+    var children = getChildren(c, exp);
     for (var i = 0; i < children.length; i++) {
       var child = children[i];
-      renderExp(c, child,  expid + "." + (o + i));
+      renderExp(c, child);
       c.translate(0, FluoCan.getHeight(c, child));
       if (i < children.length - 1) {
         FluoCanvas.drawArrow(c, 14);
@@ -333,32 +347,32 @@ var FluoCan = function() {
     c.restore();
   };
   VerticalHandler.getHeight = function (c, exp) {
-    return (exp[2].length - 1) * 20 + childrenSum(c, exp, 'getHeight');
+    return (getChildren(c, exp).length - 1) * 14 + childrenSum(c, exp, 'getHeight');
   };
   VerticalHandler.getWidth = function (c, exp) {
     return childrenMax(c, exp, 'getWidth');
   };
 
   var HorizontalHandler = newHandler();
-  HorizontalHandler.render = function (c, exp, expid) {
+  HorizontalHandler.render = function (c, exp) {
+    var children = getChildren(c, exp);
     var dist = this.computeDistribution(c, exp);
     var childrenHeight = this.getChildrenHeight(c, exp);
-    var o = this.getChildOffset(exp);
     this.renderHeader(c, exp, dist);
     c.save();
     c.translate(0, this.getHeaderHeight(c, exp));
-    for (var i=0; i < exp[2].length; i++) {
-      var child = exp[2][i];
+    for (var i=0; i < children.length; i++) {
+      var child = children[i];
       c.save();
       c.translate(dist[i], 0);
-      this.renderChild(c, child, expid + '.' + (o + i), childrenHeight);
+      this.renderChild(c, child, childrenHeight);
       c.restore();
     }
     c.restore();
     this.renderFooter(c, exp, dist, childrenHeight);
   };
   HorizontalHandler.getHeaderHeight = function (c, exp) {
-    if (c.fluoVertical == false) return 23 + attributeMaxWidth(c, exp);
+    if (c.canvas.horizontal == true) return 23 + attributeMaxWidth(c, exp);
     return 23 + attributeCount(exp) * 20;
   };
   HorizontalHandler.getChildrenHeight = function (c, exp) {
@@ -368,14 +382,15 @@ var FluoCan = function() {
     return this.getHeaderHeight(c, exp) + this.getChildrenHeight(c, exp) + 10;
   };
   HorizontalHandler.getWidth = function (c, exp) {
-    return (exp[2].length - 1) * 3 + childrenSum(c, exp, 'getWidth');
+    return (getChildren(c, exp).length - 1) * 3 + childrenSum(c, exp, 'getWidth');
   };
   HorizontalHandler.computeDistribution = function (c, exp) {
+    var children = getChildren(c, exp);
     var totalWidth = this.getWidth(c, exp);
     var offset = -totalWidth/2;
-    var dist = new Array(exp[2].length);
-    for (var i = 0; i < exp[2].length; i++) {
-      var cWidth = FluoCan.getWidth(c, exp[2][i]);
+    var dist = new Array(children.length);
+    for (var i = 0; i < children.length; i++) {
+      var cWidth = FluoCan.getWidth(c, children[i]);
       dist[i] = offset + cWidth / 2;
       offset += (cWidth + 3);
     }
@@ -402,7 +417,7 @@ var FluoCan = function() {
   HorizontalHandler.renderHeaderLabel = function (c, exp) {
     var width = attributeMaxWidth(c, exp);
     var height = attributeCount(exp) * 20;
-    if (c.fluoVertical == false) {
+    if (c.canvas.horizontal == true) {
       var w = width;
       width = height;
       height = w;
@@ -416,9 +431,9 @@ var FluoCan = function() {
     drawAttributes(c, exp, false, width, height);
     c.restore();
   };
-  HorizontalHandler.renderChild = function (c, exp, expid, childrenHeight) {
+  HorizontalHandler.renderChild = function (c, exp, childrenHeight) {
     var cheight = FluoCan.getHeight(c, exp);
-    renderExp(c, exp, expid);
+    renderExp(c, exp);
     c.beginPath();
     c.moveTo(0, cheight); c.lineTo(0, childrenHeight);
     c.stroke();
@@ -450,9 +465,6 @@ var FluoCan = function() {
     FluoCanvas.drawParaDiamond(c, 20);
   };
 
-  // NOTE : if I need this 'adjust' technique for another
-  // expression, I might as well prepare a createAdjustingHandler()...
-
   var IfHandler = newHandler(HorizontalHandler);
   IfHandler.adjustExp = function (exp) {
     //
@@ -461,21 +473,19 @@ var FluoCan = function() {
     if (exp.adjusted == true) return;
     if ( ! (exp[1]['test'] || exp[1]['not'])) {
       // ok, steal first exp
-      var cond = exp[2][0];
-      exp[1] = cond[1];
-      exp[1]['condition'] = cond[0];
-      exp[2] = [ exp[2][1], exp[2][2] ];
-      exp.childOffset = 1;
+      var cond = exp[2].shift();
+      if (cond) {
+        exp[1] = cond[1];
+        exp[1]['condition'] = cond[0];
+      }
     }
-    if (exp[2].length == 1 || ( ! exp[2][1])) {
-      // adding a ghost expression...
-      exp[2] = [ exp[2][0], [ '_', {}, [] ]];
-    }
+    for (var i = 0; i < 2 - exp[2].length; i++) exp[2].push([ '_', {}, [] ]);
+      // adding ghost expressions
     exp.adjusted = true;
   };
-  IfHandler.render = function (c, exp, expid) {
+  IfHandler.render = function (c, exp) {
     this.adjustExp(exp);
-    HorizontalHandler.render(c, exp, expid);
+    HorizontalHandler.render(c, exp);
   };
   IfHandler.getHeight = function (c, exp) {
     this.adjustExp(exp);
@@ -490,7 +500,7 @@ var FluoCan = function() {
   // used for empty else clause
   //
   var GhostHandler = newHandler();
-  GhostHandler.render = function (c, exp, expid) {
+  GhostHandler.render = function (c, exp) {
   };
   GhostHandler.getHeight = function (c, exp) {
     return 0;
@@ -510,26 +520,56 @@ var FluoCan = function() {
     '_': GhostHandler
   };
 
-  //function newCan (id, width, height) {
-  //  var can = document.createElement('canvas');
-  //  can.id = id;
-  //  can.setAttribute('width', width);
-  //  can.setAttribute('height', height);
-  //  return can;
-  //}
+  var MINORS = [
+    'set', 'set-fields', 'unset', 'description'
+  ];
 
-  function renderFlow (context, flow, workitems, highlight) {
+  function identifyExpressions (exp, expid) {
+    if (exp.expid) return; // identify only once
+    if ( ! expid) expid = '0';
+    exp.expid = expid;
+    if ((typeof exp) == 'string') return;
+    for (var i = 0; i < exp[2].length; i++) {
+      identifyExpressions(exp[2][i], expid + '.' + i);
+    }
+  }
 
-    if ( ! workitems) workitems = [];
+  function setOption (context, options, optname, defval) {
+    var v = options[optname];
+    if (v) {
+      context.canvas[optname] = v;
+    }
+    else if (optname in options) { // v is null
+      context.canvas[optname] = null;
+    }
+    else if (defval && ! (context.canvas[optname])) {
+      context.canvas[optname] = defval;
+    }
+  }
+
+  //function renderFlow (context, flow, workitems, highlight) {
+  function renderFlow (context, flow, options) {
+
+    if ( ! options) options = {};
+
+    identifyExpressions(flow);
 
     context = resolveContext(context);
     neutralizeContext(context);
 
     context.canvas.flow = flow;
-    context.canvas.workitems = workitems;
-    context.canvas.highlight = highlight;
+
+    setOption(context, options, 'workitems', []);
+    setOption(context, options, 'highlight');
+    setOption(context, options, 'hideMinor');
+    setOption(context, options, 'horizontal');
 
     context.save();
+
+    if (context.canvas.horizontal == true) {
+      context.translate(0, flow.width + 2);
+      context.rotate(-Math.PI/2);
+    }
 
     context.mozTextStyle = "12px Helvetica";
 
@@ -542,29 +582,33 @@ var FluoCan = function() {
     var w = getWidth(context, flow);
     context.translate(w/2 + 1, 1); // aligning left
 
-    renderExp(context, flow, '0');
+    renderExp(context, flow);
+
+    context.restore();
 
     //flow.width = getWidth(context, flow);
     //flow.height = getHeight(context, flow);
     getWidth(context, flow);
     getHeight(context, flow);
-
-    //dlog(""+flow.width+" / "+flow.height);
-    //dlog(""+context.canvas.width+" / "+context.canvas.height+" (canvas)");
-
-    context.restore();
   }
 
   function highlight (c, highlight) {
     canvas = resolveCanvas(c);
     //clear(canvas);
-    renderFlow(canvas, canvas.flow, canvas.workitems, highlight);
+    //renderFlow(canvas, canvas.flow, canvas.workitems, highlight);
+    renderFlow(canvas, canvas.flow, {'highlight': highlight});
   }
 
   function drawWorkitem (c, exp) {
     var ww = c.mozMeasureText('wi');
     c.save();
-    c.translate(20, -7);
+    if (c.canvas.horizontal == true) {
+      c.rotate(Math.PI/2);
+      c.translate(5, -14);
+    }
+    else {
+      c.translate(20, -7);
+    }
     c.fillStyle = '#F4D850';
     c.moveTo(0, 0);
     c.beginPath();
@@ -584,9 +628,9 @@ var FluoCan = function() {
     c.restore();
   }
 
-  function renderExp (c, exp, expid) {
+  function renderExp (c, exp) {
 
-    if (expid == c.canvas.highlight) { // highlight
+    if (c.canvas.highlight && exp.expid == c.canvas.highlight) { // highlight
       var w = getWidth(c, exp); 
       var h = getHeight(c, exp);
       var t = 7;
@@ -598,9 +642,9 @@ var FluoCan = function() {
       c.restore();
     }
 
-    getHandler(exp).render(c, exp, expid);
+    getHandler(exp).render(c, exp);
 
-    if (c.canvas.workitems.indexOf(expid) > -1) { // workitem
+    if (c.canvas.workitems.indexOf(exp.expid) > -1) { // workitem
       drawWorkitem(c, exp);
     }
   }
@@ -626,12 +670,28 @@ var FluoCan = function() {
   // replaces the canvas element with a new, cropped, one
   //
   function crop (canvas) {
+
     canvas = resolveCanvas(canvas);
     var nc = document.createElement("canvas");
+
     nc.id = canvas.id;
-    nc.setAttribute('width', canvas.flow.width + 2);
-    nc.setAttribute('height', canvas.flow.height + 2);
-    renderFlow(nc, canvas.flow, canvas.workitems, canvas.highlight);
+
+    var w = canvas.flow.width + 2;
+    var h = canvas.flow.height + 2;
+
+    if (canvas.horizontal == true) {
+      var x = w; w = h; h = x; 
+    }
+
+    nc.setAttribute('width', w);
+    nc.setAttribute('height', h);
+
+    nc.hideMinor = canvas.hideMinor;
+    nc.horizontal = canvas.horizontal;
+    nc.workitems = canvas.workitems;
+
+    //renderFlow(nc, canvas.flow, canvas.workitems, canvas.highlight);
+    renderFlow(nc, canvas.flow);
     canvas.parentNode.replaceChild(nc, canvas);
   }
 
@@ -649,7 +709,6 @@ var FluoCan = function() {
   // returns the raw height of an expression (caches it too)
   //
   function getHeight (c, exp) {
-    //return getHandler(exp).getHeight(c, exp);
     if ((typeof exp) == 'string') return getHandler(exp).getHeight(c, exp);
     if (exp.height) return exp.height;
     exp.height = getHandler(exp).getHeight(c, exp);
@@ -660,7 +719,6 @@ var FluoCan = function() {
   // return the raw width of an expression
   //
   function getWidth (c, exp) {
-    //return getHandler(exp).getWidth(c, exp);
     if ((typeof exp) == 'string') return getHandler(exp).getWidth(c, exp);
     if (exp.width) return exp.width;
     exp.width = getHandler(exp).getWidth(c, exp);
@@ -680,11 +738,38 @@ var FluoCan = function() {
     return h;
   }
 
+  function clearExpWidthCache (exp) {
+    if ((typeof exp) == 'string') return;
+    exp.width = null;
+    exp.height = null;
+    for (var i = 0; i < exp[2].length; i++) clearExpWidthCache(exp[2][i]);
+  }
+
+  function toggleMinor (canvas) {
+    canvas = resolveCanvas(canvas);
+    canvas.hideMinor = ! canvas.hideMinor;
+    clearExpWidthCache(canvas.flow);
+    //renderFlow(canvas, canvas.flow, canvas.workitems, canvas.highlight);
+    renderFlow(canvas, canvas.flow);
+  }
+
+  function toggleVertical (canvas) {
+    canvas = resolveCanvas(canvas);
+    canvas.horizontal = ! canvas.horizontal;
+    clearExpWidthCache(canvas.flow);
+    //renderFlow(canvas, canvas.flow, canvas.workitems, canvas.highlight);
+    renderFlow(canvas, canvas.flow);
+  }
+
   return {
+    HANDLERS: HANDLERS,
+    MINORS: MINORS,
     renderFlow: renderFlow,
     highlight: highlight,
     getHeight: getHeight,
     getWidth: getWidth,
     crop: crop,
+    toggleMinor: toggleMinor,
+    toggleVertical: toggleVertical
   };
 }();

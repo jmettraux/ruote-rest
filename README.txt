@@ -44,6 +44,12 @@ Then head to
 
     http://localhost:4567/processes
 
+(
+to start it on port 3333 :
+
+    ruby lib/start.rb -p 3333
+)
+
 
 == interface
 

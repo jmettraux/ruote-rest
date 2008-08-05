@@ -19,14 +19,11 @@ task :recreate_mysql_db do
 
   # drop
 
-  begin
-    sh 'mysql -u '+dbadmin+' -p -e "drop database '+db+'"'
-  rescue Exception => e
-  end
+  sh "mysql -u #{dbadmin} -p -e \"drop database if exists #{db}\""
 
   # create
 
-  sh 'mysql -u '+dbadmin+' -p -e "create database '+db+' CHARACTER SET utf8 COLLATE utf8_general_ci"'
+  sh "mysql -u #{dbadmin} -p -e \"create database #{db} CHARACTER SET utf8 COLLATE utf8_general_ci\""
 
   # run the migrations
 

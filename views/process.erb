@@ -116,5 +116,5 @@
 
 </div>
 
-<%= render_fluo_foot(@process.process_stack.representation) if @detailed %>
+<%= render_fluo_foot(@process.process_stack.representation, nil, @process.expressions.collect { |e| e.fei.expid }) if @detailed %>
 
