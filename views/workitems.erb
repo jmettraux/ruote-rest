@@ -11,5 +11,13 @@
 
 <br/>
 
+<hr/>
+
+<form action="/workitems">
+  search :
+  <input type="text" name="q" />
+  <input type="submit" value="GET /workitems?q=..." />
+</form>
+
 <%= render_fluo_foot(@wfid, nil, @workitems.collect { |wi| wi.fei.expid }) if @wfid %>
 
