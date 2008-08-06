@@ -9,13 +9,25 @@
 
 <hr/>
 
-<h4>POST /processes</h4>
+<%= some_javascript %>
 
-<div class="explanation">launching a new process instance</div>
+<div id="show_launch">
+  <a href="#" onclick="show('launchform'); hide('show_launch'); return false;">process launch form</a>
+</div>
 
-<br/>
+<form 
+  id="launchform" 
+  action="/processes" 
+  method="POST" 
+  enctype="multipart/form-data" 
+  style="display: none;"
+>
+    <h4>POST /processes</h4>
+    
+    <div class="explanation">launching a new process instance</div>
 
-<form action="/processes" method="POST" enctype="multipart/form-data">
+    <br/>
+
     <div>process definition :<br/>
         <div><input 
             name="pdef_url" 

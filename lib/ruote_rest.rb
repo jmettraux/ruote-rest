@@ -61,7 +61,6 @@ require 'misc'
 # representations (I'd prefer another name...)
 
 load 'inout.rb'
-load 'rep/html.rb'
 load 'rep/xml.rb'
 
 load 'rep/fei.rb'
@@ -84,6 +83,7 @@ load 'res/workitems.rb'
 #
 # helpers
 
+load 'helpers/general.rb'
 load 'helpers/links.rb'
 load 'helpers/fluo.rb'
 
