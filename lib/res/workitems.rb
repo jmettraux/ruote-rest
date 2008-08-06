@@ -92,12 +92,14 @@ helpers do
 
   def find_workitems
 
-    #pname = params[:pname]
+    p = params[:participant]
     sn = get_store_names
     @wfid = params[:wfid]
     q = params[:q]
 
-    workitems = if q
+    workitems = if p
+      OpenWFE::Extras::Workitem.find_all_by_participant_name p
+    elsif q
       OpenWFE::Extras::Workitem.search q, sn
     elsif sn
       OpenWFE::Extras::Workitem.find_in_stores sn

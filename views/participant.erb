@@ -1,22 +1,26 @@
 
 <%
-    regex, part = @participant
-    link = "/participants/#{uri_escape regex.original_string}"
+  regex, part = @participant
+  link = "/participants/#{uri_escape regex.original_string}"
 %>
 <div class="participant">
 
-    <div class="participant_link"><a href="<%= link %>">GET <%= link %></a></div>
+  <div class="participant_link"><a href="<%= link %>">GET <%= link %></a></div>
 
-    <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
-    <div>class : <span class="participant_class"><%= part.class.name %></span></div>
+  <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
+  <div>class : <span class="participant_class"><%= part.class.name %></span></div>
+  <% if regex.original_string.match /^[0-9a-zA-Z ]+$/ %>
+    <!-- only link if participant has a 'flat' regex -->
+    <div>workitems : <%= rlink('workitems', { 'participant' => regex.original_string }) %></div>
+  <% end %>
 
-    <form id="remove" action="<%= link %>" method="post">
+  <form id="remove" action="<%= link %>" method="post">
 
-        <input type="hidden" name="_method" value="DELETE"/>
+    <input type="hidden" name="_method" value="DELETE"/>
 
-        remove : 
-        <input type="submit" value="DELETE <%= link %>" />
-    </form>
+    remove : 
+    <input type="submit" value="DELETE <%= link %>" />
+  </form>
 
 </div>
 
