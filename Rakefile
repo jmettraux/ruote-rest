@@ -41,6 +41,6 @@ end
 #
 # other tasks
 
-load 'tasks/install_workflow_engine.rake'
-load 'tasks/recreate_mysql_db.rake'
+load 'tasks/ruote.rake'
+load 'tasks/mysql.rake'
 
