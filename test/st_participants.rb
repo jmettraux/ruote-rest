@@ -14,8 +14,8 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/test/unit'
 
-require 'ruote_rest.rb'
 require 'testbase'
+require 'ruote_rest.rb'
 
 
 class StParticipantsTest < Test::Unit::TestCase
@@ -46,7 +46,7 @@ class StParticipantsTest < Test::Unit::TestCase
     #puts @response.body
 
     assert_not_nil(
-      @response.body.index(' count="3"'), "expected 3 participants")
+      @response.body.index(' count="4"'), "expected 4 participants")
 
     get_it "/participants/toto"
 
@@ -60,7 +60,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     #puts @response.body
 
-    assert_not_nil @response.body.index(' count="2"')
+    assert_not_nil @response.body.index(' count="3"')
   end
 
   def test_1
@@ -76,12 +76,19 @@ class StParticipantsTest < Test::Unit::TestCase
     get_it "/participants"
 
     assert_not_nil(
-      @response.body.index(' count="3"'), "expected 3 participants")
+      @response.body.index(' count="4"'), "expected 4 participants")
 
     get_it "/participants?pname=toto"
 
     assert_equal 200, @response.status
     assert_not_nil @response.body.index('toto')
+  end
+
+  def test_2
+
+    assert_equal(
+      [ 'one', 'two', 'three' ],
+      $engine.get_participant_map.lookup_participant('carlito').params)
   end
 
 end

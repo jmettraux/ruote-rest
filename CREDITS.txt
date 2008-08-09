@@ -1,0 +1,52 @@
+
+CREDITS
+=======
+
+OpenWFEru is an open source Ruby workflow / BPM engine made in Japan. Its nickname is "ruote" ('wheel' in Italian).
+
+ruote-rest is a RESTful wrapper around ruote and a worklist.
+
+
+The main project team
+---------------------
+
+John Mettraux ( project lead ( john >at< openwfe.org ) )
+
+
+Contributors
+------------
+
+Nicholas Petrella - participant patches
+
+
+Sponsors
+--------
+
+(none)
+
+
+Donators
+--------
+
+(none)
+
+
+Feedback
+--------
+
+Many
+
+
+Misc
+----
+
+The OpenWFE logo was designed by Phosphore (http://phosphore.ch)
+The 'ru' was added by Jamandru Reynolds (http://geometron.net)
+
+
+Tools / Libraries
+-----------------
+
+- Ruby on Rails  http://rubyonrails.org (active record)
+- Json  http://json.org  http://json.rubyforge.org
+

@@ -9,45 +9,45 @@ require 'openwfe/util/xml'
 
 configure do
 
-    ev = Sinatra.application.options.env
+  ev = Sinatra.application.options.env
 
-    FileUtils.mkdir 'logs' unless File.exist?('logs')
+  FileUtils.mkdir 'logs' unless File.exist?('logs')
 
-    ac = {}
+  ac = {}
 
-    ac[:engine_name] = "ruote_rest"
+  ac[:engine_name] = "ruote_rest"
 
-    ac[:work_directory] = "work_#{ev}"
+  ac[:work_directory] = "work_#{ev}"
 
-    ac[:logger] = Logger.new "logs/openwferu_#{ev}.log", 10, 1024000
-    ac[:logger].level = (ev == 'production') ? Logger::INFO : Logger::DEBUG
+  ac[:logger] = Logger.new "logs/openwferu_#{ev}.log", 10, 1024000
+  ac[:logger].level = (ev == 'production') ? Logger::INFO : Logger::DEBUG
 
-    ac[:remote_definitions_allowed] = true
-        #
-        # are [remote] process definitions pointed at via a URL allowed ?
-
-    ac[:definition_in_launchitem_allowed] = true
-        #
-        # are process definitions embedded in the launchitem allowed ?
-        #
-        # (this is a dangerous, you really have to trust the clients)
-
+  ac[:remote_definitions_allowed] = true
     #
-    # instantiating the workflow / BPM engine
+    # are [remote] process definitions pointed at via a URL allowed ?
 
-    #engine_class = OpenWFE::Engine
-        #
-        # a transient, in-memory engine
+  ac[:definition_in_launchitem_allowed] = true
+    #
+    # are process definitions embedded in the launchitem allowed ?
+    #
+    # (this is a dangerous, you really have to trust the clients)
 
-    #engine_class = OpenWFE::FilePersistedEngine
-    engine_class = OpenWFE::CachedFilePersistedEngine
-        #
-        # file based persistence
+  #
+  # instantiating the workflow / BPM engine
 
-    #engine_class = OpenWFE::Extras::CachedDbPersistedEngine
-        #
-        # database persistence for the engine
+  #engine_class = OpenWFE::Engine
+    #
+    # a transient, in-memory engine
 
-    $engine = engine_class.new ac
+  #engine_class = OpenWFE::FilePersistedEngine
+  engine_class = OpenWFE::CachedFilePersistedEngine
+    #
+    # file based persistence
+
+  #engine_class = OpenWFE::Extras::CachedDbPersistedEngine
+    #
+    # database persistence for the engine
+
+  $engine = engine_class.new ac
 end
 

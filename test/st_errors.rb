@@ -12,8 +12,8 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/test/unit'
 
-require 'ruote_rest.rb'
 require 'testbase'
+require 'ruote_rest.rb'
 
 
 class StErrorsTest < Test::Unit::TestCase

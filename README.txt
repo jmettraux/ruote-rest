@@ -44,7 +44,7 @@ To prepare the dev database with the admin 'toto'
 
 Then head to
 
-    http://localhost:4567/processes
+    http://localhost:4567/
 
 (
 to start it on port 3333 :

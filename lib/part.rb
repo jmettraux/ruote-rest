@@ -77,11 +77,8 @@ module Participants
 
     clazz = classname.constantize # thanks activesupport
 
-    participant = if args
-      clazz.new args
-    else
-      clazz.new
-    end
+    participant = args ? clazz.new(*args) : clazz.new
+      # patch by Nick Petrella
 
     $engine.register_participant pregex, participant
   end

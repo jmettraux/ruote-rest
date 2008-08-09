@@ -3,8 +3,9 @@
 
 == ruote-rest - 0.9.19    not yet released
 
-- todo #21419  : removed direct dependency on json gem, relying on whatever is 
-                 present (activesupport or json)
-- bug   #21096 : reordered participant load order in conf/participants.rb
-- todo  #20647 : showing scheduled jobs for /processes
+- patch #21497  : participant initialization parameter fix by Nick Petrella
+- todo  #21419  : removed direct dependency on json gem, relying on whatever is 
+                  present (activesupport or json)
+- bug    #21096 : reordered participant load order in conf/participants.rb
+- todo   #20647 : showing scheduled jobs for /processes
 

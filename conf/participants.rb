@@ -4,15 +4,15 @@
 
 configure do
 
-    #
-    # other participants
+  #
+  # other participants
 
-    $engine.register_participant :kilroy do
-        puts "Kilroy was here"
-    end
+  $engine.register_participant :kilroy do
+    puts "Kilroy was here"
+  end
 
-    #
-    # loading active participants
+  #
+  # loading active participants
 
-    Participants.init_all
+  Participants.init_all
 end

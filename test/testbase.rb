@@ -9,6 +9,15 @@
 
 module TestBase
 
+  class TestParticipant
+
+    attr_reader :params
+
+    def initialize (p1, p2, p3)
+      @params = [ p1, p2, p3 ]
+    end
+  end
+
   def setup
 
     FileUtils.rm_rf 'work_test'
@@ -24,8 +33,9 @@ module TestBase
 
     File.open "conf/participants_test.yaml", "w" do |f|
       f.puts(YAML.dump([
-        [ "alpha", 'OpenWFE::Extras::ActiveParticipant', nil ],
-        [ "bravo", 'OpenWFE::Extras::ActiveParticipant', nil ]
+        [ 'alpha', 'OpenWFE::Extras::ActiveParticipant', nil ],
+        [ 'bravo', 'OpenWFE::Extras::ActiveParticipant', nil ],
+        [ 'carlito', 'TestBase::TestParticipant', [ 'one', 'two', 'three' ] ]
       ]))
     end
 
@@ -38,5 +48,6 @@ module TestBase
   end
 
   #def teardown
+  #  FileUtils.rm "conf/participants_test.yaml"
   #end
 end

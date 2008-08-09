@@ -3,8 +3,7 @@ require 'fileutils'
 
 namespace :ruote do
 
-  RUFUSES = %w{
-    dollar eval lru mnemo scheduler verbs }.collect { |e| "rufus-#{e}" }
+  RUFUSES = %w{ dollar lru mnemo scheduler verbs }.collect { |e| "rufus-#{e}" }
 
   #
   # do use either ruote:install or ruote:gem_install
