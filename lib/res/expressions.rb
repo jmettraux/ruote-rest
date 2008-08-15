@@ -43,7 +43,7 @@ get "/expressions/:wfid" do
   wfid = params[:wfid]
   es = $engine.process_stack wfid, true
 
-  throw :halt, [ 404, "no process #{wfid}" ] unless es
+  throw :done, [ 404, "no process #{wfid}" ] unless es
 
   rrender :expressions, es
 end
@@ -54,7 +54,7 @@ put "/expressions/:wfid/:expid" do
 
   $engine.update_expression expression
 
-  header "Location" => expression.href(request)
+  response.location = expression.href(request)
   rrender :expression, find_expression
 end
 
@@ -70,7 +70,7 @@ delete "/expressions/:wfid/:expid" do
   $engine.cancel_expression e
 
   response.status = 303
-  header "Location" => request.href(:expressions, params[:wfid])
+  response.location = request.href(:expressions, params[:wfid])
   "expression at #{e.href} cancelled (terminated)"
 end
 
@@ -98,7 +98,7 @@ helpers do
 
       (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
 
-    } or throw :halt, [ 404, "no expression #{expid} in process #{wfid}" ]
+    } or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
   end
 end
 

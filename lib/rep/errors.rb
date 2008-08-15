@@ -40,8 +40,8 @@
 
 helpers do
 
-#
-# ERRORS
+  #
+  # ERRORS
 
   def render_errors_xml (errors)
 
@@ -76,17 +76,18 @@ helpers do
 
   def render_errors_html (errors)
 
-    @errors = errors
-
-    _erb :errors, :layout => :html
+    _erb(
+      :errors,
+      :layout => :html,
+      :locals => { :errors => errors })
   end
 
   def render_error_html (error, alone=true)
 
-    @error = error
-    @alone = alone
-
-    _erb :error, :layout => alone ? :html : false
+    _erb(
+      :error,
+      :layout => alone ? :html : false,
+      :locals => { :error => error, :alone => alone })
   end
 
 end

@@ -85,7 +85,7 @@ helpers do
         pr.original_string == pid
       end
 
-      throw :halt, [ 404, "no participant at #{pid}" ] unless part
+      throw :done, [ 404, "no participant at #{pid}" ] unless part
 
       [ regex, part ]
 

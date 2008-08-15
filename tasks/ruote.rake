@@ -3,7 +3,8 @@ require 'fileutils'
 
 namespace :ruote do
 
-  RUFUSES = %w{ dollar lru mnemo scheduler verbs }.collect { |e| "rufus-#{e}" }
+  RUFUSES = %w{ 
+    dollar lru mnemo scheduler verbs sixjo }.collect { |e| "rufus-#{e}" }
 
   #
   # do use either ruote:install or ruote:gem_install
@@ -48,7 +49,7 @@ namespace :ruote do
     GEMS = RUFUSES.dup
 
     GEMS << 'ruote'
-    GEMS << 'ruote-extras'
+    GEMS << 'ruote-extras' # TODO : remove me soon
 
     #GEMS << 'json_pure'
     #GEMS << 'json'

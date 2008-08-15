@@ -1,49 +1,49 @@
 
-<%= render_fluo_head if @detailed %>
+<%= render_fluo_head if detailed %>
 
-<% if @wfid %>
+<% if params[:wfid] %>
 <div 
   class="workitem"
-  onmouseover="FluoCan.highlight('fluo', '<%= @workitem.fei.expid %>');"
+  onmouseover="FluoCan.highlight('fluo', '<%= workitem.fei.expid %>');"
   onmouseout="FluoCan.highlight('fluo', null);"
 >
 <% else %>
 <div class="workitem">
 <% end %>
 
-  <div class="workitem_link"><%= rlink(@workitem) %></div>
+  <div class="workitem_link"><%= rlink(workitem) %></div>
 
-  <%= @detailed ? "<br/>" : "" %>
+  <%= detailed ? "<br/>" : "" %>
 
-  <div>fei : <span class="workitem_fei"><%= @workitem.fei.to_s %></span></div>
-  <div>participant : <span class="workitem_participant"><%= @workitem.participant_name %></span></div>
-  <div>dispatch time : <span class="workitem_dispatch_time"><%= display_time @workitem, :dispatch_time %></span></div>
+  <div>fei : <span class="workitem_fei"><%= workitem.fei.to_s %></span></div>
+  <div>participant : <span class="workitem_participant"><%= workitem.participant_name %></span></div>
+  <div>dispatch time : <span class="workitem_dispatch_time"><%= display_time workitem, :dispatch_time %></span></div>
 
-  <% if @detailed %>
+  <% if detailed %>
 
-    <div>last modified : <span class="workitem_last_modified"><%= display_time @workitem, :last_modified %></span></div>
-    <div>process : <%= rlink('processes', @workitem.fei.wfid) %></div>
-    <div>expression : <%= rlink('expressions', @workitem.fei.wfid, @workitem.fei.expid) %></div>
-    <div>workitems of this process : <%= rlink('workitems', { 'wfid' => @workitem.fei.wfid }) %></div>
+    <div>last modified : <span class="workitem_last_modified"><%= display_time workitem, :last_modified %></span></div>
+    <div>process : <%= rlink('processes', workitem.fei.wfid) %></div>
+    <div>expression : <%= rlink('expressions', workitem.fei.wfid, workitem.fei.expid) %></div>
+    <div>workitems of this process : <%= rlink('workitems', { 'wfid' => workitem.fei.wfid }) %></div>
 
     <br/>
 
-    <form action="<%= @workitem.href %>" method="POST" enctype="multipart/form-data">
+    <form action="<%= workitem.href %>" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="_method" value="PUT" />
 
       attributes :<br/>
-      <textarea name="attributes" cols="60" rows="12"><%= @workitem.attributes.to_json %></textarea>(json)<br/>
+      <textarea name="attributes" cols="60" rows="12"><%= workitem.attributes.to_json %></textarea>(json)<br/>
 
       proceed : <input type="checkbox" name="proceed" value="proceed" /><br/>
 
       <br/>
 
-      <input type="submit" value="PUT <%= @workitem.href %>" />
+      <input type="submit" value="PUT <%= workitem.href %>" />
     </form>
 
   <% end %>
 
 </div>
 
-<%= render_fluo_foot(@workitem.fei.wfid, nil, @workitem.fei.expid) if @detailed %>
+<%= render_fluo_foot(workitem.fei.wfid, nil, workitem.fei.expid) if detailed %>
 

@@ -1,11 +1,11 @@
 
-<%= render_fluo_head if @wfid %>
+<%= render_fluo_head if params[:wfid] %>
 
 <h4>GET /workitems</h4>
 
 <div class="explanation">the workitems waiting for [human] intervention</div>
 
-<% @workitems.each do |wi| %>
+<% workitems.each do |wi| %>
   <%= render_workitem_html wi, false %>
 <% end %>
 
@@ -19,5 +19,5 @@
   <input type="submit" value="GET /workitems?q=..." />
 </form>
 
-<%= render_fluo_foot(@wfid, nil, @workitems.collect { |wi| wi.fei.expid }) if @wfid %>
+<%= render_fluo_foot(params[:wfid], nil, workitems.collect { |wi| wi.fei.expid }) if params[:wfid] %>
 

@@ -73,9 +73,10 @@ helpers do
 
   def render_participants_html (ps)
 
-    @participants = ps
-
-    _erb :participants, :layout => :html
+    _erb(
+      :participants,
+      :layout => :html,
+      :locals => { :participants => ps })
   end
 
   def render_participant_xml (part)
@@ -86,13 +87,12 @@ helpers do
     end
   end
 
-  def render_participant_html (part, alone=true)
+  def render_participant_html (part, detailed=true)
 
-    @participant = part
-
-    layout = alone ? :html : nil
-
-    _erb :participant, :layout => layout
+    _erb(
+      :participant,
+      :layout => detailed ? :html : nil,
+      :locals => { :participant => part, :detailed => detailed })
   end
 
   def _render_participant_xml (xml, part)

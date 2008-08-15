@@ -14,5 +14,5 @@ configure do
   #
   # loading active participants
 
-  Participants.init_all
+  Participants.init_all "conf/participants_#{application.environment}.yaml"
 end

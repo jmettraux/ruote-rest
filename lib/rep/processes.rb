@@ -62,13 +62,10 @@ helpers do
 
   def render_processes_html (ps)
 
-    @processes = ps
-
-    #erb :processes, :locals => { "ps" => ps }
-      #
-      # sinatra 0.2.2 : locals seem not working
-
-    _erb :processes, :layout => :html
+    _erb(
+      :processes,
+      :layout => :html,
+      :locals => { :processes => ps })
   end
 
 #
@@ -76,10 +73,10 @@ helpers do
 
   def render_process_html (p, detailed=true)
 
-    @process = p
-    @detailed = detailed
-
-    _erb :process, :layout => detailed ? :html : false
+    _erb(
+      :process,
+      :layout => detailed ? :html : false,
+      :locals => { :process => p, :detailed => detailed })
   end
 
   def render_process_json (p)

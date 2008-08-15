@@ -3,7 +3,7 @@
 
 <div class="explanation">listing errors in the engine</div>
 
-<% @errors.each do |error| %>
+<% errors.each do |error| %>
   <%= render_error_html(error, false) %>
 <% end %>
 

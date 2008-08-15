@@ -88,9 +88,10 @@ end
 
 def render_expressions_html (es)
 
-  @expressions = es
-
-  _erb :expressions, :layout => :html
+  _erb(
+    :expressions,
+    :layout => :html,
+    :locals => { :expressions => es })
 end
 
 #
@@ -108,12 +109,10 @@ end
 
 def render_expression_html (e, detailed=true)
 
-  @expression = e
-  @detailed = detailed
-
-  layout = detailed ? :html : nil
-
-  _erb :expression, :layout => layout
+  _erb(
+    :expression,
+    :layout => detailed ? :html : nil,
+    :locals => { :expression => e, :detailed => detailed })
 end
 
 def _expression_link (xml, tagname, fei, env=false)

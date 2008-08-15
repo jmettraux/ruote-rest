@@ -48,14 +48,14 @@ module Participants
 
   def self.load_all
 
-    File.open filename do |f|
+    File.open @filename do |f|
       YAML.load f
     end
   end
 
   def self.save (participants)
 
-    File.open filename, 'w' do |f|
+    File.open @filename, 'w' do |f|
       f.puts YAML.dump(participants)
     end
   end
@@ -92,7 +92,9 @@ module Participants
     $engine.list_participants.delete part
   end
 
-  def self.init_all
+  def self.init_all (filename)
+
+    @filename = filename
 
     ps = load_all
 
@@ -100,12 +102,6 @@ module Participants
       register pregex, classname, args
     end
   end
-
-  protected
-
-    def self.filename
-      "conf/participants_#{Sinatra.application.options.env}.yaml"
-    end
 
 end
 

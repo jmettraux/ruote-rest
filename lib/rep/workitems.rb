@@ -99,22 +99,23 @@ helpers do
 
   def render_workitems_html (wis)
 
-    @workitems = wis.sort_by { |wi| wi.participant_name }
-    @workitems = @workitems.collect { |wi| wi.as_owfe_workitem }
+    wis = wis.sort_by { |wi| wi.participant_name }
+    wis = wis.collect { |wi| wi.as_owfe_workitem }
 
-    _erb :workitems, :layout => :html
+    _erb(
+      :workitems,
+      :layout => :html,
+      :locals => { :workitems => wis })
   end
 
   def render_workitem_html (wi, detailed=true)
 
-    @workitem = wi
-    @workitem = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::Workitem)
+    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::Workitem)
 
-    @detailed = detailed
-
-    layout = @detailed ? :html : nil
-
-    _erb :workitem, :layout => layout
+    _erb(
+      :workitem,
+      :layout => detailed ? :html : nil,
+      :locals => { :workitem => wi, :detailed => detailed })
   end
 
 end

@@ -67,7 +67,7 @@ get "/processes/:wfid/representation" do
 
   pstack = $engine.process_stack params[:wfid], true
 
-  throw :halt, [ 404, "no such process" ] unless pstack
+  throw :done, [ 404, "no such process" ] unless pstack
 
   format = params[:format] || 'json'
 
@@ -116,7 +116,7 @@ delete "/processes/:wfid" do
   sleep 0.350
 
   response.status = 303
-  header "Location" => request.href(:processes)
+  response.location = request.href(:processes)
   "process #{wfid} deleted"
 end
 
@@ -131,7 +131,7 @@ helpers do
     wfid = params[:wfid]
 
     $engine.process_status(wfid) ||
-      throw(:halt, [ 404, "no process '#{wfid}'" ])
+      throw(:done, [ 404, "no process '#{wfid}'" ])
   end
 
   def get_status_and_stack

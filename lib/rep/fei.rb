@@ -46,9 +46,7 @@
 
 def render_fei_html (fei)
 
-  @fei = fei
-
-  _erb :fei, :layout => :html
+  _erb :fei, :layout => :html, :locals => { :fei => fei }
 end
 
 def render_fei_xml (fei)

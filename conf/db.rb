@@ -4,13 +4,12 @@ require 'active_record'
 
 configure do
 
-  db = "ruoterest_#{Sinatra.application.options.env}"
-
   ActiveRecord::Base.establish_connection(
-    :adapter => "mysql",
-    :database => db,
+    :adapter => 'mysql',
+    #:database => "ruoterest_#{Sinatra.application.options.env}",
+    :database => "ruoterest_#{application.environment}",
     #:username => 'toto',
     #:password => 'secret',
-    :encoding => "utf8")
+    :encoding => 'utf8')
 end
 

@@ -8,6 +8,7 @@ $:.unshift "#{dir}/../vendor" # if any
 
 #$:.unshift "~/sinatra/lib"
 $:.unshift "~/ruote/lib"
+$:.unshift "~/rufus/rufus-sixjo/lib"
 
 
 require 'rubygems'

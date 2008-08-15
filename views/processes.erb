@@ -3,7 +3,7 @@
 
 <div class="explanation">listing all the processes currently running</div>
 
-<% @processes.values.each do |process| %>
+<% processes.values.each do |process| %>
     <%= render_process_html(process, false) %>
 <% end %>
 

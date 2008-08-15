@@ -3,6 +3,7 @@
 
 == ruote-rest - 0.9.19    not yet released
 
+- todo  #21413  : showing workitem search form
 - patch #21497  : participant initialization parameter fix by Nick Petrella
 - todo  #21419  : removed direct dependency on json gem, relying on whatever is 
                   present (activesupport or json)

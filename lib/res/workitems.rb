@@ -64,11 +64,13 @@ put "/workitems/:wid" do
     $engine.reply owi
     wi.destroy
 
-    header 'Location' => request.href(:workitems)
+    response.location = request.href(:workitems)
+
     rrender :workitems, find_workitems
   else
 
     wi.replace_fields owi.attributes
+
     rrender :workitem, wi
   end
 end
@@ -86,7 +88,7 @@ helpers do
     begin
       OpenWFE::Extras::Workitem.find wid
     rescue Exception => e
-      throw :halt, [ 404, "no workitem with id #{wid}" ]
+      throw :done, [ 404, "no workitem with id #{wid}" ]
     end
   end
 
@@ -94,7 +96,7 @@ helpers do
 
     p = params[:participant]
     sn = get_store_names
-    @wfid = params[:wfid]
+    wfid = params[:wfid]
     q = params[:q]
 
     workitems = if p
@@ -103,8 +105,8 @@ helpers do
       OpenWFE::Extras::Workitem.search q, sn
     elsif sn
       OpenWFE::Extras::Workitem.find_in_stores sn
-    elsif @wfid
-      OpenWFE::Extras::Workitem.find_all_by_wfid @wfid
+    elsif wfid
+      OpenWFE::Extras::Workitem.find_all_by_wfid wfid
     else
       OpenWFE::Extras::Workitem.find :all
     end

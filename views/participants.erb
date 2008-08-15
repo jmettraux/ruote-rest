@@ -3,7 +3,7 @@
 
 <div class="explanation">listing the participants registered in the engine.</div>
 
-<% @participants.each do |part| %>
+<% participants.each do |part| %>
     <%= render_participant_html part, false %>
 <% end %>
 

@@ -1,23 +1,23 @@
 
 <div class="error">
 
-  <div class="error_link"><a href="<%= @error.href %>">GET <%= @error.href %></a></div>
+  <div class="error_link"><a href="<%= error.href %>">GET <%= error.href %></a></div>
 
   <br/>
 
-  <div>fei : <span class="error_fei"><%= @error.fei.expname %> <%= @error.fei.expid %></div>
-  <div>call : <span class="error_message"><%= @error.message %></div>
-  <div>date : <span class="error_date"><%= @error.date %></div>
-  <div>text : <span class="error_text"><%= @error.stacktrace.split("\n").first %></div>
+  <div>fei : <span class="error_fei"><%= error.fei.expname %> <%= error.fei.expid %></div>
+  <div>call : <span class="error_message"><%= error.message %></div>
+  <div>date : <span class="error_date"><%= error.date %></div>
+  <div>text : <span class="error_text"><%= error.stacktrace.split("\n").first %></div>
 
   <br/>
 
   <div>
-    <form action="<%= @error.href %>" method="post" enctype="multipart/form-data">
+    <form action="<%= error.href %>" method="post" enctype="multipart/form-data">
       <input type="hidden" name="_method" value="DELETE"/>
 
       replay at error :
-      <input type="submit" value="DELETE <%= @error.href %>" />
+      <input type="submit" value="DELETE <%= error.href %>" />
     </form>
   </div>
 

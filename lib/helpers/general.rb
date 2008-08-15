@@ -38,27 +38,18 @@
 # John Mettraux at openwfe.org
 #
 
+module Rufus::Sixjo::Erb
 
-#
-# this method (this file) will vanish as soon as a Sinatra that handles
-# layout for erb is available
-#
-def _erb (template, opts={})
+  def _erb (template, opts={})
 
-  if opts[:layout]
-
-    erb(:header) +
-    erb(template) +
-    erb(:footer)
-  else
-
-    erb template
+    if opts[:layout]
+      "#{erb(:header)}#{erb(template, opts)}#{erb(:footer)}"
+    else
+      erb(template, opts)
+    end
   end
 end
 
-#def __erb (template, opts={})
-#  ::ERB.new(content).result(binding)
-#end
 
 helpers do
 

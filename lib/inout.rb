@@ -63,9 +63,9 @@ def rrender (type, object, options={})
     # useful for debugging
 
   response.status = options.delete(:status) || 200
+  response.content_type = ctype
 
-  header 'Content-Type' => ctype
-  options.each { |k, v| header(k => v) }
+  options.each { |k, v| response.header[k] = v }
 
   return send("render_#{type}_#{format}", object) unless format == 'js'
 
@@ -73,15 +73,6 @@ def rrender (type, object, options={})
   method = "render_#{type}_json"
 
   "var #{varname} = #{send(method, object)}"
-
-  #begin
-  #  send method_name, object
-  #rescue Exception => e
-  #  puts e
-  #  #puts e.backtrace
-  #  header 'Content-Type' => 'application/xml'
-  #  send "render_#{type}_xml", object
-  #end
 end
 
 #

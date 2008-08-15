@@ -37,9 +37,12 @@
 # John Mettraux at openwfe.org
 #
 
-require 'sinatra'
-
 require 'rexml/document'
+
+#require 'sinatra'
+require 'rufus/sixjo'
+
+include Rufus::Sixjo
 
 #
 # conf
@@ -92,8 +95,20 @@ load 'helpers/fluo.rb'
 
 get "/" do
 
-  response.status = 303
-  header "Location" => request.href(:processes)
-  ""
+  redirect request.href(:processes)
 end
+
+#
+# Racking
+
+six = new_sixjo_rack_app(Rack::File.new('public'))
+
+app = Rack::Builder.new do
+
+  use Rack::CommonLogger
+  use Rack::ShowExceptions
+  run six
+end
+
+Rack::Handler::Mongrel.run app, :Port => 4567
 
