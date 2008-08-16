@@ -43,7 +43,7 @@
 #
 def rparse (type)
 
-  representation = request.env['rack.input'].read
+  representation = request.content
 
   format = determine_in_format
 
@@ -109,7 +109,7 @@ FORMATS = {
 #
 def determine_out_format (options)
 
-  f = options[:format] || params['format']
+  f = options[:format] || params[:format]
 
   return FORMATS[:xml] if f == 'xml'
   return FORMATS[:json] if f == 'json'

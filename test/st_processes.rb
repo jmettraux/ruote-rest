@@ -9,9 +9,6 @@
 
 require 'rubygems'
 
-require 'sinatra'
-require 'sinatra/test/unit'
-
 require 'testbase'
 require 'ruote_rest.rb'
 
@@ -20,15 +17,13 @@ class StProcessesTest < Test::Unit::TestCase
 
   include TestBase
 
-  include Sinatra::Builder
-  include Sinatra::RenderingHelpers
-
 
   def test_0
 
-    get_it "/processes"
+    get "/processes"
 
     #p @response
+    #puts @response.body
 
     assert_equal(
       "application/xml",
@@ -55,10 +50,12 @@ class StProcessesTest < Test::Unit::TestCase
     #puts OpenWFE::Xml.launchitem_to_xml(li, 2)
     #puts
 
-    post_it(
+    post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li, 2),
       { "CONTENT_TYPE" => "application/xml" })
+
+    #puts @response.body
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
 
@@ -68,34 +65,36 @@ class StProcessesTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/processes"
+    get "/processes"
+
+    #puts @response.body
 
     assert_not_nil @response.body.index(fei.wfid)
 
-    get_it "/processes/#{fei.wfid}"
+    get "/processes/#{fei.wfid}"
     #puts
     #puts @response.body
     #puts
 
     assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 
-    get_it "/processes/#{fei.wfid}/representation"
+    get "/processes/#{fei.wfid}/representation"
 
     js = json_parse(@response.body)
     assert_kind_of Array, js
     assert_equal "application/json", @response["Content-Type"]
 
-    delete_it "/processes/#{fei.wfid}"
+    delete "/processes/#{fei.wfid}"
 
     assert_equal 303, @response.status
 
     sleep 0.350
 
-    get_it "/processes"
+    get "/processes"
 
     assert_not_nil @response.body.index('count="0"')
 
-    get_it "/processes/#{fei.wfid}"
+    get "/processes/#{fei.wfid}"
 
     assert_equal 404, @response.status
   end
@@ -113,7 +112,7 @@ class StProcessesTest < Test::Unit::TestCase
       end
     EOS
 
-    post_it(
+    post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li, 2),
       { "CONTENT_TYPE" => "application/xml" })
@@ -122,16 +121,16 @@ class StProcessesTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/processes/#{fei.wfid}"
+    get "/processes/#{fei.wfid}"
 
-    put_it(
+    put(
       "/processes/#{fei.wfid}",
       "<process><paused>true</paused></process>",
       { "CONTENT_TYPE" => "application/xml" })
 
     assert_not_nil @response.body.index('<paused>true</paused>')
 
-    put_it(
+    put(
       "/processes/#{fei.wfid}",
       "<process><paused>false</paused></process>",
       { "CONTENT_TYPE" => "application/xml" })
@@ -156,7 +155,7 @@ class StProcessesTest < Test::Unit::TestCase
       end
     EOS
 
-    post_it(
+    post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li, 2),
       { "CONTENT_TYPE" => "application/xml" })
@@ -165,7 +164,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/processes/#{fei.wfid}"
+    get "/processes/#{fei.wfid}"
 
     #puts @response.body
     assert_match(/Rufus::AtJob/, @response.body)

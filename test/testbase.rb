@@ -7,6 +7,9 @@
 # Tue Apr 29 21:59:47 JST 2008
 #
 
+require 'test/unit'
+
+
 module TestBase
 
   class TestParticipant
@@ -44,10 +47,21 @@ module TestBase
 
     $engine.get_participant_map.participants.clear
 
-    Participants.init_all
+    Participants.init_all('conf/participants_test.yaml')
   end
 
   #def teardown
   #  FileUtils.rm "conf/participants_test.yaml"
   #end
+
+  [ :post, :get, :put, :delete ].each do |v|
+    module_eval <<-EOS
+      def #{v} (path, body=nil, options={})
+        options[:input] = body if body
+        @response = \
+          Rack::MockRequest.new($app).request('#{v}'.upcase, path, options)
+        @response
+      end
+    EOS
+  end
 end

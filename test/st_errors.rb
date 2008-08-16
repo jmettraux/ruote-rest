@@ -9,9 +9,6 @@
 
 require 'rubygems'
 
-require 'sinatra'
-require 'sinatra/test/unit'
-
 require 'testbase'
 require 'ruote_rest.rb'
 
@@ -20,13 +17,10 @@ class StErrorsTest < Test::Unit::TestCase
 
   include TestBase
 
-  include Sinatra::Builder
-  include Sinatra::RenderingHelpers
-
 
   def test_0
 
-    get_it "/errors"
+    get "/errors"
 
     #p @response
 
@@ -39,7 +33,7 @@ class StErrorsTest < Test::Unit::TestCase
       @response.body)
   end
 
-  def test_0
+  def test_1
 
     fei = $engine.launch <<-EOS
 <process-definition name="st_errors" revision="t1">
@@ -49,7 +43,7 @@ class StErrorsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/errors"
+    get "/errors"
 
     assert_not_nil @response.body.index(
       "<errors count=\"1\">")

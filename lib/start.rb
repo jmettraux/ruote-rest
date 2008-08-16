@@ -15,3 +15,5 @@ require 'rubygems'
 
 load 'ruote_rest.rb'
 
+Rack::Handler::Mongrel.run $app, :Port => 4567
+

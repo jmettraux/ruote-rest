@@ -45,7 +45,7 @@ helpers do
 
   def render_errors_xml (errors)
 
-    builder do |xml|
+    builder(2) do |xml|
       xml.instruct!
       xml.errors :count => errors.size do
         errors.each { |error| _render_error_xml xml, error }

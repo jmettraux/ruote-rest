@@ -7,13 +7,7 @@
 # Mon Apr 14 15:45:00 JST 2008
 #
 
-
-
-#require 'test/unit'
-
 require 'rubygems'
-require 'sinatra'
-require 'sinatra/test/unit'
 
 require 'testbase'
 require 'ruote_rest.rb'
@@ -22,9 +16,6 @@ require 'ruote_rest.rb'
 class StExpressionsTest < Test::Unit::TestCase
 
   include TestBase
-
-  include Sinatra::Builder
-  include Sinatra::RenderingHelpers
 
 
   def test_0
@@ -38,7 +29,7 @@ class StExpressionsTest < Test::Unit::TestCase
       end
     EOS
 
-    post_it(
+    post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li),
       { "CONTENT_TYPE" => "application/xml" })
@@ -47,19 +38,19 @@ class StExpressionsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/expressions/#{fei.wfid}"
+    get "/expressions/#{fei.wfid}"
     #puts
     #puts @response.body
     #puts
     assert_not_nil @response.body.index(' count="5"')
 
 
-    get_it "/expressions/#{fei.wfid}/0_0"
+    get "/expressions/#{fei.wfid}/0_0"
 
     assert_not_nil @response.body.index(
       '<class>OpenWFE::SequenceExpression</class>')
 
-    get_it "/expressions/#{fei.wfid}/0e"
+    get "/expressions/#{fei.wfid}/0e"
     #puts
     #puts @response.body
     #puts
@@ -68,7 +59,7 @@ class StExpressionsTest < Test::Unit::TestCase
       "GET /0e --> not an environment")
 
 
-    get_it "/expressions/#{fei.wfid}/0"
+    get "/expressions/#{fei.wfid}/0"
 
     assert_not_nil(
       @response.body.index('<class>OpenWFE::DefineExpression</class>'),
@@ -77,7 +68,7 @@ class StExpressionsTest < Test::Unit::TestCase
     #
     # cancel process
 
-    delete_it "/expressions/#{fei.wfid}/0"
+    delete "/expressions/#{fei.wfid}/0"
 
     assert_equal 303, @response.status
 
@@ -94,7 +85,7 @@ class StExpressionsTest < Test::Unit::TestCase
       end
     EOS
 
-    post_it(
+    post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li),
       { "CONTENT_TYPE" => "application/xml" })
@@ -103,7 +94,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get_it "/expressions/#{fei.wfid}/0_0?format=yaml"
+    get "/expressions/#{fei.wfid}/0_0?format=yaml"
 
     assert_equal "application/yaml", @response["Content-Type"]
 
@@ -112,7 +103,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     exp.attributes = { :toto => :surf }
 
-    put_it(
+    put(
       "/expressions/#{fei.wfid}/0_0",
       exp.to_yaml,
       { "CONTENT_TYPE" => "application/yaml" })
@@ -121,9 +112,10 @@ class StExpressionsTest < Test::Unit::TestCase
       "http://example.org/expressions/#{fei.wfid}/0_0",
       @response["Location"])
 
-    get_it(
+    get(
       "/expressions/#{fei.wfid}/0_0",
-      :env => { 'HTTP_ACCEPT' => "application/yaml" })
+      nil,
+      { 'HTTP_ACCEPT' => "application/yaml" })
 
     exp = YAML.load @response.body
 

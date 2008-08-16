@@ -12,8 +12,6 @@
 #require 'test/unit'
 
 require 'rubygems'
-require 'sinatra'
-require 'sinatra/test/unit'
 
 require 'testbase'
 require 'ruote_rest.rb'
@@ -22,9 +20,6 @@ require 'ruote_rest.rb'
 class StWorkitemsTest < Test::Unit::TestCase
 
   include TestBase
-
-  include Sinatra::Builder
-  include Sinatra::RenderingHelpers
 
 
   def test_0
@@ -42,7 +37,7 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
 
-    get_it '/workitems'
+    get '/workitems'
 
     #p @response.status
     #puts @response.body
@@ -51,7 +46,7 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, workitems.size
 
-    get_it workitems.first._uri
+    get workitems.first._uri
 
     workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
@@ -60,13 +55,13 @@ class StWorkitemsTest < Test::Unit::TestCase
     #
     # get /workitems?wfid=x
 
-    get_it "/workitems?wfid=#{fei.wfid}"
+    get "/workitems?wfid=#{fei.wfid}"
 
     workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
     assert_equal 1, workitems.size
 
-    get_it "/workitems?wfid=#{fei.wfid}nada"
+    get "/workitems?wfid=#{fei.wfid}nada"
 
     workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
@@ -77,12 +72,12 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     workitem.owner = "toto"
 
-    put_it(
+    put(
       workitem._uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
       { "CONTENT_TYPE" => "application/xml" })
 
-    get_it workitem._uri
+    get workitem._uri
 
     workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
@@ -93,21 +88,21 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     workitem._state = "proceeded"
 
-    put_it(
+    put(
       workitem._uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
       { "CONTENT_TYPE" => "application/xml" })
 
     sleep 0.350
 
-    get_it workitem._uri
+    get workitem._uri
 
     assert_equal 404, @response.status
 
     #
     # proceeded ?
 
-    get_it '/workitems'
+    get '/workitems'
 
     workitems = OpenWFE::Xml.workitems_from_xml @response.body
 

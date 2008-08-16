@@ -103,12 +103,10 @@ end
 
 six = new_sixjo_rack_app(Rack::File.new('public'))
 
-app = Rack::Builder.new do
+$app = Rack::Builder.new do
 
   use Rack::CommonLogger
   use Rack::ShowExceptions
   run six
 end
-
-Rack::Handler::Mongrel.run app, :Port => 4567
 
