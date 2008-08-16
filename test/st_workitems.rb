@@ -24,7 +24,7 @@ class StWorkitemsTest < Test::Unit::TestCase
 
   def test_0
 
-    fei = $engine.launch <<-EOS
+    fei = $app.engine.launch <<-EOS
       class Test0 < OpenWFE::ProcessDefinition
         sequence do
           alpha

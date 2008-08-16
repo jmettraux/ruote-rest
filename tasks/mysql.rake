@@ -42,6 +42,9 @@ namespace :mysql do
     require 'openwfe/extras/participants/activeparticipants'
     OpenWFE::Extras::WorkitemTables.up
 
+    require 'openwfe/extras/expool/dbhistory'
+    OpenWFE::Extras::HistoryTables.up
+
     #OpenWFE::Extras::ProcessErrorTables.up
     #OpenWFE::Extras::ExpressionTables.up
   end

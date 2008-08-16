@@ -101,12 +101,7 @@ end
 #
 # Racking
 
-six = new_sixjo_rack_app(Rack::File.new('public'))
+env = ENV['ruote.environment'] || 'development'
 
-$app = Rack::Builder.new do
-
-  use Rack::CommonLogger
-  use Rack::ShowExceptions
-  run six
-end
+$app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
 

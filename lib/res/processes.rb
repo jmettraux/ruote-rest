@@ -43,7 +43,7 @@
 #
 get "/processes" do
 
-  rrender :processes, $engine.list_process_status
+  rrender :processes, application.engine.list_process_status
 end
 
 #
@@ -53,7 +53,7 @@ post "/processes" do
 
   launchitem = rparse :launchitem
 
-  fei = $engine.launch launchitem
+  fei = application.engine.launch launchitem
 
   rrender(
     :fei, fei,
@@ -65,7 +65,7 @@ end
 #
 get "/processes/:wfid/representation" do
 
-  pstack = $engine.process_stack params[:wfid], true
+  pstack = application.engine.process_stack params[:wfid], true
 
   throw :done, [ 404, "no such process" ] unless pstack
 
@@ -96,9 +96,9 @@ put "/processes/:wfid" do
   process = rparse :process
 
   if process[:paused]
-    $engine.pause_process pstatus.wfid
+    application.engine.pause_process pstatus.wfid
   else
-    $engine.resume_process pstatus.wfid
+    application.engine.resume_process pstatus.wfid
   end
 
   rrender :process, get_status_and_stack
@@ -111,7 +111,7 @@ delete "/processes/:wfid" do
 
   wfid = params[:wfid]
 
-  $engine.cancel_process wfid
+  application.engine.cancel_process wfid
 
   sleep 0.350
 
@@ -130,7 +130,7 @@ helpers do
 
     wfid = params[:wfid]
 
-    $engine.process_status(wfid) ||
+    application.engine.process_status(wfid) ||
       throw(:done, [ 404, "no process '#{wfid}'" ])
   end
 
@@ -138,7 +138,7 @@ helpers do
 
     pstatus = get_process_status
 
-    pstack = $engine.process_stack pstatus.wfid, true
+    pstack = application.engine.process_stack pstatus.wfid, true
     class << pstatus
       attr_accessor :process_stack
     end

@@ -27,6 +27,8 @@ CLEAN.include 'work_test', 'work_development', 'log', 'tmp'
 #
 Rake::TestTask.new(:test) do |t|
 
+  ENV['ruote.environment'] = 'test'
+
   t.libs << 'test'
   t.libs << 'conf'
   t.libs << 'vendor'

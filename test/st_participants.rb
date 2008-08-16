@@ -80,7 +80,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     assert_equal(
       [ 'one', 'two', 'three' ],
-      $engine.get_participant_map.lookup_participant('carlito').params)
+      $app.engine.get_participant_map.lookup_participant('carlito').params)
   end
 
 end

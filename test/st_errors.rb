@@ -35,7 +35,7 @@ class StErrorsTest < Test::Unit::TestCase
 
   def test_1
 
-    fei = $engine.launch <<-EOS
+    fei = $app.engine.launch <<-EOS
 <process-definition name="st_errors" revision="t1">
   <participant ref="tonto" />
 </process-definition>

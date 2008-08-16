@@ -121,7 +121,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     assert_equal :surf, exp.attributes[:toto]
 
-    $engine.cancel_process fei
+    $app.engine.cancel_process fei
 
     sleep 0.350
   end

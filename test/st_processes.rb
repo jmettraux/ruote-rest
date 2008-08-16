@@ -104,7 +104,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_2
 
-    $engine.register_participant :alpha, OpenWFE::HashParticipant
+    $app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses < OpenWFE::ProcessDefinition
@@ -137,7 +137,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     assert_not_nil @response.body.index('<paused>false</paused>')
 
-    $engine.cancel_process fei
+    $app.engine.cancel_process fei
 
     sleep 0.350
   end
@@ -147,7 +147,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_3
 
-    $engine.register_participant :alpha, OpenWFE::HashParticipant
+    $app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses < OpenWFE::ProcessDefinition

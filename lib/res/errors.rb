@@ -40,7 +40,7 @@
 
 get "/errors" do
 
-  logs = $engine.get_error_journal.get_error_logs
+  logs = application.engine.get_error_journal.get_error_logs
 
   errors = logs.values.inject([]) { |r, log| r += log }
   errors = errors.sort_by { |err| err.fei.wfid }
@@ -52,7 +52,7 @@ get "/errors/:wfid" do
 
   wfid = params[:wfid]
 
-  rrender :errors, $engine.get_error_journal.get_error_log(wfid)
+  rrender :errors, application.engine.get_error_journal.get_error_log(wfid)
 end
 
 get "/errors/:wfid/:error_id" do
@@ -65,7 +65,7 @@ delete "/errors/:wfid/:error_id" do
 
   error = find_error
 
-  $engine.replay_at_error error
+  application.engine.replay_at_error error
 
   "replayed"
 end
@@ -81,7 +81,7 @@ helpers do
     wfid = params[:wfid]
     error_id = params[:error_id]
 
-    errors = $engine.get_error_journal.get_error_log(wfid)
+    errors = application.engine.get_error_journal.get_error_log(wfid)
 
     errors.find { |e| e.error_id == error_id }
   end

@@ -80,20 +80,21 @@ module Participants
     participant = args ? clazz.new(*args) : clazz.new
       # patch by Nick Petrella
 
-    $engine.register_participant pregex, participant
+    @engine.register_participant pregex, participant
   end
 
   def self.remove (pregex)
 
-    part = $engine.list_participants.find do |pr, pa|
+    part = @engine.list_participants.find do |pr, pa|
       pr == pregex
     end
 
-    $engine.list_participants.delete part
+    @engine.list_participants.delete part
   end
 
-  def self.init_all (filename)
+  def self.init_all (engine, filename)
 
+    @engine = engine
     @filename = filename
 
     ps = load_all

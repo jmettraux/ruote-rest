@@ -40,7 +40,7 @@
 
 get "/participants" do
 
-  rrender :participants, $engine.list_participants
+  rrender :participants, application.engine.list_participants
 end
 
 get "/participants/:pid" do
@@ -54,7 +54,7 @@ post "/participants" do
 
   Participants.add regex, pclass, store_name
 
-  rrender :participants, $engine.list_participants, :status => 201
+  rrender :participants, application.engine.list_participants, :status => 201
 end
 
 delete "/participants/:pid" do
@@ -81,7 +81,7 @@ helpers do
 
       #pid = CGI.unescape(pid) # no need :)
 
-      regex, part = $engine.list_participants.find do |pr, pa|
+      regex, part = application.engine.list_participants.find do |pr, pa|
         pr.original_string == pid
       end
 

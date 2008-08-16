@@ -61,7 +61,7 @@ put "/workitems/:wid" do
 
     owi.fei = wi.full_fei
 
-    $engine.reply owi
+    application.engine.reply owi
     wi.destroy
 
     response.location = request.href(:workitems)

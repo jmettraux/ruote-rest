@@ -45,9 +45,9 @@ module TestBase
     #
     # initting the participant
 
-    $engine.get_participant_map.participants.clear
+    $app.engine.get_participant_map.participants.clear
 
-    Participants.init_all('conf/participants_test.yaml')
+    Participants.init_all($app.engine, 'conf/participants_test.yaml')
   end
 
   #def teardown

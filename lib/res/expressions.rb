@@ -41,7 +41,7 @@
 get "/expressions/:wfid" do
 
   wfid = params[:wfid]
-  es = $engine.process_stack wfid, true
+  es = application.engine.process_stack wfid, true
 
   throw :done, [ 404, "no process #{wfid}" ] unless es
 
@@ -52,7 +52,7 @@ put "/expressions/:wfid/:expid" do
 
   expression = rparse :expression
 
-  $engine.update_expression expression
+  application.engine.update_expression expression
 
   response.location = expression.href(request)
   rrender :expression, find_expression
@@ -67,7 +67,7 @@ delete "/expressions/:wfid/:expid" do
 
   e = find_expression
 
-  $engine.cancel_expression e
+  application.engine.cancel_expression e
 
   response.status = 303
   response.location = request.href(:expressions, params[:wfid])
@@ -92,7 +92,7 @@ helpers do
       env = true
     end
 
-    es = $engine.process_stack wfid, true
+    es = application.engine.process_stack wfid, true
 
     es.find { |e|
 
