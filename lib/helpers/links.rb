@@ -75,10 +75,14 @@ helpers do
   #
   def as_x_href (format)
 
-    href = here
-    href += href.index('?') ? '&' : '?'
+    #href = here
+    #href += href.index('?') ? '&' : '?'
+    #href + "format=#{format}&plain=true"
 
-    href + "format=#{format}&plain=true"
+    r = "#{request.scheme}://#{request.host}:#{request.port}"
+    r << "#{request.script_name}#{request.path_info}.#{format}?plain=true"
+    r << "&#{request.query_string}" if request.query_string.length > 0
+    r
   end
 
 end

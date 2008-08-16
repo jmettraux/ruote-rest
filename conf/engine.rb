@@ -62,4 +62,3 @@ configure do
   application.instance_variable_set(:@engine, engine)
 
 end
-

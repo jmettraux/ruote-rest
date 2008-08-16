@@ -109,7 +109,7 @@ FORMATS = {
 #
 def determine_out_format (options)
 
-  f = options[:format] || params[:format]
+  f = options[:format] || params[:format] || request.env['_FORMAT']
 
   return FORMATS[:xml] if f == 'xml'
   return FORMATS[:json] if f == 'json'
