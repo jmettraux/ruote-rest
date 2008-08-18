@@ -15,7 +15,7 @@
 
   <div class="h_right" style="float: right;">
     <a href="<%= as_x_href('xml') %>">as xml</a> |
-    <% if respond_to?("render_#{t}_json") %>
+    <% if defined?("render_#{t}_json") %>
       <a href="<%= as_x_href('json') %>">as json</a>
     <% else %>
       as json

@@ -47,5 +47,38 @@ helpers do
       :layout => :html,
       :locals => { :entries => entries })
   end
+
+  def render_history_xml (entries)
+
+    builder(2) do |xml|
+      xml.instruct!
+      xml.history(:count => entries.size) do
+        entries.each do |entry|
+          xml.entry do
+            xml.created_at entry.created_at
+            xml.source entry.source
+            xml.event entry.event
+            xml.wfid entry.wfid
+            xml.fei entry.fei
+            xml.message entry.message
+          end
+        end
+      end
+    end
+  end
+
+  def render_history_json (entries)
+
+    entries.collect { |e|
+      {
+        'created_at' => e.created_at,
+        'source' => e.source,
+        'event' => e.event,
+        'wfid' => e.wfid,
+        'fei' => e.fei,
+        'message' => e.message
+      }
+    }.to_json
+  end
 end
 

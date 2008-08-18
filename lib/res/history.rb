@@ -53,17 +53,26 @@ end
 
 def find_entries (params)
 
-  wfid = params[:wfid]
   offset = (params[:offset] || 0).to_i
   limit = (params[:limit] || 30).to_i
-  order = 'created_at desc'
 
-  opts = { :offset => offset, :limit => limit, :order => order }
+  wfid = params[:wfid]
 
-  if wfid
-    OpenWFE::Extras::HistoryEntry.find_all_by_wfid(wfid, opts)
-  else
-    OpenWFE::Extras::HistoryEntry.find(:all, opts)
-  end
+  event = params[:event]
+
+  order = params[:order] || 'created_at'
+  desc = params[:desc] || 'true'
+  order = "#{order} #{desc == 'false' ? 'asc' : 'desc'}"
+
+  cond = {}
+  cond[:wfid] = wfid if wfid
+  cond[:event] = event if event
+
+  opts = {
+    :offset => offset, :limit => limit, :order => order, :conditions => cond }
+
+  #total = ActiveRecord::Base::connection.execute("select count(*) from history").fetch_row[0].to_i
+
+  OpenWFE::Extras::HistoryEntry.find(:all, opts)
 end
 

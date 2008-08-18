@@ -53,22 +53,6 @@ def swapdots (s)
   s.gsub(/\_/, '.')
 end
 
-
-#
-#   render_time(workitem, :dispatch_time)
-#     # => Sat Mar 1 20:29:44 2008 (1d16h18m)
-#
-def display_time (object, accessor)
-
-  t = object.send accessor
-
-  return "" unless t
-
-  d = Time.now - t
-
-  "#{t.ctime} (#{Rufus::to_duration_string(d, :drop_seconds => true)})"
-end
-
 #
 # Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
 # as well.

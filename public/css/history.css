@@ -15,3 +15,12 @@ table.history td {
   font-size: 80%;
 }
 
+table.history td.created_at {
+  width: 210px;
+}
+table.history td.since {
+  text-align: right;
+  width: 60px;
+  padding-right: 5px;
+}
+
