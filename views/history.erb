@@ -37,3 +37,10 @@
   </tfoot>
 </table>
 
+<div>
+<a href="/history?offset=0">|&lt;</a>
+<a href="/history?offset=<%= offset - limit %>">&lt;</a>
+<%= offset %> to <%= offset + limit %> / <%= total %>
+<a href="/history?offset=<%= offset + limit %>">&gt;</a>
+<a href="/history?offset=<%= total - limit %>">&gt;|</a>
+</div>

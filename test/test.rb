@@ -6,4 +6,5 @@ require 'st_errors'
 require 'st_expressions'
 require 'st_participants'
 require 'st_workitems'
+require 'st_history'
 

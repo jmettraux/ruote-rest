@@ -28,6 +28,7 @@ module TestBase
 
     OpenWFE::Extras::Workitem.delete_all
     OpenWFE::Extras::Field.delete_all
+    OpenWFE::Extras::HistoryEntry.delete_all
 
     #
     # resetting the participant file

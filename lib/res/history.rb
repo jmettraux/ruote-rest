@@ -71,8 +71,12 @@ def find_entries (params)
   opts = {
     :offset => offset, :limit => limit, :order => order, :conditions => cond }
 
-  #total = ActiveRecord::Base::connection.execute("select count(*) from history").fetch_row[0].to_i
-
-  OpenWFE::Extras::HistoryEntry.find(:all, opts)
+  {
+    :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
+    :total => ActiveRecord::Base::connection.execute(
+      "select count(*) from history").fetch_row[0].to_i,
+    :offset => offset,
+    :limit => limit
+  }
 end
 

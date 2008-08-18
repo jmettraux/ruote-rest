@@ -40,20 +40,27 @@
 
 helpers do
 
-  def render_history_html (entries)
+  def render_history_html (history)
 
     _erb(
       :history,
       :layout => :html,
-      :locals => { :entries => entries })
+      :locals => history)
   end
 
-  def render_history_xml (entries)
+  def render_history_xml (history)
 
     builder(2) do |xml|
+
       xml.instruct!
-      xml.history(:count => entries.size) do
-        entries.each do |entry|
+
+      xml.history(
+        :count => history[:entries].size,
+        :total => history[:total],
+        :offset => history[:offset],
+        :limit => history[:limit]) do
+
+        history[:entries].each do |entry|
           xml.entry do
             xml.created_at entry.created_at
             xml.source entry.source
@@ -67,9 +74,9 @@ helpers do
     end
   end
 
-  def render_history_json (entries)
+  def render_history_json (history)
 
-    entries.collect { |e|
+    history[:entries].collect { |e|
       {
         'created_at' => e.created_at,
         'source' => e.source,
