@@ -37,73 +37,33 @@
 # John Mettraux at openwfe.org
 #
 
-require 'rexml/document'
+require 'openwfe/extras/expool/dbhistory'
 
-#require 'sinatra'
-require 'rufus/sixjo'
 
-include Rufus::Sixjo
+get "/history" do
 
-#
-# conf
-
-load 'auth.rb'
-require 'part.rb'
-
-require 'db'
-require 'engine'
-require 'participants'
-
-#
-# misc
-
-require 'patching'
-require 'misc'
-
-#
-# representations (I'd prefer another name...)
-
-load 'inout.rb'
-load 'rep/xml.rb'
-
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-load 'rep/history.rb'
-
-#
-# resources
-
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-load 'res/history.rb'
-
-#
-# helpers
-
-load 'helpers/general.rb'
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# "/" redirection
-
-get "/" do
-
-  redirect request.href(:processes)
+  rrender :history, find_entries(params)
 end
 
-#
-# Racking
+get "/history/:wfid" do
 
-env = ENV['ruote.environment'] || 'development'
+  rrender :history, find_entries(params)
+end
 
-$app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
+
+def find_entries (params)
+
+  wfid = params[:wfid]
+  offset = (params[:offset] || 0).to_i
+  limit = (params[:limit] || 30).to_i
+  order = 'created_at desc'
+
+  opts = { :offset => offset, :limit => limit, :order => order }
+
+  if wfid
+    OpenWFE::Extras::HistoryEntry.find_all_by_wfid(wfid, opts)
+  else
+    OpenWFE::Extras::HistoryEntry.find(:all, opts)
+  end
+end
 

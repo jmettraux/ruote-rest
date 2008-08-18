@@ -1,0 +1,17 @@
+
+table.history {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+table.history thead th {
+  text-align: left;
+  font-size: 90%;
+}
+table.history tr:hover {
+  background-color: #efefef;
+}
+table.history td {
+  font-size: 80%;
+}
+

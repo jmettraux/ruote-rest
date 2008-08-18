@@ -1,0 +1,13 @@
+
+body {
+    /*text-align: center;*/
+    color: #888;
+    font-family: Helvetica;
+    font-size: 14px;
+    margin: 20px 70px;
+}
+.explanation {
+    font-size: 12px;
+    font-style: italic;
+}
+
