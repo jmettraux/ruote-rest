@@ -23,35 +23,17 @@ b = Rack::Builder.new do
   run $app
 end
 
+port = 4567 # TODO : optparse me
 
-#if Module.constants.include?('Mongrel') then
-#  #
-#  # graceful shutdown for Mongrel by Torsten Schoenebaum
-#  class Mongrel::HttpServer
-#    alias :old_graceful_shutdown :graceful_shutdown
-#    def graceful_shutdown
-#      $app.engine.stop
-#      sleep 1
-#      old_graceful_shutdown
-#    end
-#  end
-#else
-#  at_exit do
-#    #
-#    # make sure to stop the workflow engine when 'ruote-rest' terminates
-#
-#    $app.engine.stop
-#    sleep 1
-#  end
-#end
+puts ".. [#{Time.now}] ruote-rest listening on port #{port}"
 
-at_exit do
-  #
-  # make sure to stop the workflow engine when 'ruote-rest' terminates
-
-  $app.engine.stop
-  sleep 1
+Rack::Handler::Mongrel.run(b, :Port => port) do |server|
+  trap(:INT) do
+    puts "\n.. [#{Time.now}] stopping webserver and workflow engine ..."
+    server.stop
+    $app.engine.stop
+    sleep 1
+    puts ".. [#{Time.now}] stopped."
+  end
 end
-
-Rack::Handler::Mongrel.run b, :Port => 4567
 
