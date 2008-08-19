@@ -67,6 +67,7 @@ helpers do
             xml.event entry.event
             xml.wfid entry.wfid
             xml.fei entry.fei
+            xml.participant entry.participant
             xml.message entry.message
           end
         end
@@ -83,6 +84,7 @@ helpers do
         'event' => e.event,
         'wfid' => e.wfid,
         'fei' => e.fei,
+        'participant' => e.participant,
         'message' => e.message
       }
     }.to_json

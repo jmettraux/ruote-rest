@@ -60,7 +60,7 @@ def find_entries (params)
 
   event = params[:event]
 
-  order = params[:order] || 'created_at'
+  order = params[:order] || 'id'
   desc = params[:desc] || 'true'
   order = "#{order} #{desc == 'false' ? 'asc' : 'desc'}"
 
