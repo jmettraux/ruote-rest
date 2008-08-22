@@ -37,75 +37,9 @@
 # John Mettraux at openwfe.org
 #
 
-require 'rexml/document'
 
-#require 'sinatra'
-require 'rufus/sixjo'
+get "/service" do
 
-include Rufus::Sixjo
-
-#
-# conf
-
-load 'auth.rb'
-require 'part.rb'
-
-require 'db'
-require 'engine'
-require 'participants'
-
-#
-# misc
-
-require 'patching'
-require 'misc'
-
-#
-# representations (I'd prefer another name...)
-
-load 'inout.rb'
-load 'rep/xml.rb'
-
-load 'rep/service.rb'
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-load 'rep/history.rb'
-
-#
-# resources
-
-load 'res/service.rb'
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-load 'res/history.rb'
-
-#
-# helpers
-
-load 'helpers/application.rb'
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# "/" redirection
-
-get "/" do
-
-  redirect request.href(:service)
+  rrender :service, nil
 end
-
-#
-# Racking
-
-env = ENV['ruote.environment'] || 'development'
-
-$app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
 

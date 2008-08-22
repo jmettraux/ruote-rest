@@ -37,75 +37,46 @@
 # John Mettraux at openwfe.org
 #
 
-require 'rexml/document'
 
-#require 'sinatra'
-require 'rufus/sixjo'
+SERVICES = [ :processes, :workitems, :errors, :participants, :history ]
 
-include Rufus::Sixjo
 
-#
-# conf
+helpers do
 
-load 'auth.rb'
-require 'part.rb'
+  def render_service_html (_)
 
-require 'db'
-require 'engine'
-require 'participants'
+    _erb(:service, :layout => :html)
+  end
 
-#
-# misc
+  def render_service_xml (_)
 
-require 'patching'
-require 'misc'
+    builder(2) do |xml|
+      xml.instruct!
+      xml.service do
+        xml.workspace do
+          SERVICES.each { |s| xml.collection :href => request.href(s) }
+        end
+      end
+    end
+  end
 
-#
-# representations (I'd prefer another name...)
+  def render_service_atom (_)
 
-load 'inout.rb'
-load 'rep/xml.rb'
+    # TODO
 
-load 'rep/service.rb'
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-load 'rep/history.rb'
+    builder(2) do |xml|
+      xml.instruct!
+      xml.service do
+      end
+    end
+  end
 
-#
-# resources
+  def render_service_json (_)
 
-load 'res/service.rb'
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-load 'res/history.rb'
+    SERVICES.collect { |s|
+      { 'name' => s.to_s, 'href' => request.href(s) }
+    }.to_json
+  end
 
-#
-# helpers
-
-load 'helpers/application.rb'
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# "/" redirection
-
-get "/" do
-
-  redirect request.href(:service)
 end
-
-#
-# Racking
-
-env = ENV['ruote.environment'] || 'development'
-
-$app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
 

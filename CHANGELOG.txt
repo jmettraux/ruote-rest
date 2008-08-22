@@ -3,6 +3,7 @@
 
 == ruote-rest - 0.9.19    not yet released
 
+- todo  #21638  : added the /service 'document'
 - todo  #21509  : added /history view
 - todo  #21598  : better workitem ids (backward compatible though)
 - todo  #21575  : adapted to sixjo params['_FORMAT'] (.xml, .json, ...)

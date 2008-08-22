@@ -1,6 +1,7 @@
 
 require 't_misc'
 
+require 'st_service'
 require 'st_processes'
 require 'st_errors'
 require 'st_expressions'

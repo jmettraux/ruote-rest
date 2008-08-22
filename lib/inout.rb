@@ -104,8 +104,7 @@ FORMATS = {
 } unless defined?(FORMATS)
 
 #
-# determines the format the client is expecting by reading the "Accept"
-# request header
+# determines the format the client is expecting
 #
 def determine_out_format (options)
 
