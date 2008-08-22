@@ -155,9 +155,11 @@ class OpenWFE::InFlowWorkItem
   #
   def href (request=nil)
 
-    return request.href(:workitems, db_id) if request
+    i = "#{fei.wfid}_#{db_id}"
 
-    "/workitems/#{db_id}"
+    return request.href(:workitems, i) if request
+
+    "/workitems/#{i}"
   end
 end
 

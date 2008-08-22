@@ -43,7 +43,7 @@
 #
 def rparse (type)
 
-  representation = request.content
+  representation = request.body.read
 
   format = determine_in_format
 
@@ -59,7 +59,7 @@ def rrender (type, object, options={})
 
   format, ctype = determine_out_format options
 
-  ctype = "text/plain" if params[:plain]
+  ctype = 'text/plain' if params[:plain]
     # useful for debugging
 
   response.status = options.delete(:status) || 200

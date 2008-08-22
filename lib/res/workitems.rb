@@ -69,6 +69,8 @@ put "/workitems/:wid" do
     rrender :workitems, find_workitems
   else
 
+    # TODO : notify HTML clients of the update ? flash.notice ?
+
     wi.replace_fields owi.attributes
 
     rrender :workitem, wi
@@ -83,9 +85,9 @@ helpers do
 
   def find_workitem
 
-    wid = params[:wid]
-
+    wid = nil
     begin
+      wid = params[:wid].split('_')[-1]
       OpenWFE::Extras::Workitem.find wid
     rescue Exception => e
       throw :done, [ 404, "no workitem with id #{wid}" ]
