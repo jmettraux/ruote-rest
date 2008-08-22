@@ -47,7 +47,6 @@ include Rufus::Sixjo
 #
 # conf
 
-load 'auth.rb'
 require 'part.rb'
 
 require 'db'
@@ -108,4 +107,6 @@ end
 env = ENV['ruote.environment'] || 'development'
 
 $app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
+
+load 'auth.rb' unless env == 'test'
 

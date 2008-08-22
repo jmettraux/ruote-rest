@@ -52,6 +52,9 @@ to start it on port 3333 :
     ruby lib/start.rb -p 3333
 )
 
+it will lead you to the "service document" with links to all the resources/
+collection that make ruote-rest.
+
 
 == interface
 
@@ -73,6 +76,11 @@ conf/participants_development.yaml
 
     participants configuration, the yaml file holds the list of 
     'active participants' (the worklist in fact).
+
+conf/auth.rb
+
+    authentication filters, contains an HTTP basic authentication example
+    and a "whitelist" authentication example.
 
 
 == license
