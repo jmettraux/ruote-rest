@@ -88,7 +88,7 @@ load 'res/history.rb'
 #
 # helpers
 
-load 'helpers/general.rb'
+load 'helpers/application.rb'
 load 'helpers/links.rb'
 load 'helpers/fluo.rb'
 

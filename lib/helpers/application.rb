@@ -96,5 +96,30 @@ helpers do
     Rufus::to_duration_string(d, :drop_seconds => true)
   end
 
+  def page_link (respath, offset, limit, text)
+    "<a href=\"#{respath}?offset=#{offset}&limit=#{limit}\">#{text}</a> "
+  end
+
+  def paging (respath, offset, limit, total)
+
+    s = ""
+
+    s << page_link(respath, 0, limit, '|&lt;') \
+      if offset != 0
+
+    s << page_link(respath, offset - limit, limit, '&lt;') \
+      if offset - limit > 0
+
+    s << " #{offset} to #{offset + limit} / #{total} "
+
+    s << page_link(respath, offset + limit, limit, '&gt;') \
+      if offset + 2 * limit < total
+
+    s << page_link(respath, total - limit, limit, '&gt;|') \
+      if offset + limit < total
+
+    "<div class=\"pager\">#{s}</div>"
+  end
+
 end
 
