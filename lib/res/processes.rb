@@ -65,16 +65,12 @@ end
 #
 get "/processes/:wfid/representation" do
 
-  # TODO : a process status cache would be appreciated...
-
-  pstack = application.engine.process_stack params[:wfid], true
-
-  throw :done, [ 404, "no such process" ] unless pstack
-
   format = params[:format] || 'json'
 
-  #rrender :process_representation, pstack, :format => 'json'
-  rrender :process_representation, pstack, :format => format
+  rrender(
+    :process_representation,
+    get_process_status.all_expressions,
+    :format => format)
 end
 
 #
