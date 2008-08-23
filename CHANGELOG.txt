@@ -3,14 +3,15 @@
 
 == ruote-rest - 0.9.19    not yet released
 
-- todo  #21638  : added the /service 'document'
-- todo  #21509  : added /history view
-- todo  #21598  : better workitem ids (backward compatible though)
-- todo  #21575  : adapted to sixjo params['_FORMAT'] (.xml, .json, ...)
-- todo  #21413  : showing workitem search form
-- patch #21497  : participant initialization parameter fix by Nick Petrella
-- todo  #21419  : removed direct dependency on json gem, relying on whatever is 
+- todo  #21644 : included process_stack result into process_status
+- todo  #21638 : added the /service 'document'
+- todo  #21509 : added /history view
+- todo  #21598 : better workitem ids (backward compatible though)
+- todo  #21575 : adapted to sixjo params['_FORMAT'] (.xml, .json, ...)
+- todo  #21413 : showing workitem search form
+- patch #21497 : participant initialization parameter fix by Nick Petrella
+- todo  #21419 : removed direct dependency on json gem, relying on whatever is 
                   present (activesupport or json)
-- bug    #21096 : reordered participant load order in conf/participants.rb
-- todo   #20647 : showing scheduled jobs for /processes
+- bug   #21096 : reordered participant load order in conf/participants.rb
+- todo  #20647 : showing scheduled jobs for /processes
 

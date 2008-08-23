@@ -152,7 +152,7 @@ helpers do
         end
 
         xml.representation(
-          p.process_stack.representation.to_json,
+          p.all_expressions.representation.to_json,
           :href => request.href(:processes, p.wfid, :representation))
 
       else
@@ -188,9 +188,9 @@ helpers do
   #
   # Renders the process definition tree (potientally updated) as some JSON
   #
-  def render_process_representation_json (pstack)
+  def render_process_representation_json (expressions)
 
-    pstack.representation.to_json
+    expressions.representation.to_json
   end
 
 end

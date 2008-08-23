@@ -65,6 +65,8 @@ end
 #
 get "/processes/:wfid/representation" do
 
+  # TODO : a process status cache would be appreciated...
+
   pstack = application.engine.process_stack params[:wfid], true
 
   throw :done, [ 404, "no such process" ] unless pstack
@@ -80,11 +82,7 @@ end
 #
 get "/processes/:wfid" do
 
-  wfid = params[:wfid]
-
-  pstatus = get_status_and_stack
-
-  rrender :process, pstatus
+  rrender :process, get_process_status
 end
 
 #
@@ -101,7 +99,7 @@ put "/processes/:wfid" do
     application.engine.resume_process pstatus.wfid
   end
 
-  rrender :process, get_status_and_stack
+  rrender :process, get_process_status
 end
 
 #
@@ -132,19 +130,6 @@ helpers do
 
     application.engine.process_status(wfid) ||
       throw(:done, [ 404, "no process '#{wfid}'" ])
-  end
-
-  def get_status_and_stack
-
-    pstatus = get_process_status
-
-    pstack = application.engine.process_stack pstatus.wfid, true
-    class << pstatus
-      attr_accessor :process_stack
-    end
-    pstatus.process_stack = pstack
-
-    pstatus
   end
 end
 

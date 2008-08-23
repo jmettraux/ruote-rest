@@ -80,6 +80,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     get "/processes/#{fei.wfid}/representation"
 
+    #puts @response.body
     js = json_parse(@response.body)
     assert_kind_of Array, js
     assert_equal "application/json", @response["Content-Type"]
