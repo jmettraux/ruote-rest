@@ -56,6 +56,11 @@ configure do
     #
     # tracking history
 
+  engine.reload
+  sleep 0.350
+    #
+    # let the engine reschedule/repause stuff in the expool
+
   class << application
     attr_reader :engine
   end
