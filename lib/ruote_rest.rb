@@ -94,9 +94,9 @@ load 'helpers/links.rb'
 load 'helpers/fluo.rb'
 
 #
-# "/" redirection
+# '/' redirection
 
-get "/" do
+get '/' do
 
   redirect request.href(:service)
 end
@@ -106,7 +106,8 @@ end
 
 env = ENV['ruote.environment'] || 'development'
 
-$app = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
+$rr = new_sixjo_rack_app(Rack::File.new('public'), :environment => env)
+$app = $rr
 
 load 'auth.rb' unless env == 'test'
 

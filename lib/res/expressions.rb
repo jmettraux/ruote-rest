@@ -40,12 +40,14 @@
 
 get "/expressions/:wfid" do
 
-  wfid = params[:wfid]
-  es = application.engine.process_stack wfid, true
+  #wfid = params[:wfid]
+  #es = application.engine.process_stack wfid, true
+  #throw :done, [ 404, "no process #{wfid}" ] unless es
 
-  throw :done, [ 404, "no process #{wfid}" ] unless es
+  ps = get_process_status
 
-  rrender :expressions, es
+  #rrender :expressions, es
+  rrender :expressions, ps.all_expressions
 end
 
 put "/expressions/:wfid/:expid" do
@@ -92,12 +94,13 @@ helpers do
       env = true
     end
 
-    es = application.engine.process_stack wfid, true
+    #es = application.engine.process_stack wfid, true
+    #es.find { |e|
+    #  (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
+    #} or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
 
-    es.find { |e|
-
+    get_process_status.all_expressions.find { |e|
       (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-
     } or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
   end
 end

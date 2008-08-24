@@ -6,7 +6,6 @@ $:.unshift "#{dir}/../conf"
 
 $:.unshift "#{dir}/../vendor" # if any
 
-#$:.unshift "~/sinatra/lib"
 $:.unshift "~/ruote/lib"
 $:.unshift "~/rufus/rufus-sixjo/lib"
 
@@ -31,7 +30,7 @@ Rack::Handler::Mongrel.run(b, :Port => port) do |server|
   trap(:INT) do
     puts "\n.. [#{Time.now}] stopping webserver and workflow engine ..."
     server.stop
-    $app.engine.stop
+    $rr.engine.stop
     sleep 1
     puts ".. [#{Time.now}] stopped."
   end

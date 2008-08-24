@@ -26,3 +26,6 @@ end
 #end
 #$app.realm = 'ruote-rest'
 
+# ($app always pointing to 'top' app, while $rr points to ruote-rest itself)
+# (will certainly change)
+

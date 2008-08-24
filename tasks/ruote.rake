@@ -31,7 +31,7 @@ namespace :ruote do
     #sh "sudo gem install --no-rdoc --no-ri json"
     sh "sudo gem install --no-rdoc --no-ri activerecord"
     sh "sudo gem install --no-rdoc --no-ri rogue_parser"
-    sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
+    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
   end
 
   def git_clone (elt)
@@ -49,7 +49,7 @@ namespace :ruote do
     GEMS = RUFUSES.dup
 
     GEMS << 'ruote'
-    GEMS << 'ruote-extras' # TODO : remove me soon
+    #GEMS << 'ruote-extras'
 
     #GEMS << 'json_pure'
     #GEMS << 'json'
@@ -57,7 +57,7 @@ namespace :ruote do
     GEMS << 'activerecord'
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
-    sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
+    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
 
     #puts
     #puts "installed gems  #{GEMS.join(' ')}"

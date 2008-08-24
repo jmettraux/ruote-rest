@@ -81,7 +81,7 @@
 
     <div class="process_representation">
       Representation :<br/>
-      <span class="process_rep"><%= process.process_stack.representation.to_json %></span>
+      <span class="process_rep"><%= process.all_expressions.representation.to_json %></span>
     </div>
 
     <br/>
@@ -116,5 +116,5 @@
 
 </div>
 
-<%= render_fluo_foot(process.process_stack.representation, nil, process.expressions.collect { |e| e.fei.expid }) if detailed %>
+<%= render_fluo_foot(process.all_expressions.representation, nil, process.expressions.collect { |e| e.fei.expid }) if detailed %>
 
