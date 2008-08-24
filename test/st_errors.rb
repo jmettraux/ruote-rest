@@ -20,7 +20,7 @@ class StErrorsTest < Test::Unit::TestCase
 
   def test_0
 
-    get "/errors"
+    get '/errors'
 
     #p @response
 
@@ -43,11 +43,14 @@ class StErrorsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get "/errors"
+    get '/errors'
+
+    #puts @response.body
 
     assert_not_nil @response.body.index(
-      "<errors count=\"1\">")
+      '<errors count="1">')
     assert_not_nil @response.body.index(
-      "<text>exception : No participant named 'tonto'</text>")
+      "<text>No participant named 'tonto'</text>")
   end
 end
+
