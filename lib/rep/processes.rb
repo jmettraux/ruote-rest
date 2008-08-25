@@ -83,7 +83,7 @@ helpers do
 
   def render_process_json (p)
 
-    p.to_h.to_json
+    p.to_h(request).to_json
   end
 
   def render_process_xml (p)

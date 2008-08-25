@@ -55,6 +55,7 @@ helpers do
       xml.service do
         xml.workspace do
           SERVICES.each { |s| xml.collection :href => request.href(s) }
+          xml.collection :href => request.href('processes', 0, 'variables')
         end
       end
     end
@@ -73,9 +74,14 @@ helpers do
 
   def render_service_json (_)
 
-    SERVICES.collect { |s|
+    h = SERVICES.collect { |s|
       { 'name' => s.to_s, 'href' => request.href(s) }
-    }.to_json
+    }
+    h << {
+      'name' => 'engine_variables',
+      'href' => request.href('processes', 0, 'variables')
+    }
+    h.to_json
   end
 
 end

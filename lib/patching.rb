@@ -117,18 +117,18 @@ class OpenWFE::ProcessStatus
   #
   def href (request=nil)
 
-    return request.href(:processes, wfid) if request
-
-    "/processes/#{wfid}"
+    request ? request.href(:processes, wfid) : "/processes/#{wfid}"
   end
 
-  def to_h
+  def to_h (request=nil)
 
     {
+      'href' => href(request),
       'wfid' => wfid,
       'launch_time' => launch_time,
       'paused' => paused,
-      'variables' => variables
+      'variables' => variables,
+      'tags' => tags
     }
   end
 end
@@ -179,9 +179,7 @@ class OpenWFE::ProcessError
   #
   def href (request=nil)
 
-    return request.href(:errors, wfid, expid) if request
-
-    "/errors/#{wfid}/#{error_id}"
+    request ? request.href(:errors, wfid, expid) : "/errors/#{wfid}/#{error_id}"
   end
 end
 

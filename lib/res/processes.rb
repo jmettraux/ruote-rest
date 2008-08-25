@@ -76,9 +76,13 @@ end
 #
 get '/processes/:wfid/variables' do
 
-  rrender(
-    :process_variables,
-    get_process_status.variables)
+  variables = if params[:wfid] == '0'
+    application.engine.get_variables
+  else
+    get_process_status.variables
+  end
+
+  rrender :process_variables, variables
 end
 
 #
