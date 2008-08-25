@@ -54,7 +54,7 @@ helpers do
     params = "?" + params.collect { |k, v| "#{k}=#{swapdots(v)}" }.join("&") if params
     params = "" unless params
 
-    args = args.collect { |a| swapdots(a) }
+    args = args.collect { |a| has_filetype?(a) ? a : swapdots(a) }
 
     "<a href=\"#{request.href(*args)}#{params}\">" +
     "GET /#{args.join('/')}#{params}" +

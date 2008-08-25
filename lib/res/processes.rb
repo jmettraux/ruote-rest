@@ -41,7 +41,7 @@
 #
 # Returns the statuses of all the process currently running in this ruote_rest
 #
-get "/processes" do
+get '/processes' do
 
   rrender :processes, application.engine.list_process_status
 end
@@ -49,7 +49,7 @@ end
 #
 # Launches a business process
 #
-post "/processes" do
+post '/processes' do
 
   launchitem = rparse :launchitem
 
@@ -63,20 +63,28 @@ end
 #
 # just return the process instance tree as JSON
 #
-get "/processes/:wfid/representation" do
-
-  format = params[:format] || 'json'
+get '/processes/:wfid/representation' do
 
   rrender(
     :process_representation,
-    get_process_status.all_expressions,
-    :format => format)
+    get_process_status.all_expressions)
+end
+
+#
+# Returns the variable of the process (well, the variable set at the
+# process level only)
+#
+get '/processes/:wfid/variables' do
+
+  rrender(
+    :process_variables,
+    get_process_status.variables)
 end
 
 #
 # Returns the detailed status of a process instance
 #
-get "/processes/:wfid" do
+get '/processes/:wfid' do
 
   rrender :process, get_process_status
 end
@@ -84,7 +92,7 @@ end
 #
 # Updates a process instance (pauses or resumes it).
 #
-put "/processes/:wfid" do
+put '/processes/:wfid' do
 
   pstatus = get_process_status
   process = rparse :process
@@ -101,7 +109,7 @@ end
 #
 # Cancels a process instance
 #
-delete "/processes/:wfid" do
+delete '/processes/:wfid' do
 
   wfid = params[:wfid]
 

@@ -37,8 +37,6 @@
 # John Mettraux at openwfe.org
 #
 
-require 'cgi'
-
 
 #
 # swap from dots to underscores
@@ -59,17 +57,8 @@ end
 #
 def uri_escape (s)
 
-  CGI.escape(s).gsub(/\./, '%2E')
+  Rack::Utils.escape(s).gsub(/\./, '%2E')
 end
-
-#--
-# Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
-# as well.
-#
-#def uri_unescape (s)
-#  CGI.unescape s
-#end
-#++
 
 #
 # JSON related stuff and patching

@@ -1,5 +1,8 @@
 
 .process {
-    margin-top: 10px;
+  margin-top: 10px;
+}
+.process_details > div {
+  margin-top: 10px;
 }
 

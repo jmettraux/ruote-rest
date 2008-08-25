@@ -9,6 +9,7 @@ body {
 .explanation {
   font-size: 12px;
   font-style: italic;
+  margin-bottom: 10px;
 }
 a, a:visited {
   color: #000099;

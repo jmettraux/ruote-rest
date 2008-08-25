@@ -103,6 +103,9 @@ FORMATS = {
 
 } unless defined?(FORMATS)
 
+FTYPES = FORMATS.keys.collect { |k| k.to_s } \
+  unless defined?(FTYPES)
+
 #
 # determines the format the client is expecting
 #
@@ -123,5 +126,16 @@ def determine_out_format (options)
   return FORMATS[:js] if accept.index('js')
 
   FORMATS[:xml]
+end
+
+#
+# Returns true if the string is something like "xxx.json" or "yyy.xml"
+#
+def has_filetype? (s)
+
+  ss = s.split('.')
+  return false if ss.length != 2
+
+  FTYPES.include?(ss.last)
 end
 

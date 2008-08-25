@@ -37,6 +37,8 @@
 # John Mettraux at openwfe.org
 #
 
+require 'openwfe/util/xml'
+
 
 helpers do
 
@@ -191,6 +193,22 @@ helpers do
   def render_process_representation_json (expressions)
 
     expressions.representation.to_json
+  end
+
+  #
+  # Renders the variables as JSON.
+  #
+  def render_process_variables_json (variables)
+
+    variables.to_json
+  end
+
+  #
+  # Renders the variables as XML.
+  #
+  def render_process_variables_xml (variables)
+
+    OpenWFE::Xml.to_xml(variables, 2, true)
   end
 
 end

@@ -20,35 +20,37 @@ class StParticipantsTest < Test::Unit::TestCase
 
   def test_0
 
-    get "/participants"
+    get '/participants'
+
+    #puts @response.body
 
     assert_equal 200, @response.status
-    assert_equal "application/xml", @response["Content-Type"]
+    assert_equal 'application/xml', @response['Content-Type']
 
     post(
-      "/participants",
+      '/participants',
       '["toto","OpenWFE::HashParticipant"]',
-      { "CONTENT_TYPE" => "application/json" })
+      { 'CONTENT_TYPE' => 'application/json' })
 
     assert_equal 201, @response.status
-    assert_not_equal "", @response.body
+    assert_not_equal '', @response.body
 
-    get "/participants"
+    get '/participants'
 
     #puts @response.body
 
     assert_not_nil(
       @response.body.index(' count="4"'), "expected 4 participants")
 
-    get "/participants/toto"
+    get '/participants/toto'
 
     assert_not_nil @response.body.index('>toto<')
 
-    delete "/participants/toto"
+    delete '/participants/toto'
 
     assert_equal 303, @response.status
 
-    get "/participants"
+    get '/participants'
 
     #puts @response.body
 
@@ -58,19 +60,19 @@ class StParticipantsTest < Test::Unit::TestCase
   def test_1
 
     post(
-      "/participants",
+      '/participants',
       '["toto","OpenWFE::Extras::ActiveStoreParticipant", "totostore"]',
-      { "CONTENT_TYPE" => "application/json" })
+      { 'CONTENT_TYPE' => 'application/json' })
 
     assert_equal 201, @response.status
-    assert_not_equal "", @response.body
+    assert_not_equal '', @response.body
 
-    get "/participants"
+    get '/participants'
 
     assert_not_nil(
-      @response.body.index(' count="4"'), "expected 4 participants")
+      @response.body.index(' count="4"'), 'expected 4 participants')
 
-    get "/participants?pname=toto"
+    get '/participants?pname=toto'
 
     assert_equal 200, @response.status
     assert_not_nil @response.body.index('toto')

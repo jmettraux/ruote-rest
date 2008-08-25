@@ -5,8 +5,6 @@
 
   <div class="process_link"><%= rlink(process) %></div>
 
-  <br/>
-
   <div>wfid : <span class="process_wfid"><%= process.wfid %></div>
   <div>
     process : <span class="process_wfname"><%= process.wfname %></span>
@@ -15,95 +13,87 @@
   <div>launched : <span class="process_launch_time"><%= display_time(process, :launch_time) %></div>
   <div>paused : <span class="process_paused"><%= process.paused %></div>
   <div>tags : <span class="process_tags"><%= process.tags.join(", ") %></div>
-  <div>branches : <span class="process_branches"><%= process.branches %></div>
   <div>all expressions : <%= rlink('expressions', process.wfid) %></div>
-  <div>representation (json) : <%= rlink('processes', process.wfid, 'representation') %> (<a href="/processes/<%= process.wfid %>/representation?plain=true">plain/text</a>)</div>
   <div>workitems : <%= rlink('workitems', { 'wfid' => process.wfid }) %></div>
 
   <% if detailed %>
 
-    <br/>
+    <div class="process_details">
 
-    <div class="process_variables">
-      Process variables :
-      <% process.variables.each do |k, v| %>
-        <div class="process_var">
-          <span class="process_var_key"><%= k.to_s %></span>
-          =&gt;
-          <span class="process_var_value"><%= v.to_json %></span>
-        </div>
-      <% end %>
-    </div>
+      <div>branches : <span class="process_branches"><%= process.branches %></div>
 
-    <br/>
+      <div class="process_variables">
+        Process variables : <%= rlink('processes', process.wfid, 'variables.json') %> (<a href="/processes/<%= process.wfid %>/variables.json?plain=true">plain/text</a>)
+        <% process.variables.each do |k, v| %>
+          <div class="process_var">
+            <span class="process_var_key"><%= k.to_s %></span>
+            =&gt;
+            <span class="process_var_value"><%= v.to_json %></span>
+          </div>
+        <% end %>
+      </div>
 
-    <div class="process_scheduled_jobs">
-      Scheduled jobs :
-      <% process.scheduled_jobs.each do |sj| %>
-        <div class="process_scheduled_jobs">
-          <%= sj.class.name %> / info : <%= sj.schedule_info %> / next time : <%= sj.next_time.to_s %><br/>
-        </div>
-      <% end %>
-    </div>
+      <div class="process_scheduled_jobs">
+        Scheduled jobs :
+        <% process.scheduled_jobs.each do |sj| %>
+          <div class="process_scheduled_jobs">
+            <%= sj.class.name %> / info : <%= sj.schedule_info %> / next time : <%= sj.next_time.to_s %><br/>
+          </div>
+        <% end %>
+      </div>
 
-    <br/>
+      <div class="process_expression">
+        Active expressions :
+        <% process.expressions.each do |fexp|
+            fei = fexp.fei
+        %>
+          <div 
+            class="process_exp"
+            onmouseover="FluoCan.highlight('fluo', '<%= fei.expid %>');"
+            onmouseout="FluoCan.highlight('fluo', null);"
+          >
+            <%= fei.expname + " " + fei.expid %> : <%= rlink(fexp) %>
+          </div>
+        <% end %>
+      </div>
 
-    <div class="process_expression">
-      Active expressions :
-      <% process.expressions.each do |fexp|
-          fei = fexp.fei
-      %>
-        <div 
-          class="process_exp"
-          onmouseover="FluoCan.highlight('fluo', '<%= fei.expid %>');"
-          onmouseout="FluoCan.highlight('fluo', null);"
-        >
-          <%= fei.expname + " " + fei.expid %> : <%= rlink(fexp) %>
-        </div>
-      <% end %>
-    </div>
+      <div class="process_errors">
+        Errors :
+        <% process.errors.each do |k, error| %>
+          <div class="process_err">
+            <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
+            :
+            <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
+          </div>
+        <% end %>
+        <%= process.errors.size == 0 ? "none" : "" %>
+      </div>
 
-    <br/>
+      <div class="process_representation">
+        Representation : <%= rlink('processes', process.wfid, 'representation.json') %> (<a href="/processes/<%= process.wfid %>/representation.json?plain=true">plain/text</a>)
+        <div class="process_rep"><%= process.all_expressions.representation.to_json %></div>
+      </div>
 
-    <div class="process_errors">
-      Errors :
-      <% process.errors.each do |k, error| %>
-        <div class="process_err">
-          <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
-          :
-          <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
-        </div>
-      <% end %>
-      <%= process.errors.size == 0 ? "none" : "" %>
-    </div>
+      <div>
+        <form action="<%= process.href %>" method="post" enctype="multipart/form-data">
 
-    <br/>
+          <input type="hidden" name="_method" value="PUT"/>
+          <input type="hidden" name="paused" value="<%= ( ! process.paused?) %>" />
 
-    <div class="process_representation">
-      Representation :<br/>
-      <span class="process_rep"><%= process.all_expressions.representation.to_json %></span>
-    </div>
+          <%= process.paused? ? "resume" : "pause" %> process :
+          <input type="submit" value="PUT <%= process.href %>"/> (with a 'paused=<%= !process.paused? %>' flag)
+        </form>
+      </div>
 
-    <br/>
+      <div>
+        <form action="<%= process.href %>" method="post" enctype="multipart/form-data">
+          <input type="hidden" name="_method" value="DELETE"/>
 
-    <div>
-      <form action="<%= process.href %>" method="post" enctype="multipart/form-data">
+          terminate (cancel) process :
+          <input type="submit" value="DELETE <%= process.href %>" />
+        </form>
+      </div>
 
-        <input type="hidden" name="_method" value="PUT"/>
-        <input type="hidden" name="paused" value="<%= ( ! process.paused?) %>" />
-
-        <%= process.paused? ? "resume" : "pause" %> process :
-        <input type="submit" value="PUT <%= process.href %>"/> (with a 'paused=<%= !process.paused? %>' flag)
-      </form>
-    </div>
-
-    <div>
-      <form action="<%= process.href %>" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="_method" value="DELETE"/>
-
-        terminate (cancel) process :
-        <input type="submit" value="DELETE <%= process.href %>" />
-      </form>
     </div>
 
   <% else %>

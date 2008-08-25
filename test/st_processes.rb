@@ -20,17 +20,17 @@ class StProcessesTest < Test::Unit::TestCase
 
   def test_0
 
-    get "/processes"
+    get '/processes'
 
     #p @response
     #puts @response.body
 
     assert_equal(
-      "application/xml",
+      'application/xml',
       @response.content_type)
 
     assert_equal(
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes href=\"http://example.org/processes\" count=\"0\">\n</processes>\n",
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\" href=\"http://example.org/processes\">\n</processes>\n",
       @response.body)
   end
 
@@ -51,21 +51,21 @@ class StProcessesTest < Test::Unit::TestCase
     #puts
 
     post(
-      "/processes",
+      '/processes',
       OpenWFE::Xml.launchitem_to_xml(li, 2),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     #puts @response.body
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
 
     assert_equal 201, @response.status
-    assert_equal "TestStProcesses", fei.workflow_definition_name
-    assert_not_nil @response["Location"]
+    assert_equal 'TestStProcesses', fei.workflow_definition_name
+    assert_not_nil @response['Location']
 
     sleep 0.350
 
-    get "/processes"
+    get '/processes'
 
     #puts @response.body
 
@@ -78,12 +78,12 @@ class StProcessesTest < Test::Unit::TestCase
 
     assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 
-    get "/processes/#{fei.wfid}/representation"
+    get "/processes/#{fei.wfid}/representation.json"
 
     #puts @response.body
     js = json_parse(@response.body)
     assert_kind_of Array, js
-    assert_equal "application/json", @response["Content-Type"]
+    assert_equal 'application/json', @response['Content-Type']
 
     delete "/processes/#{fei.wfid}"
 
@@ -91,7 +91,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get "/processes"
+    get '/processes'
 
     assert_not_nil @response.body.index('count="0"')
 
@@ -114,9 +114,9 @@ class StProcessesTest < Test::Unit::TestCase
     EOS
 
     post(
-      "/processes",
+      '/processes',
       OpenWFE::Xml.launchitem_to_xml(li, 2),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
 
@@ -126,15 +126,15 @@ class StProcessesTest < Test::Unit::TestCase
 
     put(
       "/processes/#{fei.wfid}",
-      "<process><paused>true</paused></process>",
-      { "CONTENT_TYPE" => "application/xml" })
+      '<process><paused>true</paused></process>',
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     assert_not_nil @response.body.index('<paused>true</paused>')
 
     put(
       "/processes/#{fei.wfid}",
-      "<process><paused>false</paused></process>",
-      { "CONTENT_TYPE" => "application/xml" })
+      '<process><paused>false</paused></process>',
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     assert_not_nil @response.body.index('<paused>false</paused>')
 
@@ -157,9 +157,9 @@ class StProcessesTest < Test::Unit::TestCase
     EOS
 
     post(
-      "/processes",
+      '/processes',
       OpenWFE::Xml.launchitem_to_xml(li, 2),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
 
