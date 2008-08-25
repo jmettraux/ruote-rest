@@ -1,7 +1,7 @@
 
 namespace :mysql do
 
-  desc "setting up the mysql database for ruote-rest"
+  desc "Sets up a mysql database for ruote-rest"
   task :setup do
 
     #

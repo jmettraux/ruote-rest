@@ -12,11 +12,17 @@ namespace :ruote do
   #
 
 
-  #
-  # Installs under vendor/ the latest source of OpenWFEru (and required
-  # subprojects).
-  #
-  task :install do
+  desc "Installs under vendor/ the latest source of OpenWFEru (and required subprojects)."
+  task :install => :get_from_github do
+
+    #sh "sudo gem install --no-rdoc --no-ri json_pure"
+    #sh "sudo gem install --no-rdoc --no-ri json"
+    sh "sudo gem install --no-rdoc --no-ri activerecord"
+    sh "sudo gem install --no-rdoc --no-ri rogue_parser"
+    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
+  end
+
+  task :get_from_github do
 
     FileUtils.mkdir 'tmp' unless File.exists?('tmp')
 
@@ -26,12 +32,6 @@ namespace :ruote do
 
     RUFUSES.each { |e| git_clone(e) }
     git_clone "ruote"
-
-    #sh "sudo gem install --no-rdoc --no-ri json_pure"
-    #sh "sudo gem install --no-rdoc --no-ri json"
-    sh "sudo gem install --no-rdoc --no-ri activerecord"
-    sh "sudo gem install --no-rdoc --no-ri rogue_parser"
-    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
   end
 
   def git_clone (elt)
@@ -41,9 +41,7 @@ namespace :ruote do
     sh "rm -fR tmp/#{elt}"
   end
 
-  #
-  # install Ruote / OpenWFEru and its dependencies as gems
-  #
+  desc "Install Ruote and its dependencies as gems"
   task :gem_install do
 
     GEMS = RUFUSES.dup
