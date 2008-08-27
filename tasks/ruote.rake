@@ -1,6 +1,4 @@
 
-require 'fileutils'
-
 namespace :ruote do
 
   RUFUSES = %w{ 
@@ -24,21 +22,23 @@ namespace :ruote do
 
   task :get_from_github do
 
-    FileUtils.mkdir 'tmp' unless File.exists?('tmp')
+    mkdir 'tmp' unless File.exists?('tmp')
 
-    sh "rm -fR vendor/ruote"
-    sh "rm -fR vendor/rufus"
-    sh "mkdir vendor"
+    rm_r 'vendor/ruote'
+    rm_r 'vendor/rufus'
+    mkdir 'vendor' unless File.exists?('vendor')
 
     RUFUSES.each { |e| git_clone(e) }
-    git_clone "ruote"
+    git_clone 'ruote'
   end
 
   def git_clone (elt)
 
-    sh "cd tmp && git clone git://github.com/jmettraux/#{elt}.git"
-    sh "cp -pR tmp/#{elt}/lib/* vendor/"
-    sh "rm -fR tmp/#{elt}"
+    chdir 'tmp' do
+      sh "git clone git://github.com/jmettraux/#{elt}.git"
+    end
+    cp_r "tmp/#{elt}/lib/*", 'vendor/'
+    rm_r "tmp/#{elt}"
   end
 
   desc "Install Ruote and its dependencies as gems"
@@ -55,7 +55,6 @@ namespace :ruote do
     GEMS << 'activerecord'
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
-    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
 
     #puts
     #puts "installed gems  #{GEMS.join(' ')}"

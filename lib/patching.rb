@@ -37,6 +37,8 @@
 # John Mettraux at openwfe.org
 #
 
+require 'digest/md5'
+
 
 #
 # Reopening Rack::Request to add some convenience methods
@@ -69,6 +71,7 @@ end
 module RuoteLinkable
 
   def link (request)
+
     "<a href=\"#{href(request)}\">GET #{href}</a>"
   end
 end
@@ -120,10 +123,16 @@ class OpenWFE::ProcessStatus
     request ? request.href(:processes, wfid) : "/processes/#{wfid}"
   end
 
+  def etag
+
+    @etag ||= ::Digest::MD5.hexdigest("#{wfid}#{timestamp.to_f}")
+  end
+
   def to_h (request=nil)
 
     {
       'href' => href(request),
+      'timestamp' => timestamp.to_s,
       'wfid' => wfid,
       'launch_time' => launch_time,
       'paused' => paused,

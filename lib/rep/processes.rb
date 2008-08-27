@@ -105,6 +105,8 @@ helpers do
       xml.launch_time p.launch_time
       xml.paused p.paused
 
+      xml.timestamp p.timestamp.to_s
+
       xml.tags do
         p.tags.each { |t| xml.tag t }
       end

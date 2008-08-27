@@ -15,15 +15,15 @@ namespace :mysql do
       unless [ 'test', 'development', 'production' ].include?(stage)
 
     db = "ruoterest_#{stage}"
-    dbadmin = ENV['dbadmin'] || "root"
+    db_admin = ENV['dbadmin'] || 'root'
+    #db_user = 'densha'
 
-    # drop
+    # drop & create
 
-    sh "mysql -u #{dbadmin} -p -e \"drop database if exists #{db}\""
+    sh "mysql -u #{db_admin} -p -e \"drop database if exists #{db}\""
+    sh "mysql -u #{db_admin} -p -e \"create database #{db} CHARACTER SET utf8 COLLATE utf8_general_ci\""
 
-    # create
-
-    sh "mysql -u #{dbadmin} -p -e \"create database #{db} CHARACTER SET utf8 COLLATE utf8_general_ci\""
+    #sh "mysql -u #{db_admin} -p -e \"grant all privileges on #{db}.* to '#{db_user}'@'localhost' identified by '#{db_user}'\""
 
     # run the migrations
 
