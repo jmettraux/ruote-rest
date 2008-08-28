@@ -67,6 +67,13 @@ def rrender (type, object, options={})
 
   options.each { |k, v| response.header[k] = v }
 
+  set_etag(object.etag) \
+    if object.respond_to?(:etag) and object.etag
+  set_last_modified(object.timestamp) \
+    if object.respond_to?(:timestamp) and object.timestamp
+      #
+      # where the conditional GET happens...
+
   return send("render_#{type}_#{format}", object) unless format == 'js'
 
   varname = params[:var] || 'ruote_js'

@@ -41,6 +41,14 @@ require 'digest/md5'
 
 
 #
+# a shortcut to ::Digest::MD5.hexdigest(s)
+#
+def md5 (s)
+  ::Digest::MD5.hexdigest(s)
+end
+
+
+#
 # Reopening Rack::Request to add some convenience methods
 #
 class Rack::Request
@@ -125,7 +133,7 @@ class OpenWFE::ProcessStatus
 
   def etag
 
-    @etag ||= ::Digest::MD5.hexdigest("#{wfid}#{timestamp.to_f}")
+    @etag ||= md5("#{wfid}_#{timestamp.to_i}")
   end
 
   def to_h (request=nil)
@@ -139,6 +147,14 @@ class OpenWFE::ProcessStatus
       'variables' => variables,
       'tags' => tags
     }
+  end
+end
+
+module OpenWFE::StatusesMixin
+
+  def etag
+    @etag ||= md5("#{object_id}_#{timestamp.to_i}")
+      # object_id is reliable since the engine caches the statuses
   end
 end
 
@@ -169,6 +185,25 @@ class OpenWFE::InFlowWorkItem
     return request.href(:workitems, i) if request
 
     "/workitems/#{i}"
+  end
+end
+
+#
+# The activerecord based workitem, adding etag and timestamp...
+#
+class OpenWFE::Extras::Workitem
+
+  def pretag
+    "#{fei} #{store_name} #{last_modified} #{dispatch_time} " +
+    "#{fields.collect { |f| f.fkey.to_s + ' ' + f.value.to_s }.join(', ')}"
+  end
+
+  def etag
+    @etag ||= md5(pretag)
+  end
+
+  def timestamp
+    last_modified
   end
 end
 

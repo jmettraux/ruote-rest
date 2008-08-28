@@ -71,12 +71,21 @@ def find_entries (params)
   opts = {
     :offset => offset, :limit => limit, :order => order, :conditions => cond }
 
-  {
+  total = ActiveRecord::Base::connection.execute(
+    'select count(*) from history').fetch_row[0].to_i
+
+  entries = {
     :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
-    :total => ActiveRecord::Base::connection.execute(
-      "select count(*) from history").fetch_row[0].to_i,
+    :total => total,
     :offset => offset,
     :limit => limit
   }
+
+  class << entries
+    def etag
+      md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
+    end
+  end
+  entries
 end
 
