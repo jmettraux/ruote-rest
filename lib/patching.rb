@@ -225,8 +225,37 @@ class OpenWFE::ProcessError
 
     request ? request.href(:errors, wfid, expid) : "/errors/#{wfid}/#{error_id}"
   end
+
+  def pretag
+    "#{date}_#{fei}_#{message}"
+  end
+
+  def etag
+    md5(pretag)
+  end
+
+  def timestamp
+    date
+  end
 end
 
+module ArrayEtagMixin
+  def etag
+    md5(collect { |e| e.pretag }.join('|'))
+  end
+  def timestamp
+    m = max { |e0, e1|
+      if e0.timestamp == nil
+        -1
+      elsif e1.timestamp == nil
+        1
+      else
+        e0.timestamp <=> e1.timestamp
+      end
+    }
+    m != nil ? m.timestamp : nil
+  end
+end
 
 require 'builder'
 

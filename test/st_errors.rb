@@ -31,6 +31,9 @@ class StErrorsTest < Test::Unit::TestCase
     assert_equal(
       "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors count=\"0\">\n</errors>\n",
       @response.body)
+
+    assert_not_nil @response.headers['ETag']
+    assert_nil @response.headers['Last-Modified']
   end
 
   def test_1
@@ -51,6 +54,9 @@ class StErrorsTest < Test::Unit::TestCase
       '<errors count="1">')
     assert_not_nil @response.body.index(
       "<text>No participant named 'tonto'</text>")
+
+    assert_not_nil @response.headers['ETag']
+    assert_not_nil @response.headers['Last-Modified']
   end
 end
 

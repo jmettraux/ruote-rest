@@ -42,6 +42,9 @@ class StWorkitemsTest < Test::Unit::TestCase
     #p @response.status
     #puts @response.body
 
+    assert_not_nil @response.headers['ETag']
+    assert_not_nil @response.headers['Last-Modified']
+
     workitems = OpenWFE::Xml.workitems_from_xml @response.body
 
     assert_equal 1, workitems.size
@@ -62,6 +65,8 @@ class StWorkitemsTest < Test::Unit::TestCase
     assert_equal 1, workitems.size
 
     get "/workitems?wfid=#{fei.wfid}nada"
+
+    #puts @response.body
 
     workitems = OpenWFE::Xml.workitems_from_xml @response.body
 

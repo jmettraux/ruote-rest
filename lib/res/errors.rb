@@ -45,6 +45,8 @@ get "/errors" do
   errors = logs.values.inject([]) { |r, log| r += log }
   errors = errors.sort_by { |err| err.fei.wfid }
 
+  errors.extend(ArrayEtagMixin)
+
   rrender :errors, errors
 end
 
@@ -52,11 +54,14 @@ get "/errors/:wfid" do
 
   wfid = params[:wfid]
 
-  rrender :errors, application.engine.get_error_journal.get_error_log(wfid)
+  errors = application.engine.get_error_journal.get_error_log(wfid)
+
+  errors.extend(ArrayEtagMixin)
+
+  rrender :errors, errors
 end
 
 get "/errors/:wfid/:error_id" do
-
 
   rrender :error, find_error
 end

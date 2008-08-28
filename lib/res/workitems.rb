@@ -115,24 +115,8 @@ helpers do
 
     workitems = workitems.sort_by { |wi| wi.id }
 
-    class << workitems
-      def etag
-        #@etag ||= md5(...
-        # no need to 'cache' the @etag...
-        md5(collect { |wi| wi.pretag }.join('|'))
-      end
-      def timestamp
-        max { |wi0, wi1|
-          if wi0.last_modified == nil
-            -1
-          elsif wi1.last_modified == nil
-            1
-          else
-            wi0.last_modified <=> wi1.last_modified
-          end
-        }.last_modified
-      end
-    end
+    workitems.extend(ArrayEtagMixin)
+
     workitems
   end
 

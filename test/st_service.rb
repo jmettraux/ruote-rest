@@ -31,6 +31,6 @@ class StServiceTest < Test::Unit::TestCase
 
     a = json_parse(@response.body)
 
-    assert_equal 5, a.size
+    assert_equal 6, a.size
   end
 end
