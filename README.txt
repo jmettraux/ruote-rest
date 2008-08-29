@@ -1,7 +1,7 @@
 
 = ruote-rest
 
-A RESTful instance of OpenWFEru (ruote) powered by Sinatra (http://sinatrarb.com)
+A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.org/)
 
 
 == getting it

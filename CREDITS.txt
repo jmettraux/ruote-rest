@@ -47,6 +47,7 @@ The 'ru' was added by Jamandru Reynolds (http://geometron.net)
 Tools / Libraries
 -----------------
 
+- Rack http://rack.rubyforge.org/
 - Ruby on Rails  http://rubyonrails.org (active record)
 - Json  http://json.org  http://json.rubyforge.org
 
