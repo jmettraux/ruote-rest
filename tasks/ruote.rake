@@ -2,7 +2,8 @@
 namespace :ruote do
 
   RUFUSES = %w{ 
-    dollar lru mnemo scheduler verbs sixjo }.collect { |e| "rufus-#{e}" }
+    dollar lru mnemo scheduler verbs sixjo treechecker
+  }.collect { |e| "rufus-#{e}" }
 
   #
   # do use either ruote:install or ruote:gem_install
@@ -51,7 +52,7 @@ namespace :ruote do
 
     #GEMS << 'json_pure'
     #GEMS << 'json'
-    GEMS << 'rogue_parser'
+    #GEMS << 'rogue_parser'
     GEMS << 'activerecord'
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
