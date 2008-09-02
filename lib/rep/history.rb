@@ -32,10 +32,12 @@
 #
 
 #
-# "made in Japan"
+# "made in Japan" as opposed to "swiss made"
 #
 # John Mettraux at openwfe.org
 #
+
+require 'atom/collection' # gem 'atom-tools'
 
 
 helpers do
@@ -88,6 +90,39 @@ helpers do
         'message' => e.message
       }
     }.to_json
+  end
+
+  def render_history_atom (history)
+
+    # TODO : ETag + Last-Modified
+    # TODO : link ref="alt"
+
+    feed = Atom::Feed.new(
+      "http://#{request.host}:#{request.port}#{request.fullpath}")
+
+    history.each do |e|
+
+      entry = Atom::Entry.new
+      entry.id = md5(
+        "#{e.created_at}--#{e.source}--#{e.event}--#{e.wfid}--#{e.fei}")
+
+      entry.content = <<-EOS
+        <div class="history_entry">
+          <div class="created_at">#{e.created_at}</div>
+          <div class="wfid">#{e.wfid}</div>
+          <div class="fei">#{e.fei}</div>
+          <div class="source">#{e.source}</div>
+          <div class="event">#{e.event}</div>
+          <div class="participant">#{e.participant}</div>
+          <div class="message">#{e.message}</div>
+        </div>
+      EOS
+      entry.content['type'] = 'xhtml'
+
+      feed << entry
+    end
+
+    feed.to_s
   end
 end
 

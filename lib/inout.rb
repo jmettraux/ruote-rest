@@ -106,7 +106,8 @@ FORMATS = {
   :html => [ 'html', 'text/html' ],
   :json => [ 'json', 'application/json' ],
   :js => [ 'js', 'text/javascript' ],
-  :yaml => [ 'yaml', 'application/yaml' ]
+  :yaml => [ 'yaml', 'application/yaml' ],
+  :atom => [ 'atom', 'application/atom+xml' ]
 
 } unless defined?(FORMATS)
 
@@ -124,6 +125,7 @@ def determine_out_format (options)
   return FORMATS[:json] if f == 'json'
   return FORMATS[:js] if f == 'js'
   return FORMATS[:yaml] if f == 'yaml'
+  return FORMATS[:atom] if f == 'atom'
 
   accept = request.env['HTTP_ACCEPT'] || ''
 
@@ -131,6 +133,7 @@ def determine_out_format (options)
   return FORMATS[:yaml] if accept.index('yaml')
   return FORMATS[:json] if accept.index('json')
   return FORMATS[:js] if accept.index('js')
+  return FORMATS[:atom] if accept.index('atom')
 
   FORMATS[:xml]
 end

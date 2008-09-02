@@ -18,7 +18,7 @@ namespace :ruote do
     #sh "sudo gem install --no-rdoc --no-ri json"
     sh "sudo gem install --no-rdoc --no-ri activerecord"
     sh "sudo gem install --no-rdoc --no-ri rogue_parser"
-    #sh "sudo gem install --no-rdoc --no-ri -v 0.2.2 sinatra"
+    sh "sudo gem install --no-rdoc --no-ri atom-tools"
   end
 
   task :get_from_github do
@@ -54,6 +54,7 @@ namespace :ruote do
     #GEMS << 'json'
     #GEMS << 'rogue_parser'
     GEMS << 'activerecord'
+    GEMS << 'atom-tools'
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
 

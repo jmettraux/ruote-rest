@@ -51,41 +51,52 @@ get "/history/:wfid" do
 end
 
 
-def find_entries (params)
+helpers do
 
-  offset = (params[:offset] || 0).to_i
-  limit = (params[:limit] || 30).to_i
+  def find_feed_entries (params)
 
-  wfid = params[:wfid]
-
-  event = params[:event]
-
-  order = params[:order] || 'id'
-  desc = params[:desc] || 'true'
-  order = "#{order} #{desc == 'false' ? 'asc' : 'desc'}"
-
-  cond = {}
-  cond[:wfid] = wfid if wfid
-  cond[:event] = event if event
-
-  opts = {
-    :offset => offset, :limit => limit, :order => order, :conditions => cond }
-
-  total = ActiveRecord::Base::connection.execute(
-    'select count(*) from history').fetch_row[0].to_i
-
-  entries = {
-    :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
-    :total => total,
-    :offset => offset,
-    :limit => limit
-  }
-
-  class << entries
-    def etag
-      md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
-    end
+    OpenWFE::Extras::HistoryEntry.find(
+      :all, :limit => (params[:limit] || 35).to_i)
   end
-  entries
-end
 
+  def find_entries (params)
+
+    return find_feed_entries(params) \
+      if determine_out_format({}).first == 'atom'
+
+    offset = (params[:offset] || 0).to_i
+    limit = (params[:limit] || 30).to_i
+
+    wfid = params[:wfid]
+
+    event = params[:event]
+
+    order = params[:order] || 'id'
+    desc = params[:desc] || 'true'
+    order = "#{order} #{desc == 'false' ? 'asc' : 'desc'}"
+
+    cond = {}
+    cond[:wfid] = wfid if wfid
+    cond[:event] = event if event
+
+    opts = {
+      :offset => offset, :limit => limit, :order => order, :conditions => cond }
+
+    total = ActiveRecord::Base::connection.execute(
+      'select count(*) from history').fetch_row[0].to_i
+
+    entries = {
+      :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
+      :total => total,
+      :offset => offset,
+      :limit => limit
+    }
+
+    class << entries
+      def etag
+        md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
+      end
+    end
+    entries
+  end
+end
