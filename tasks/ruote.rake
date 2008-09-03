@@ -25,8 +25,8 @@ namespace :ruote do
 
     mkdir 'tmp' unless File.exists?('tmp')
 
-    rm_r 'vendor/ruote'
-    rm_r 'vendor/rufus'
+    rm_r 'vendor/ruote' if File.exists?('vendor/ruote')
+    rm_r 'vendor/rufus' if File.exists?('vendor/rufus')
     mkdir 'vendor' unless File.exists?('vendor')
 
     RUFUSES.each { |e| git_clone(e) }
@@ -38,7 +38,7 @@ namespace :ruote do
     chdir 'tmp' do
       sh "git clone git://github.com/jmettraux/#{elt}.git"
     end
-    cp_r "tmp/#{elt}/lib/*", 'vendor/'
+    cp_r "tmp/#{elt}/lib/.", 'vendor/'
     rm_r "tmp/#{elt}"
   end
 
