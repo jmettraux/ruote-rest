@@ -12,6 +12,10 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="/css/<%= request.path_info.split('/')[1] %>.css" />
 
+    <% if request.path_info == '/history' %>
+    <link rel="alternate" href="/history.atom" type="application/atom+xml" title="ruote-rest /history feed"/>
+    <% end %>
+
   </head>
 
 <body>

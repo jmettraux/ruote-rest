@@ -94,11 +94,17 @@ helpers do
 
   def render_history_atom (history)
 
-    # TODO : ETag + Last-Modified
-    # TODO : link ref="alt"
-
     feed = Atom::Feed.new(
       "http://#{request.host}:#{request.port}#{request.fullpath}")
+
+    feed.title = "history feed for http://#{request.host}:#{request.port}"
+
+    feed.authors.new(
+      :name => 'ruote-rest', :uri => 'http://openwferu.rubyforge.org')
+
+    feed.links << Atom::Link.new(
+      :rel => 'self',
+      :href => "http://#{request.host}:#{request.port}#{request.fullpath}")
 
     history.each do |e|
 
@@ -106,12 +112,23 @@ helpers do
       entry.id = md5(
         "#{e.created_at}--#{e.source}--#{e.event}--#{e.wfid}--#{e.fei}")
 
+      fei = e.fei ? OpenWFE::FlowExpressionId.from_s(e.fei) : nil
+      fei = fei ? "#{fei.expname} #{fei.expid}" : ""
+
+      entry.title = "#{e.event} #{e.wfid} #{fei} #{e.participant}"
+
+      entry.links << Atom::Link.new(
+        :rel => 'related',
+        :href => request.href('processes', e.wfid)) if e.wfid and e.wfid != '0'
+
+      entry.published = e.created_at
+
       entry.content = <<-EOS
         <div class="history_entry">
           <div class="created_at">#{e.created_at}</div>
+          <div class="source">#{e.source}</div>
           <div class="wfid">#{e.wfid}</div>
           <div class="fei">#{e.fei}</div>
-          <div class="source">#{e.source}</div>
           <div class="event">#{e.event}</div>
           <div class="participant">#{e.participant}</div>
           <div class="message">#{e.message}</div>

@@ -21,6 +21,9 @@
     <% else %>
       as json
     <% end %>
+    <% if request.path_info == '/history' %>
+      | <a href="/history.atom?plain=true">as atom</a>
+    <% end %>
   </div>
   <div style="clear: both;"></div>
 </div>

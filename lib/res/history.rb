@@ -55,8 +55,20 @@ helpers do
 
   def find_feed_entries (params)
 
-    OpenWFE::Extras::HistoryEntry.find(
-      :all, :limit => (params[:limit] || 35).to_i)
+    entries = OpenWFE::Extras::HistoryEntry.find(
+      :all,
+      :limit => (params[:limit] || 35).to_i,
+      :order => "created_at DESC")
+
+    class << entries
+      def etag
+        md5("#{self.first.created_at} #{self.first.id}")
+      end
+      def timestamp
+        self.first.created_at
+      end
+    end
+    entries
   end
 
   def find_entries (params)
