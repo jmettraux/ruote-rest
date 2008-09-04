@@ -59,8 +59,8 @@
       <% end %>
   
       <% if expression.raw_rep_updated %>
-        raw representation (updated) :
-        <span class="expression_raw_rep_updated"><%= expression.raw_rep_updated.to_json %></span>
+        <div>raw representation updated :
+        <span class="expression_raw_rep_updated"><%= expression.raw_rep_updated.to_json %></span></div>
       <% end %>
   
       <div>yaml : <a href="<%= expression.href %>?format=yaml">GET <%= expression.href %>?format=yaml</a><span id="edit_button"> (<a href="" onclick="show('put_yaml'); hide('edit_button'); return false;">PUT</a>)</span></div>

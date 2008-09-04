@@ -12,6 +12,9 @@
 .expression {
   float: left;
 }
+.expression_name {
+  font-weight: bold;
+}
 .expression_link {
   margin-bottom: 5px;
 }
