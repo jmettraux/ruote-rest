@@ -149,6 +149,26 @@ class OpenWFE::ProcessStatus
   end
 end
 
+#
+# making sure that /expressions/:wfid has an etag and a last-modified
+#
+module OpenWFE::RepresentationMixin
+
+  def etag
+    return @etag if @etag
+    root_exp = find_root_expression
+    @etag ||= root_exp ? md5("#{root_exp.fei.wfid}__#{timestamp}") : nil
+  end
+
+  def timestamp
+    @timestamp ||= self.max { |fexp0, fexp1|
+      u0 = fexp0.updated_at || Time.at(0)
+      u1 = fexp1.updated_at || Time.at(0)
+      u0 <=> u1
+    }.updated_at
+  end
+end
+
 module OpenWFE::StatusesMixin
 
   def etag
@@ -168,6 +188,14 @@ class OpenWFE::FlowExpression
   def href (request=nil)
 
     fei.href(request)
+  end
+
+  def etag
+    md5("#{fei}__#{updated_at}")
+  end
+
+  def timestamp
+    updated_at
   end
 end
 
