@@ -38,25 +38,27 @@
 #
 
 
+helpers do
+
 #
 # IN
 
 #
 # The YAML is the body of the request
 #
-def parse_expression_yaml (yaml)
+  def parse_expression_yaml (yaml)
 
-  YAML.load yaml
-end
+    YAML.load yaml
+  end
 
 #
 # fetches the YAML out of the 'yaml' request param
 #
-def parse_expression_form (x)
+  def parse_expression_form (x)
 
-  yaml = request.params['yaml']
-  YAML.load yaml
-end
+    yaml = request.params['yaml']
+    YAML.load yaml
+  end
 
 #
 # OUT
@@ -64,126 +66,145 @@ end
 #
 # expressions
 
-def render_expression_yaml (e)
+  def render_expression_yaml (e)
 
-  e.to_yaml
-end
+    e.to_yaml
+  end
 
-def render_expressions_xml (es)
+  def render_expressions_xml (es)
 
-  builder do |xml|
+    builder do |xml|
 
-    xml.instruct!
+      xml.instruct!
 
-    xml.expressions :count => es.size do
+      xml.expressions :count => es.size do
 
-      es.sort_by { |e| e.fei.expid }.each do |fexp|
-        _render_expression_xml xml, fexp
+        es.sort_by { |e| e.fei.expid }.each do |fexp|
+          _render_expression_xml xml, fexp
+        end
+
+        xml.process_representation es.representation.to_json
       end
-
-      xml.process_representation es.representation.to_json
     end
   end
-end
 
-def render_expressions_html (es)
+  def render_expressions_html (es)
 
-  _erb(
-    :expressions,
-    :layout => :html,
-    :locals => { :expressions => es })
-end
+    _erb(
+      :expressions,
+      :layout => :html,
+      :locals => { :expressions => es })
+  end
 
 #
 # expression
 
-def render_expression_xml (e)
+  def render_expression_xml (e)
 
-  builder do |xml|
+    builder do |xml|
 
-    xml.instruct!
+      xml.instruct!
 
-    _render_expression_xml xml, e, true
-  end
-end
-
-def render_expression_html (e, detailed=true)
-
-  _erb(
-    :expression,
-    :layout => detailed ? :html : nil,
-    :locals => { :expression => e, :detailed => detailed })
-end
-
-def _expression_link (xml, tagname, fei, env=false)
-
-  return unless fei
-
-  expid = fei.expid
-  expid += "e" if env
-
-  xml.tag!(
-    tagname,
-    fei.to_s,
-    :href => request.href(
-      :expressions,
-      fei.wfid,
-      swapdots(expid)))
-end
-
-def _render_expression_xml (xml, e, detailed=false)
-
-  params = {}
-
-  params[:href] = request.href(
-    :expressions, e.fei.wfid, swapdots(e.fei.expid)) unless detailed
-
-  xml.expression params do
-
-    xml.tag! "class", e.class.name
-    xml.name e.fei.expression_name
-    xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
-
-    if detailed
-
-      OpenWFE::Xml._fei_to_xml(xml, e.fei)
-
-      #
-      # parent id
-
-      _expression_link xml, 'parent', e.parent_id
-
-      #
-      # environment id
-
-      _expression_link xml, 'environment', e.environment_id
-
-      #
-      # children
-
-      xml.children do
-        e.children.each do |c|
-          _expression_link(xml, 'child', c)
-        end
-      end if e.children
-
-      #
-      # process/expression representations
-
-      xml.raw_representation(e.raw_representation.to_json) \
-        if e.raw_representation
-      xml.raw_rep_updated(e.raw_rep_updated.to_json) \
-        if e.raw_rep_updated
-
-      #
-      # variables
-
-      hash_to_xml(xml, :variables, e, :variables) \
-        if e.is_a?(OpenWFE::Environment)
-    else
-
-      xml.fei e.fei.to_s
+      _render_expression_xml xml, e, true
     end
   end
+
+  def render_expression_html (e, detailed=true)
+
+    _erb(
+      :expression,
+      :layout => detailed ? :html : nil,
+      :locals => { :expression => e, :detailed => detailed })
+  end
+
+  def _expression_link (xml, tagname, fei, env=false)
+
+    return unless fei
+
+    expid = fei.expid
+    expid += "e" if env
+
+    xml.tag!(
+      tagname,
+      fei.to_s,
+      :href => request.href(
+        :expressions,
+        fei.wfid,
+        swapdots(expid)))
+  end
+
+  def _render_expression_xml (xml, e, detailed=false)
+
+    params = {}
+
+    params[:href] = request.href(
+      :expressions, e.fei.wfid, swapdots(e.fei.expid)) unless detailed
+
+    xml.expression params do
+
+      xml.tag! "class", e.class.name
+      xml.name e.fei.expression_name
+      xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
+
+      if detailed
+
+        OpenWFE::Xml._fei_to_xml(xml, e.fei)
+
+        #
+        # parent id
+
+        _expression_link xml, 'parent', e.parent_id
+
+        #
+        # environment id
+
+        _expression_link xml, 'environment', e.environment_id
+
+        #
+        # children
+
+        xml.children do
+          e.children.each do |c|
+            _expression_link(xml, 'child', c)
+          end
+        end if e.children
+
+        #
+        # process/expression representations
+
+        xml.raw_representation(e.raw_representation.to_json) \
+          if e.raw_representation
+        xml.raw_rep_updated(e.raw_rep_updated.to_json) \
+          if e.raw_rep_updated
+
+        #
+        # variables
+
+        hash_to_xml(xml, :variables, e, :variables) \
+          if e.is_a?(OpenWFE::Environment)
+      else
+
+        xml.fei e.fei.to_s
+      end
+    end
+  end
+
+  #
+  # stuff used in the expression.erb and expressions.erb
+
+  #
+  # raw/env/exp icon for /expressions
+  #
+  def show_expression_symbol (fexp)
+
+    src = case fexp
+      when OpenWFE::RawExpression then 'raw.png'
+      when OpenWFE::Environment then 'env.png'
+      else 'exp.png'
+    end
+
+    "<img src='/images/#{src}' align='left' />"
+  end
+
 end
 

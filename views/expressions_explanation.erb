@@ -1,121 +1,16 @@
 
-<div id="expexptop">
-
-  <div id="explanation">
-    <p>
+<div class="explanation">
+  <p>
 A process instance is a set of expressions.
-    </p>
-    <p>
+  </p>
+  <p>
 There are three kinds of expressions : environment expressions (for keeping tracks of process variables), applied expressions and raw expressions.
-    </p>
-    <p>
+  </p>
+  <p>
 Applied expressions have received a workitem (the process execution has reached them) but they haven't been replied to yet.
-    </p>
-    <p>
+  </p>
+  <p>
 Raw expressions are expressions which have not yet been applied. They may be modified.
-    </p>
-  </div>
-
-  <%= some_javascript %>
-  <script>
-    var index = 0;
-    var max = 6;
-    function moveTo (i) {
-      hide('slide'+index);
-      document.getElementById('slideindex'+index).style.textDecoration = 'inherit';
-      index = i;
-      if (index > max) index = max;
-      else if (index < 0) index = 0;
-      show('slide'+index);
-      document.getElementById('slideindex'+index).style.textDecoration = 'underline';
-    }
-  </script>
-  <div id="slides">
-
-    <div id="pager">
-      <img src="/images/btn-moveleft.gif" onclick="moveTo(index-1);" />
-      <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-      <span>
-        <% (0..6).each do |i| %> 
-          <span 
-            id="slideindex<%= i %>"
-            class="slideindex"
-            onclick="moveTo(<%= i %>);"
-          ><%= (i + 1) %></span>
-        <% end %>
-      </span>
-    </div>
-
-    <div id="slide0" class="slide">
-      <div class="slimage"><img src="/images/expressions/step0.png" /></div>
-      <div>
-        <p>
-          When the process is launched, it's composed of nothing more than 1 raw expression containing the process definition (like a cell contains some DNA).
-        </p>
-        <p>
-          The process engine then applies this 'root expression' by feeding it the initial workitem (whose payload is the one of the launchitem used for launching the process).
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-        </p>
-      </div>
-    </div>
-    <div id="slide1" class="slide">
-      <div class="slimage"><img src="/images/expressions/step1.png" /></div>
-      <div>
-        <p>
-          When turning the process-definition expression from a raw expression to a full expression, the engine will append to it an 'environment expression' that will hold the [top level] process variables.
-        </p>
-        <p>
-          Then, the children of the process-definition expression are generated and linked to their parent. Here, the only child is a sequence expression (at first it's a raw expression containing its fragment of the rest of the process)
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-        </p>
-      </div>
-    </div>
-    <div id="slide2" class="slide">
-      <div class="slimage"><img src="/images/expressions/step2.png" /></div>
-      <div>
-        <p>
-          The process-definition expression then applies its only child, which undergoes the same 'expansion' routine.
-        </p>
-        <p>
-          Raw expressions, full expressions and environment expressions all live in the "expression pool".
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-        </p>
-      </div>
-    </div>
-    <div id="slide3" class="slide">
-      <div class="slimage"><img src="/images/expressions/step3.png" /></div>
-      <div>
-        Whatever...
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-      </div>
-    </div>
-    <div id="slide4" class="slide">
-      <div class="slimage"><img src="/images/expressions/step4.png" /></div>
-      <div>
-        Whatever...
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-      </div>
-    </div>
-    <div id="slide5" class="slide">
-      <div class="slimage"><img src="/images/expressions/step5.png" /></div>
-      <div>
-        Whatever...
-          <img src="/images/btn-moveright.gif" onclick="moveTo(index+1);" />
-      </div>
-    </div>
-    <div id="slide6" class="slide">
-      <div class="slimage"><img src="/images/expressions/step6.png" /></div>
-      <div>
-        Whatever...
-      </div>
-    </div>
-
-    <script>
-      moveTo(0);
-    </script>
-  </div>
-
-  <div style="clear: both;"></div>
-
+  </p>
 </div>
 
