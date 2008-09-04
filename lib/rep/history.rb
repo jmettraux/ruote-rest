@@ -106,7 +106,7 @@ helpers do
       :rel => 'self',
       :href => "http://#{request.host}:#{request.port}#{request.fullpath}")
 
-    history.each do |e|
+    history[:entries].each do |e|
 
       entry = Atom::Entry.new
       entry.id = md5(

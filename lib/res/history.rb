@@ -53,31 +53,15 @@ end
 
 helpers do
 
-  def find_feed_entries (params)
-
-    entries = OpenWFE::Extras::HistoryEntry.find(
-      :all,
-      :limit => (params[:limit] || 35).to_i,
-      :order => "created_at DESC")
-
-    class << entries
-      def etag
-        md5("#{self.first.created_at} #{self.first.id}")
-      end
-      def timestamp
-        self.first.created_at
-      end
-    end
-    entries
-  end
-
   def find_entries (params)
 
-    return find_feed_entries(params) \
-      if determine_out_format({}).first == 'atom'
+    atom = (determine_out_format({}).first == 'atom')
 
     offset = (params[:offset] || 0).to_i
+    offset = 0 if atom
+
     limit = (params[:limit] || 30).to_i
+    limit = 210 if atom
 
     wfid = params[:wfid]
 
@@ -85,7 +69,8 @@ helpers do
 
     order = params[:order] || 'id'
     desc = params[:desc] || 'true'
-    order = "#{order} #{desc == 'false' ? 'asc' : 'desc'}"
+    order = "#{order} #{desc == 'false' ? 'ASC' : 'DESC'}"
+    order = 'id DESC' if atom
 
     cond = {}
     cond[:wfid] = wfid if wfid
@@ -109,6 +94,7 @@ helpers do
         md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
       end
     end
+
     entries
   end
 end
