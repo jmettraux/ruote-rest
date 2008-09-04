@@ -38,7 +38,12 @@
 #
 
 
-get "/expressions/:wfid" do
+get '/expressions' do
+
+  _erb :expressions_explanation, :layout => :html
+end
+
+get '/expressions/:wfid' do
 
   #wfid = params[:wfid]
   #es = application.engine.process_stack wfid, true
@@ -50,7 +55,7 @@ get "/expressions/:wfid" do
   rrender :expressions, ps.all_expressions
 end
 
-put "/expressions/:wfid/:expid" do
+put '/expressions/:wfid/:expid' do
 
   expression = rparse :expression
 
@@ -60,12 +65,12 @@ put "/expressions/:wfid/:expid" do
   rrender :expression, find_expression
 end
 
-get "/expressions/:wfid/:expid" do
+get '/expressions/:wfid/:expid' do
 
   rrender :expression, find_expression
 end
 
-delete "/expressions/:wfid/:expid" do
+delete '/expressions/:wfid/:expid' do
 
   e = find_expression
 

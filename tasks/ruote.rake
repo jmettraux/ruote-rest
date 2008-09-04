@@ -10,7 +10,6 @@ namespace :ruote do
   # but not both
   #
 
-
   desc "Installs under vendor/ the latest source of OpenWFEru (and required subprojects)."
   task :install => :get_from_github do
 
@@ -25,7 +24,7 @@ namespace :ruote do
 
     mkdir 'tmp' unless File.exists?('tmp')
 
-    rm_r 'vendor/ruote' if File.exists?('vendor/ruote')
+    rm_r 'vendor/openwfe' if File.exists?('vendor/openwfe')
     rm_r 'vendor/rufus' if File.exists?('vendor/rufus')
     mkdir 'vendor' unless File.exists?('vendor')
 

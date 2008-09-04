@@ -1,0 +1,36 @@
+
+.expression {
+  margin-top: 10px;
+}
+.explanation {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#expexptop {
+  width: 100%;
+}
+#explanation {
+  width: 50%;
+  float: left;
+}
+#slides {
+  width: 50%;
+  float: right;
+}
+
+.slide {
+  display: none;
+}
+.slide > div {
+  margin-top: 7px;
+}
+.slimage {
+  text-align: center;
+}
+#pager {
+  text-align: center;
+  margin-top: 7px;
+  cursor: pointer;
+}
+

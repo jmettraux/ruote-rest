@@ -1,19 +1,17 @@
 
 <%= render_fluo_head %>
 
-  <!-- the expressions -->
+<!-- the expressions -->
 
-  <div class="expressions">
-    <% expressions.each do |fexp| %>
-      <%= render_expression_html(fexp, false) %>
-    <% end %>
-  </div>
-  
-  <br/>
-  
-  <div>process : <%= rlink('processes', expressions.first.fei.wfid) %></div>
-
+<div class="expressions">
+  <% expressions.each do |fexp| %>
+    <%= render_expression_html(fexp, false) %>
+  <% end %>
 </div>
+
+<br/>
+
+<div>process : <%= rlink('processes', expressions.first.fei.wfid) %></div>
 
 <%= render_fluo_foot(expressions.first.fei.wfid) %>
 
