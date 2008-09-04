@@ -110,13 +110,12 @@ class OpenWFE::FlowExpressionId
   #
   def href (req=nil, resource_name='expressions')
 
-    ei = swapdots self.expid
+    env = self.expname == "environment" ? "e" : ""
+    ei = "#{swapdots self.expid}#{env}"
 
     return req.href(resource_name, wfid, ei) if req
 
-    env = self.expname == "environment" ? "e" : ""
-
-    "/#{resource_name}/#{wfid}/#{ei}#{env}"
+    "/#{resource_name}/#{wfid}/#{ei}"
   end
 end
 

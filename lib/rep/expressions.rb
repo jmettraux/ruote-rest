@@ -195,7 +195,7 @@ helpers do
   #
   # raw/env/exp icon for /expressions
   #
-  def show_expression_symbol (fexp)
+  def expression_symbol_src (fexp)
 
     src = case fexp
       when OpenWFE::RawExpression then 'raw.png'
@@ -203,7 +203,7 @@ helpers do
       else 'exp.png'
     end
 
-    "<img src='/images/#{src}' align='left' />"
+    "/images/#{src}"
   end
 
 end

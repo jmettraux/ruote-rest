@@ -1,7 +1,25 @@
 
-.expression {
+.econtainer {
+  width: 100%;
   margin-top: 10px;
 }
+.esymbol {
+  float: left;
+  margin-right: 7px;
+  margin-bottom: 11px;
+  width: 45px;
+}
+.expression {
+  float: left;
+}
+.expression_link {
+  margin-bottom: 5px;
+}
+
+form {
+  margin-top: 7px;
+}
+
 .explanation {
   margin-top: 20px;
   margin-bottom: 20px;
