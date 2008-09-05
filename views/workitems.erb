@@ -3,7 +3,15 @@
 
 <h4>GET /workitems</h4>
 
-<div class="explanation">the workitems waiting for [human] intervention</div>
+<div class="explanation">
+<% if params[:wfid] %>
+workitems of the <a href="/processes/<%= params[:wfid] %>"><%= params[:wfid] %> process instance</a>
+<% elsif params[:q] %>
+workitems that contain the string '<%= params[:q] %>'
+<% else %>
+workitems in the worklist
+<% end %>
+</div>
 
 <% workitems.each do |wi| %>
   <%= render_workitem_html wi, false %>
@@ -15,7 +23,7 @@
 
 <form action="/workitems">
   search :
-  <input type="text" name="q" />
+  <input type="text" name="q" value="<%= params[:q] %>" />
   <input type="submit" value="GET /workitems?q=..." />
 </form>
 

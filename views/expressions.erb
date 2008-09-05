@@ -1,6 +1,12 @@
 
 <%= render_fluo_head %>
 
+<% if params[:wfid] and not params[:expid] %>
+<div class="explanation">
+All the expressions that compose the <%= params[:wfid] %> process instance.
+</div>
+<% end %>
+
 <!-- the expressions -->
 
 <div class="expressions">
