@@ -1,0 +1,18 @@
+
+#editor {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+#tred {
+  float: left;
+}
+#flu {
+  float: right;
+  /*width: 50%;
+  text-align: center;*/
+}
+#flu > div {
+  text-align: right;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}

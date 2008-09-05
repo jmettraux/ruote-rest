@@ -42,8 +42,10 @@ module Rufus::Sixjo::Erb
 
   def _erb (template, opts={})
 
+    (opts[:locals] ||= {})[:template] = template
+
     if opts[:layout]
-      "#{erb(:header)}#{erb(template, opts)}#{erb(:footer)}"
+      "#{erb(:header, opts)}#{erb(template, opts)}#{erb(:footer, opts)}"
     else
       erb(template, opts)
     end

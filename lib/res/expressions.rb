@@ -70,6 +70,11 @@ get '/expressions/:wfid/:expid' do
   rrender :expression, find_expression
 end
 
+get '/expressions/:wfid/:expid/representation' do
+
+  rrender :expression_representation, find_expression
+end
+
 delete '/expressions/:wfid/:expid' do
 
   e = find_expression

@@ -1,0 +1,43 @@
+
+<h4>GET /expressions/<%= params[:wfid] %>/<%= params[:expid] %>/representation</h4>
+
+<script src="/js/fluo-json.js"></script>
+<script src="/js/fluo-can.js"></script>
+<script src="/js/fluo-tred.js"></script>
+
+<div id="editor">
+
+  <div id="tred"></div>
+
+  <div id="flu">
+
+    <canvas id="fluo" width="200" height="200"></canvas>
+
+    <div> 
+      <a id="dataurl_link" href="">graph data url</a>
+    </div>
+  </div>
+
+  <div style="clear: both;"></div>
+</div>
+
+<script>
+  var tred = document.getElementById('tred');
+
+  FluoTred.renderFlow(tred, <%= expression.raw_representation.to_json %>);
+
+  tred.onChange = function (tree) {
+    FluoCan.renderFlow('fluo', tree);
+    FluoCan.crop('fluo');
+  };
+  tred.onOver = function (expid) {
+    FluoCan.highlight('fluo', expid);
+  };
+
+  FluoCan.renderFlow('fluo', <%= expression.raw_representation.to_json %>);
+  FluoCan.crop('fluo');
+
+  var a = document.getElementById('dataurl_link');
+  a.href = document.getElementById('fluo').toDataURL();
+</script>
+

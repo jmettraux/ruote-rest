@@ -1,0 +1,34 @@
+
+.econtainer {
+  width: 100%;
+  margin-top: 10px;
+}
+.esymbol {
+  float: left;
+  margin-right: 7px;
+  margin-bottom: 11px;
+  width: 45px;
+}
+.expression {
+  float: left;
+}
+.expression_name {
+  font-weight: bold;
+}
+.expression_link {
+  margin-bottom: 5px;
+}
+
+#rawrep {
+  margin-top: 7px;
+}
+#rawrep > div {
+  margin-left: 7px;
+}
+#yaml {
+  margin-top: 7px;
+}
+form {
+  margin-top: 7px;
+}
+

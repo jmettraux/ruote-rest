@@ -54,16 +54,23 @@
       <% end %>
   
       <% if expression.raw_representation %>
-        raw representation :
-        <span class="expression_raw_representation"><%= expression.raw_representation.to_json %></span>
-      <% end %>
+      <div id="rawrep">
+        raw representation ::
+        <div>
+          json :
+          <span class="expression_raw_representation"><%= expression.raw_representation.to_json %></span>
+        </div>
   
-      <% if expression.raw_rep_updated %>
-        <div>raw representation updated :
+        <% if expression.raw_rep_updated %>
+        <div>updated :
         <span class="expression_raw_rep_updated"><%= expression.raw_rep_updated.to_json %></span></div>
+        <% end %>
+
+        <div>edition : <a href="<%= expression.href %>/representation">GET <%= expression.href %>/representation</a></div>
+      </div>
       <% end %>
   
-      <div>yaml : <a href="<%= expression.href %>?format=yaml">GET <%= expression.href %>?format=yaml</a><span id="edit_button"> (<a href="" onclick="show('put_yaml'); hide('edit_button'); return false;">PUT</a>)</span></div>
+      <div id="yaml">yaml : <a href="<%= expression.href %>?format=yaml">GET <%= expression.href %>?format=yaml</a><span id="edit_button"> (<a href="" onclick="show('put_yaml'); hide('edit_button'); return false;">PUT</a>)</span></div>
   
       <div id="put_yaml" style="display: none">
         <form action="<%= expression.href %>" method="POST" enctype="multipart/form-data">

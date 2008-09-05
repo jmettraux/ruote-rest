@@ -10,7 +10,12 @@
 
     <link rel="stylesheet" type="text/css" media="screen" href="/css/application.css" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="/css/<%= request.path_info.split('/')[1] %>.css" />
+    <!--link rel="stylesheet" type="text/css" media="screen" href="/css/<%= request.path_info.split('/')[1] %>.css" /-->
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/<%= template.to_s %>.css" />
+
+    <% if template == :erepresentation %>
+    <link rel="stylesheet" type="text/css" media="screen" href="/css/fluo-tred.css" />
+    <% end %>
 
     <% if request.path_info == '/history' %>
     <link rel="alternate" href="/history.atom" type="application/atom+xml" title="ruote-rest /history feed"/>

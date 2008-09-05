@@ -189,6 +189,16 @@ helpers do
     end
   end
 
+  def render_expression_representation_html (fexp)
+
+    _erb :erepresentation, :layout => :html, :locals => { :expression => fexp }
+  end
+
+  def render_expression_representation_json (fexp)
+
+    fexp.raw_representation.to_json
+  end
+
   #
   # stuff used in the expression.erb and expressions.erb
 
