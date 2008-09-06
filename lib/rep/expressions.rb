@@ -40,31 +40,41 @@
 
 helpers do
 
-#
-# IN
+  #
+  # IN
 
-#
-# The YAML is the body of the request
-#
+  #
+  # The YAML is the body of the request
+  #
   def parse_expression_yaml (yaml)
 
     YAML.load yaml
   end
 
-#
-# fetches the YAML out of the 'yaml' request param
-#
-  def parse_expression_form (x)
+  #
+  # fetches the YAML out of the 'yaml' request param
+  #
+  def parse_expression_form (_)
 
     yaml = request.params['yaml']
     YAML.load yaml
   end
 
-#
-# OUT
+  def parse_expression_raw_json (json)
 
-#
-# expressions
+    json_parse(json)
+  end
+
+  def parse_expression_raw_form (_)
+
+    json_parse(request.params['tree'])
+  end
+
+  #
+  # OUT
+
+  #
+  # expressions
 
   def render_expression_yaml (e)
 
@@ -189,12 +199,12 @@ helpers do
     end
   end
 
-  def render_expression_representation_html (fexp)
+  def render_expression_raw_html (fexp)
 
-    _erb :erepresentation, :layout => :html, :locals => { :expression => fexp }
+    _erb :expression_raw, :layout => :html, :locals => { :expression => fexp }
   end
 
-  def render_expression_representation_json (fexp)
+  def render_expression_raw_json (fexp)
 
     fexp.raw_representation.to_json
   end

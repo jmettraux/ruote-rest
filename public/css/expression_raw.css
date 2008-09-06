@@ -1,7 +1,12 @@
 
+#left_pane {
+  float: left;
+}
 #editor {
   margin-top: 4px;
   margin-bottom: 4px;
+  padding: 4px;
+  border: 5px solid lightgrey;
 }
 #tred {
   float: left;
@@ -15,4 +20,16 @@
   text-align: right;
   margin-top: 7px;
   margin-bottom: 7px;
+}
+#buttons_left {
+  margin-top: 13px;
+  float: left;
+}
+#buttons_right {
+  margin-top: 13px;
+  float: right;
+}
+
+#whole_flu {
+  float: right;
 }

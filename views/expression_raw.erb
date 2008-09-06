@@ -1,0 +1,80 @@
+
+<h4>GET <%= expression.href %>/raw</h4>
+
+<div class="explanation">
+expression 'raw representation' edition
+</div>
+
+<script src="/js/fluo-json.js"></script>
+<script src="/js/fluo-can.js"></script>
+<script src="/js/fluo-tred.js"></script>
+
+<div id="left_pane">
+
+  <div id="editor">
+    <div id="tred">
+    </div>
+
+    <div id="flu">
+      <canvas id="fluo" width="200" height="200"></canvas>
+    </div>
+
+    <div style="clear: both;"></div>
+
+    <div id="buttons_left">
+      <a href="<%= expression.href %>/raw" onclick="return confirm('reset to current state and lose all changes ?');">reset</a>
+      <a href="" onclick="FluoTred.undo('tred'); return false;">undo</a>
+    </div>
+    <div id="buttons_right">
+      <a id="dataurl_link" href="">graph data url</a>
+    </div>
+
+    <div style="clear: both;"></div>
+  </div>
+
+  <div>
+    <form 
+      action="<%= expression.href %>/raw" 
+      method="POST" 
+      enctype="multipart/form-data"
+    >
+      <input type="hidden" name="_method" value="PUT" />
+      <input type="hidden" id="formTree" name="tree" />
+      <input type="submit" value="PUT <%= expression.href %>/raw" />
+    </form>
+  </div>
+</div>
+
+<div id="whole_flu">
+  <canvas id="whole_fluo" width="10" height="10"></canvas>
+</div>
+<div style="clear: both;"></div>
+
+<script src="/processes/<%= params[:wfid] %>/representation?format=js&var=proc_rep"></script>
+<script>
+  var tred = document.getElementById('tred');
+  var formTree = document.getElementById('formTree');
+
+  FluoTred.renderFlow(tred, <%= expression.raw_representation.to_json %>);
+  formTree.value = FluoTred.asJson('tred');
+
+  tred.onChange = function (tree) {
+    FluoCan.renderFlow('fluo', tree);
+    FluoCan.crop('fluo');
+    formTree.value = FluoTred.asJson('tred');
+  };
+  tred.onOver = function (expid) {
+    FluoCan.highlight('fluo', expid);
+  };
+
+  FluoCan.renderFlow('fluo', <%= expression.raw_representation.to_json %>);
+  FluoCan.crop('fluo');
+
+  var a = document.getElementById('dataurl_link');
+  a.href = document.getElementById('fluo').toDataURL();
+
+  FluoCan.renderFlow('whole_fluo', proc_rep);
+  FluoCan.crop('whole_fluo');
+  FluoCan.highlight('whole_fluo', '<%= expression.fei.expid %>');
+</script>
+

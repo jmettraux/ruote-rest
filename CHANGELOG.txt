@@ -3,6 +3,7 @@
 
 == ruote-rest - 0.9.19    not yet released
 
+- todo  #21841 : wired in raw expression [fluo] edition
 - todo  #19967 : etag and last-modified for everybody
 - todo  #21707 : integrated atom feed for /history
 - todo  #21722 : replaced TreeChecker by the rufus-treechecker gem

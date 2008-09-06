@@ -61,8 +61,9 @@ put '/expressions/:wfid/:expid' do
 
   application.engine.update_expression expression
 
+  response.status = 303
   response.location = expression.href(request)
-  rrender :expression, find_expression
+  "expression at #{e.href} updated"
 end
 
 get '/expressions/:wfid/:expid' do
@@ -70,9 +71,21 @@ get '/expressions/:wfid/:expid' do
   rrender :expression, find_expression
 end
 
-get '/expressions/:wfid/:expid/representation' do
+get '/expressions/:wfid/:expid/raw' do
 
-  rrender :expression_representation, find_expression
+  rrender :expression_raw, find_expression
+end
+
+put '/expressions/:wfid/:expid/raw' do
+
+  raw = rparse :expression_raw
+  e = find_expression
+
+  application.engine.update_raw_expression(e, raw)
+
+  response.status = 303
+  response.location = e.href(request)
+  "expression at #{e.href} updated"
 end
 
 delete '/expressions/:wfid/:expid' do

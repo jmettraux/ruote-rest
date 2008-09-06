@@ -82,6 +82,7 @@ class StExpressionsTest < Test::Unit::TestCase
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStExpressions < OpenWFE::ProcessDefinition
         nada
+        surf
       end
     EOS
 
@@ -96,7 +97,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     get "/expressions/#{fei.wfid}/0_0?format=yaml"
 
-    assert_equal "application/yaml", @response["Content-Type"]
+    assert_equal 'application/yaml', @response['Content-Type']
 
     exp = YAML.load @response.body
     assert_kind_of OpenWFE::FlowExpression, exp
@@ -106,20 +107,55 @@ class StExpressionsTest < Test::Unit::TestCase
     put(
       "/expressions/#{fei.wfid}/0_0",
       exp.to_yaml,
-      { "CONTENT_TYPE" => "application/yaml" })
+      { 'CONTENT_TYPE' => 'application/yaml' })
 
     assert_equal(
       "http://example.org/expressions/#{fei.wfid}/0_0",
-      @response["Location"])
+      @response['Location'])
+
+    # GET expression as yaml
 
     get(
       "/expressions/#{fei.wfid}/0_0",
       nil,
-      { 'HTTP_ACCEPT' => "application/yaml" })
+      { 'HTTP_ACCEPT' => 'application/yaml' })
 
     exp = YAML.load @response.body
 
     assert_equal :surf, exp.attributes[:toto]
+
+    # GET expression/raw as json
+
+    get(
+      "/expressions/#{fei.wfid}/0_0/raw",
+      nil,
+      { 'HTTP_ACCEPT' => 'application/json' })
+
+    assert_equal ["nada", {}, []], json_parse(@response.body)
+
+    # PUT some other expression/raw
+
+    put(
+      "/expressions/#{fei.wfid}/0_1/raw",
+      '["surfbis",{},[]]',
+      { 'CONTENT_TYPE' => 'application/json' })
+
+    assert_equal 303, @response.status
+
+    get(
+      "/expressions/#{fei.wfid}/0_1/raw",
+      nil,
+      { 'HTTP_ACCEPT' => 'application/json' })
+
+    assert_equal ["surfbis", {}, []], json_parse(@response.body)
+
+    assert_equal(
+      [ "process-definition",
+        {"name"=>"TestStExpressions", "revision"=>"0"},
+        [["nada", {}, []], ["surfbis", {}, []]] ],
+      $app.engine.process_status(fei.wfid).all_expressions.representation)
+
+    # over.
 
     $app.engine.cancel_process fei
 

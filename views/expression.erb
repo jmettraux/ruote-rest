@@ -55,7 +55,7 @@
   
       <% if expression.raw_representation %>
       <div id="rawrep">
-        raw representation ::
+        raw :
         <div>
           json :
           <span class="expression_raw_representation"><%= expression.raw_representation.to_json %></span>
@@ -66,7 +66,7 @@
         <span class="expression_raw_rep_updated"><%= expression.raw_rep_updated.to_json %></span></div>
         <% end %>
 
-        <div>edition : <a href="<%= expression.href %>/representation">GET <%= expression.href %>/representation</a></div>
+        <div>edition : <a href="<%= expression.href %>/raw">GET <%= expression.href %>/raw</a></div>
       </div>
       <% end %>
   
