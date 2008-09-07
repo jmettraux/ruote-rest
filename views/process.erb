@@ -3,52 +3,52 @@
 
 <div class="process">
 
-  <div class="process_link"><%= rlink(process) %></div>
+  <div class="link"><%= rlink(process) %></div>
 
-  <div>wfid : <span class="process_wfid"><%= process.wfid %></div>
+  <div>wfid : <span class="wfid"><%= process.wfid %></div>
   <div>
-    process : <span class="process_wfname"><%= process.wfname %></span>
-    <span class="process_wfrevision"><%= process.wfrevision %>
+    process : <span class="wfname"><%= process.wfname %></span>
+    <span class="wfrevision"><%= process.wfrevision %>
   </div>
-  <div>launched : <span class="process_launch_time"><%= display_time(process, :launch_time) %></div>
-  <div>paused : <span class="process_paused"><%= process.paused %></div>
-  <div>tags : <span class="process_tags"><%= process.tags.join(", ") %></div>
+  <div>launched : <span class="launch_time"><%= display_time(process, :launch_time) %></div>
+  <div>paused : <span class="paused"><%= process.paused %></div>
+  <div>tags : <span class="tags"><%= process.tags.join(", ") %></div>
   <div>all expressions : <%= rlink('expressions', process.wfid) %></div>
   <div>workitems : <%= rlink('workitems', { 'wfid' => process.wfid }) %></div>
 
   <% if detailed %>
 
-    <div class="process_details">
+    <div class="details">
 
-      <div>branches : <span class="process_branches"><%= process.branches %></div>
+      <div>branches : <span class="branches"><%= process.branches %></div>
 
-      <div class="process_variables">
+      <div class="variables">
         Process variables : <%= rlink('processes', process.wfid, 'variables.json') %> (<a href="/processes/<%= process.wfid %>/variables.json?plain=true">plain/text</a>)
         <% process.variables.each do |k, v| %>
-          <div class="process_var">
-            <span class="process_var_key"><%= k.to_s %></span>
+          <div class="var">
+            <span class="var_key"><%= k.to_s %></span>
             =&gt;
-            <span class="process_var_value"><%= v.to_json %></span>
+            <span class="var_value"><%= v.to_json %></span>
           </div>
         <% end %>
       </div>
 
-      <div class="process_scheduled_jobs">
+      <div class="scheduled_jobs">
         Scheduled jobs :
         <% process.scheduled_jobs.each do |sj| %>
-          <div class="process_scheduled_jobs">
+          <div class="scheduled_jobs">
             <%= sj.class.name %> / info : <%= sj.schedule_info %> / next time : <%= sj.next_time.to_s %><br/>
           </div>
         <% end %>
       </div>
 
-      <div class="process_expression">
+      <div class="expression">
         Active expressions :
         <% process.expressions.each do |fexp|
             fei = fexp.fei
         %>
           <div 
-            class="process_exp"
+            class="exp"
             onmouseover="FluoCan.highlight('fluo', '<%= fei.expid %>');"
             onmouseout="FluoCan.highlight('fluo', null);"
           >
@@ -57,19 +57,19 @@
         <% end %>
       </div>
 
-      <div class="process_errors">
+      <div class="errors">
         Errors :
         <% process.errors.each do |k, error| %>
-          <div class="process_err">
-            <span class="process_err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
+          <div class="err">
+            <span class="err_fei">at <%= error.fei.expname %> <%= error.fei.expid %></span>
             :
-            <span class="process_err_trace"><%= error.stacktrace.split("\n")[0] %></span>
+            <span class="err_trace"><%= error.stacktrace.split("\n")[0] %></span>
           </div>
         <% end %>
         <%= process.errors.size == 0 ? "none" : "" %>
       </div>
 
-      <div class="process_representation">
+      <div class="representation">
         Representation : <%= rlink('processes', process.wfid, 'representation.json') %> (<a href="/processes/<%= process.wfid %>/representation.json?plain=true">plain/text</a>)
         <div class="process_rep"><%= process.all_expressions.representation.to_json %></div>
       </div>
@@ -99,7 +99,7 @@
   <% else %>
 
     <div>errors : 
-      <span class="process_errors_count"><%= process.errors.size %>
+      <span class="errors_count"><%= process.errors.size %>
     </div>
 
   <% end %>

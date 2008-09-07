@@ -11,17 +11,17 @@
 <div class="workitem">
 <% end %>
 
-  <div class="workitem_link"><%= rlink(workitem) %></div>
+  <div class="link"><%= rlink(workitem) %></div>
 
   <%= detailed ? "<br/>" : "" %>
 
-  <div>fei : <span class="workitem_fei"><%= workitem.fei.to_s %></span></div>
-  <div>participant : <span class="workitem_participant"><%= workitem.participant_name %></span></div>
-  <div>dispatch time : <span class="workitem_dispatch_time"><%= display_time workitem, :dispatch_time %></span></div>
+  <div>fei : <span class="fei"><%= workitem.fei.to_s %></span></div>
+  <div>participant : <span class="participant"><%= workitem.participant_name %></span></div>
+  <div>dispatch time : <span class="dispatch_time"><%= display_time workitem, :dispatch_time %></span></div>
 
   <% if detailed %>
 
-    <div>last modified : <span class="workitem_last_modified"><%= display_time workitem, :last_modified %></span></div>
+    <div>last modified : <span class="last_modified"><%= display_time workitem, :last_modified %></span></div>
     <div>process : <%= rlink('processes', workitem.fei.wfid) %></div>
     <div>expression : <%= rlink('expressions', workitem.fei.wfid, workitem.fei.expid) %></div>
     <div>workitems of this process : <%= rlink('workitems', { 'wfid' => workitem.fei.wfid }) %></div>

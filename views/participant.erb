@@ -5,10 +5,10 @@
 %>
 <div class="participant">
 
-  <div class="participant_link"><a href="<%= link %>">GET <%= link %></a></div>
+  <div class="link"><a href="<%= link %>">GET <%= link %></a></div>
 
-  <div>regex : <span class="participant_regex"><%= regex.original_string %></span></div>
-  <div>class : <span class="participant_class"><%= part.class.name %></span></div>
+  <div>regex : <span class="regex"><%= regex.original_string %></span></div>
+  <div>class : <span class="pclass"><%= part.class.name %></span></div>
   <% if regex.original_string.match /^[0-9a-zA-Z ]+$/ %>
     <!-- only link if participant has a 'flat' regex -->
     <div>workitems : <%= rlink('workitems', { 'participant' => regex.original_string }) %></div>

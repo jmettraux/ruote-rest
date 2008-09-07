@@ -12,10 +12,10 @@
 .expression {
   float: left;
 }
-.expression_name {
+.ename {
   font-weight: bold;
 }
-.expression_link {
+.link {
   margin-bottom: 5px;
 }
 

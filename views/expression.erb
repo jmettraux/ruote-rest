@@ -21,12 +21,12 @@
   
   <% end %>
   
-    <div class="expression_link"><%= rlink(expression) %></div>
+    <div class="link"><%= rlink(expression) %></div>
   
-    <div>fei : <span class="expression_fei"><%= expression.fei.to_s %></div>
-    <div>class : <span class="expression_class"><%= expression.class.name %></div>
-    <div>name : <span class="expression_name"><%= expression.fei.expname %></div>
-    <div>apply time : <span class="expression_apply_time"><%= display_time(expression, :apply_time) %></div>
+    <div>fei : <span class="fei"><%= expression.fei.to_s %></div>
+    <div>class : <span class="eclass"><%= expression.class.name %></div>
+    <div>name : <span class="ename"><%= expression.fei.expname %></div>
+    <div>apply time : <span class="apply_time"><%= display_time(expression, :apply_time) %></div>
   
     <% if detailed %>
   
@@ -58,12 +58,12 @@
         raw :
         <div>
           json :
-          <span class="expression_raw_representation"><%= expression.raw_representation.to_json %></span>
+          <span class="raw"><%= expression.raw_representation.to_json %></span>
         </div>
   
         <% if expression.raw_rep_updated %>
         <div>updated :
-        <span class="expression_raw_rep_updated"><%= expression.raw_rep_updated.to_json %></span></div>
+        <span class="raw_updated"><%= expression.raw_rep_updated.to_json %></span></div>
         <% end %>
 
         <div>edition : <a href="<%= expression.href %>/raw">GET <%= expression.href %>/raw</a></div>
