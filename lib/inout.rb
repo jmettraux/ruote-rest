@@ -74,7 +74,16 @@ def rrender (type, object, options={})
       #
       # where the conditional GET happens...
 
-  return send("render_#{type}_#{format}", object) unless format == 'js'
+
+  unless format == 'js'
+
+    body = send("render_#{type}_#{format}", object)
+
+    body = body.gsub(", ", ",\n") if format == 'json' and ctype == 'text/plain'
+      # a bit more readable for 'text/plain' output
+
+    return body
+  end
 
   varname = params[:var] || 'ruote_js'
   method = "render_#{type}_json"

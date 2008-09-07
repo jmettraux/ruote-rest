@@ -49,11 +49,11 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, workitems.size
 
-    get workitems.first._uri
+    get workitems.first.uri
 
     workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
-    assert_equal workitems.first._uri, workitem._uri
+    assert_equal workitems.first.uri, workitem.uri
 
     #
     # get /workitems?wfid=x
@@ -78,11 +78,11 @@ class StWorkitemsTest < Test::Unit::TestCase
     workitem.owner = "toto"
 
     put(
-      workitem._uri,
+      workitem.uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
       { "CONTENT_TYPE" => "application/xml" })
 
-    get workitem._uri
+    get workitem.uri
 
     workitem = OpenWFE::Xml.workitem_from_xml @response.body
 
@@ -94,13 +94,13 @@ class StWorkitemsTest < Test::Unit::TestCase
     workitem._state = "proceeded"
 
     put(
-      workitem._uri,
+      workitem.uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
       { "CONTENT_TYPE" => "application/xml" })
 
     sleep 0.350
 
-    get workitem._uri
+    get workitem.uri
 
     assert_equal 404, @response.status
 
