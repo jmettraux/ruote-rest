@@ -83,7 +83,7 @@ helpers do
 
   def render_expressions_xml (es)
 
-    builder do |xml|
+    builder(2) do |xml|
 
       xml.instruct!
 
@@ -111,7 +111,7 @@ helpers do
 
   def render_expression_xml (e)
 
-    builder do |xml|
+    builder(2) do |xml|
 
       xml.instruct!
 
