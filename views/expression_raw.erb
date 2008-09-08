@@ -5,6 +5,10 @@
 expression 'raw representation' edition
 </div>
 
+<div>
+back to <%= rlink(expression) %>
+</div>
+
 <script src="/js/fluo-json.js"></script>
 <script src="/js/fluo-can.js"></script>
 <script src="/js/fluo-tred.js"></script>
@@ -40,7 +44,7 @@ expression 'raw representation' edition
     >
       <input type="hidden" name="_method" value="PUT" />
       <input type="hidden" id="formTree" name="tree" />
-      <input type="submit" value="PUT <%= expression.href %>/raw" />
+      <input type="submit" value="PUT <%= expression.href %>/raw" title="replaces the current raw representation for this expression with the one just edited here" />
     </form>
   </div>
 </div>

@@ -66,7 +66,13 @@
         <span class="raw_updated"><%= expression.raw_rep_updated.to_json %></span></div>
         <% end %>
 
-        <div>edition : <a href="<%= expression.href %>/raw">GET <%= expression.href %>/raw</a></div>
+        <% unless expression.is_a?(OpenWFE::Environment)
+
+             onclick = "return confirm('Really want to edit the raw representation of this expression ? It is not a RawExpression, It is a rather advanced operation, proceed with care...');"
+             onclick = "" if expression.is_a?(OpenWFE::RawExpression)
+        %>
+        <div>edition : <a onclick="<%= onclick %>" href="<%= expression.href %>/raw">GET <%= expression.href %>/raw</a></div>
+        <% end %>
       </div>
       <% end %>
   
