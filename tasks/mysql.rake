@@ -35,7 +35,8 @@ namespace :mysql do
       :database => db,
       #:username => 'toto',
       #:password => 'secret',
-      #:socket => '/var/run/mysqld/mysqld.sock', # on debian
+      #:host => 'localhost',
+      #:socket => '/var/run/mysqld/mysqld.sock',
       :encoding => "utf8")
 
     $:.unshift RUOTE_LIB

@@ -13,8 +13,6 @@ namespace :ruote do
   desc "Installs under vendor/ the latest source of OpenWFEru (and required subprojects)."
   task :install => :get_from_github do
 
-    #sh "sudo gem install --no-rdoc --no-ri json_pure"
-    #sh "sudo gem install --no-rdoc --no-ri json"
     sh "sudo gem install --no-rdoc --no-ri activerecord"
     sh "sudo gem install --no-rdoc --no-ri rogue_parser"
     sh "sudo gem install --no-rdoc --no-ri atom-tools"
@@ -47,11 +45,6 @@ namespace :ruote do
     GEMS = RUFUSES.dup
 
     GEMS << 'ruote'
-    #GEMS << 'ruote-extras'
-
-    #GEMS << 'json_pure'
-    #GEMS << 'json'
-    #GEMS << 'rogue_parser'
     GEMS << 'activerecord'
     GEMS << 'atom-tools'
 

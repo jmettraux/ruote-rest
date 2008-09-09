@@ -10,6 +10,7 @@ configure do
     :database => "ruoterest_#{application.environment}",
     #:username => 'toto',
     #:password => 'secret',
+    #:host => 'localhost',
     :encoding => 'utf8')
 end
 
