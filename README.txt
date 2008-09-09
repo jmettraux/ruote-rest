@@ -6,6 +6,8 @@ A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.o
 
 == getting it
 
+Get it from GitHub or download a prepackaged release at http://rubyforge.org/frs/?group_id=2609 (and jump to '== preparing it')
+
 To get Ruote and Ruote-Rest :
 
     git clone git://github.com/jmettraux/ruote-rest.git
@@ -15,9 +17,14 @@ Then
     cd ruote-rest 
     rake ruote:install
 
-to install the Ruote (OpenWFEru) workflow engine and its dependencies.
+to install the Ruote (OpenWFEru) workflow engine and its dependencies (in a vendor/ subdirectory). Alternatively, you could do 
 
-( or get a prepackaged release of ruote + ruote-rest at http://rubyforge.org/frs/?group_id=2609 )
+    rake ruote:gem_install
+
+to get the dependencies as gems.
+
+
+== preparing it
 
 To prepare the development database
 
