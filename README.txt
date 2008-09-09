@@ -4,6 +4,11 @@
 A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.org/)
 
 
+== required gems
+
+    sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools rogue_parser
+
+
 == getting it
 
 Get it from GitHub or download a prepackaged release at http://rubyforge.org/frs/?group_id=2609 (and jump to '== preparing it')
@@ -42,6 +47,10 @@ To prepare the dev database with the admin 'toto'
 
     rake mysql:setup dbadmin=toto
 )
+
+On a debian machine, you probably want to tweak the files tasks/mysql.rake and conf/db.rb to point to :
+
+    :socket => '/var/run/mysqld/mysqld.sock'
 
 
 == starting it

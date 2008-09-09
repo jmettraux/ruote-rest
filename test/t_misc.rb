@@ -10,6 +10,7 @@
 require 'test/unit'
 
 require 'rubygems'
+require 'activesupport' # force using activesupport instead of json
 require 'rack'
 require 'misc'
 

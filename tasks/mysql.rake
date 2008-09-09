@@ -31,13 +31,15 @@ namespace :mysql do
     require 'active_record'
 
     ActiveRecord::Base.establish_connection(
-      :adapter => "mysql",
+      :adapter => 'mysql',
       :database => db,
       #:username => 'toto',
       #:password => 'secret',
+      #:socket => '/var/run/mysqld/mysqld.sock', # on debian
       :encoding => "utf8")
 
     $:.unshift RUOTE_LIB
+    $:.unshift VENDOR_LIB
 
     require 'openwfe/extras/participants/activeparticipants'
     OpenWFE::Extras::WorkitemTables.up

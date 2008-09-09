@@ -13,6 +13,7 @@ RUOTE_REST_VERSION = '0.9.19'
 
 
 RUOTE_LIB = '~/ruote/lib'
+VENDOR_LIB = 'vendor'
 
 #
 # tasks
