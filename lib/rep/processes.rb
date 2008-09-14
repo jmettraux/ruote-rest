@@ -42,8 +42,8 @@ require 'openwfe/util/xml'
 
 helpers do
 
-#
-# PROCESSES
+  #
+  # PROCESSES
 
   def render_processes_xml (ps)
 
@@ -70,8 +70,8 @@ helpers do
       :locals => { :processes => ps })
   end
 
-#
-# PROCESS
+  #
+  # PROCESS
 
   def render_process_html (p, detailed=true)
 

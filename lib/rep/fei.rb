@@ -38,21 +38,25 @@
 #
 
 
-#
-# IN
+helpers do
 
-#
-# OUT
+  #
+  # IN
 
-def render_fei_html (fei)
+  #
+  # OUT
 
-  _erb :fei, :layout => :html, :locals => { :fei => fei }
-end
+  def render_fei_html (fei)
 
-def render_fei_xml (fei)
+    _erb :fei, :layout => :html, :locals => { :fei => fei }
+  end
 
-  #header 'Location' => request.href(:processes, fei.wfid)
+  def render_fei_xml (fei)
 
-  OpenWFE::Xml.fei_to_xml fei
+    #header 'Location' => request.href(:processes, fei.wfid)
+
+    OpenWFE::Xml.fei_to_xml fei, 2
+  end
+
 end
 

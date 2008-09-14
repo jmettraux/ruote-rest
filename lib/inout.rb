@@ -79,7 +79,7 @@ def rrender (type, object, options={})
 
     body = send("render_#{type}_#{format}", object)
 
-    body = body.gsub(", ", ",\n") if format == 'json' and ctype == 'text/plain'
+    body = body.gsub(", ", ",\n ") if format == 'json' and ctype == 'text/plain'
       # a bit more readable for 'text/plain' output
 
     return body
