@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- todo  #21963 : 'tree' replaces 'representation'
 - todo  #21952 : wrote test/all_reps.rb (all representations on the deck)
 
 

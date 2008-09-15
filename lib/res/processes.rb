@@ -63,10 +63,22 @@ end
 #
 # just return the process instance tree as JSON
 #
+# (deprecated !)
+#
 get '/processes/:wfid/representation' do
 
   rrender(
-    :process_representation,
+    :process_tree,
+    get_process_status.all_expressions)
+end
+
+#
+# just return the process instance tree as JSON
+#
+get '/processes/:wfid/tree' do
+
+  rrender(
+    :process_tree,
     get_process_status.all_expressions)
 end
 

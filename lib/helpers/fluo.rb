@@ -53,7 +53,7 @@ helpers do
     elsif wfid.is_a?(Array)
       "<script>var proc_rep = #{wfid.to_json};</script>"
     else
-      "<script src=\"/processes/#{wfid}/representation?format=js&var=proc_rep\"></script>"
+      "<script src=\"/processes/#{wfid}/tree?format=js&var=proc_rep\"></script>"
     end
 
     hl = expid ? "\nFluoCan.highlight('fluo', '#{expid}');" : ""

@@ -59,7 +59,7 @@ helpers do
 
   def render_processes_json (ps)
 
-    ps.collect { |fei, s| s.to_h }.to_json
+    ps.collect { |fei, s| s.to_h(request) }.to_json
   end
 
   def render_processes_html (ps)
@@ -155,9 +155,9 @@ helpers do
           end
         end
 
-        xml.representation(
-          p.all_expressions.representation.to_json,
-          :href => request.href(:processes, p.wfid, :representation))
+        xml.tree(
+          p.all_expressions.tree.to_json,
+          :href => request.href(:processes, p.wfid, :tree))
 
       else
 
@@ -192,9 +192,9 @@ helpers do
   #
   # Renders the process definition tree (potientally updated) as some JSON
   #
-  def render_process_representation_json (expressions)
+  def render_process_tree_json (expressions)
 
-    expressions.representation.to_json
+    expressions.tree.to_json
   end
 
   #

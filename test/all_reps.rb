@@ -22,7 +22,7 @@ class AllRepsTest < Test::Unit::TestCase
 
     puts
     puts "=== #{label} ==="
-    rep = rep.gsub(/, /, ",\n ") if label.index('json')
+    rep = rep.gsub(/, /, ",\n ") if label.index('json') or label.index('JSON')
     puts rep
   end
 
@@ -73,7 +73,7 @@ class AllRepsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    %w{ processes workitems }.each do |res_name|
+    %w{ processes workitems service }.each do |res_name|
       output_res(res_name)
     end
 

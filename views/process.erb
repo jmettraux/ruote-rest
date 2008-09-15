@@ -69,9 +69,9 @@
         <%= process.errors.size == 0 ? "none" : "" %>
       </div>
 
-      <div class="representation">
-        Representation : <%= rlink('processes', process.wfid, 'representation.json') %> (<a href="/processes/<%= process.wfid %>/representation.json?plain=true">plain/text</a>)
-        <div class="process_rep"><%= process.all_expressions.representation.to_json %></div>
+      <div class="tree">
+        Tree : <%= rlink('processes', process.wfid, 'tree.json') %> (<a href="/processes/<%= process.wfid %>/tree.json?plain=true">plain/text</a>)
+        <div class="process_rep"><%= process.all_expressions.tree.to_json %></div>
       </div>
 
       <div>
@@ -106,5 +106,5 @@
 
 </div>
 
-<%= render_fluo_foot(process.all_expressions.representation, nil, process.expressions.collect { |e| e.fei.expid }) if detailed %>
+<%= render_fluo_foot(process.all_expressions.tree, nil, process.expressions.collect { |e| e.fei.expid }) if detailed %>
 
