@@ -135,17 +135,13 @@ class OpenWFE::ProcessStatus
     @etag ||= md5("#{wfid}_#{timestamp.to_i}")
   end
 
+  alias :old_to_h :to_h
+
   def to_h (request=nil)
 
-    {
-      'href' => href(request),
-      'timestamp' => timestamp.to_s,
-      'wfid' => wfid,
-      'launch_time' => launch_time,
-      'paused' => paused,
-      'variables' => variables,
-      'tags' => tags
-    }
+    h = old_to_h
+    h[:href] = href(request)
+    h
   end
 end
 
