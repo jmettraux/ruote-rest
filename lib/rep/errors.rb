@@ -43,34 +43,27 @@ helpers do
   #
   # ERRORS
 
-  def render_errors_xml (errors)
+  def render_errors_xml (errors, options={ :indent => 2 })
 
-    builder(2) do |xml|
-      xml.instruct!
+    OpenWFE::Xml::builder(options) do |xml|
       xml.errors :count => errors.size do
-        errors.each { |error| _render_error_xml xml, error }
+        errors.each { |error| render_error_xml error, options }
       end
     end
   end
 
-  def _render_error_xml (xml, error)
+  def render_error_xml (error, options={ :indent => 2 })
 
-    xml.error do
-      #xml.raw error.inspect
-      xml.href error.error_id
-      xml.wfid error.fei.wfid
-      xml.fei error.fei
-      xml.call error.message.to_s
-      xml.date error.date
-      xml.text error.stacktrace.split("\n").first
-    end
-  end
-
-  def render_error_xml (error)
-
-    builder do |xml|
-      xml.instruct!
-      _render_error_xml xml, error
+    OpenWFE::Xml::builder(options) do |xml|
+      xml.error do
+        #xml.raw error.inspect
+        xml.href error.error_id
+        xml.wfid error.wfid
+        xml.fei error.fei
+        xml.call error.message.to_s
+        xml.date error.date
+        xml.text error.stacktrace.split("\n").first
+      end
     end
   end
 

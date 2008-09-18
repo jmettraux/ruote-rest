@@ -50,11 +50,9 @@ helpers do
       :locals => history)
   end
 
-  def render_history_xml (history)
+  def render_history_xml (history, options={ :indent => 2 })
 
-    builder(2) do |xml|
-
-      xml.instruct!
+    OpenWFE::Xml::builder(options) do |xml|
 
       xml.history(
         :count => history[:entries].size,

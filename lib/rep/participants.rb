@@ -59,13 +59,12 @@ helpers do
   #
   # OUT
 
-  def render_participants_xml (ps)
+  def render_participants_xml (ps, options={ :indent => 2 })
 
-    builder do |xml|
-      xml.instruct!
+    OpenWFE::Xml::builder(options) do |xml|
       xml.participants :count => ps.size do
-        ps.each do |part|
-          _render_participant_xml xml, part
+        ps.each do |participant|
+          render_participant_xml participant, options
         end
       end
     end
@@ -79,14 +78,6 @@ helpers do
       :locals => { :participants => ps })
   end
 
-  def render_participant_xml (part)
-
-    builder do |xml|
-      xml.instruct!
-      _render_participant_xml xml, part
-    end
-  end
-
   def render_participant_html (part, detailed=true)
 
     _erb(
@@ -95,17 +86,20 @@ helpers do
       :locals => { :participant => part, :detailed => detailed })
   end
 
-  def _render_participant_xml (xml, part)
+  def render_participant_xml (part, options={ :indent => 2})
 
-    regex, participant = part
+    OpenWFE::Xml::builder(options) do |xml|
 
-    opts = {
-      :href =>
-      request.href(:participants, uri_escape(regex.original_string)) }
+      regex, participant = part
 
-    xml.participant opts do
-      xml.regex regex.original_string
-      xml.tag! :class, participant.class.name
+      params = {
+        :href =>
+        request.href(:participants, uri_escape(regex.original_string)) }
+
+      xml.participant(params) do
+        xml.regex regex.original_string
+        xml.tag! :class, participant.class.name
+      end
     end
   end
 

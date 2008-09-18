@@ -284,15 +284,3 @@ module ArrayEtagMixin
   end
 end
 
-require 'builder'
-
-class Rufus::Sixjo::Context
-
-  def builder (indent=0, &block)
-
-    xml = Builder::XmlMarkup.new :indent => indent
-    block.call(xml)
-    xml.target!
-  end
-end
-

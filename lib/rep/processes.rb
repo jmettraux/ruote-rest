@@ -45,13 +45,12 @@ helpers do
   #
   # PROCESSES
 
-  def render_processes_xml (ps)
+  def render_processes_xml (ps, options={ :indent => 2 })
 
-    builder(2) do |xml|
-      xml.instruct!
+    OpenWFE::Xml::builder(options) do |xml|
       xml.processes :href => request.href(:processes), :count => ps.size do
         ps.each do |fei, process_status|
-          _render_process_xml xml, process_status
+          render_process_xml process_status, options
         end
       end
     end
@@ -86,34 +85,26 @@ helpers do
     p.to_h(request).to_json
   end
 
-  def render_process_xml (p)
+  def render_process_xml (p, options={ :indent => 2 })
 
-    builder do |xml|
-      xml.instruct!
-      _render_process_xml xml, p, true
-    end
-  end
+    OpenWFE::Xml::builder(options) do |xml|
 
-  def _render_process_xml (xml, p, detailed=false)
+      xml.process :href => request.href(:processes, p.wfid) do
 
-    xml.process :href => request.href(:processes, p.wfid) do
+        xml.wfid p.wfid
+        xml.wfname p.wfname
+        xml.wfrevision p.wfrevision
 
-      xml.wfid p.wfid
-      xml.wfname p.wfname
-      xml.wfrevision p.wfrevision
+        xml.launch_time p.launch_time
+        xml.paused p.paused
 
-      xml.launch_time p.launch_time
-      xml.paused p.paused
+        xml.timestamp p.timestamp.to_s
 
-      xml.timestamp p.timestamp.to_s
+        xml.tags do
+          p.tags.each { |t| xml.tag t }
+        end
 
-      xml.tags do
-        p.tags.each { |t| xml.tag t }
-      end
-
-      xml.branches p.branches
-
-      if detailed
+        xml.branches p.branches
 
         hash_to_xml xml, :variables, p, :variables
 
@@ -158,11 +149,6 @@ helpers do
         xml.tree(
           p.all_expressions.tree.to_json,
           :href => request.href(:processes, p.wfid, :tree))
-
-      else
-
-        xml.errors :count => p.errors.size
-
       end
     end
   end

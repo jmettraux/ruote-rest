@@ -50,8 +50,7 @@ helpers do
 
   def render_service_xml (_)
 
-    builder(2) do |xml|
-      xml.instruct!
+    OpenWFE::Xml::builder(:indent => 2) do |xml|
       xml.service do
         xml.workspace do
           SERVICES.each { |s| xml.collection :href => request.href(s) }
@@ -65,8 +64,7 @@ helpers do
 
     # TODO
 
-    builder(2) do |xml|
-      xml.instruct!
+    OpenWFE::Xml::builder(:indent => 2) do |xml|
       xml.service do
       end
     end
