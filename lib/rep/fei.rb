@@ -55,7 +55,7 @@ helpers do
 
     #header 'Location' => request.href(:processes, fei.wfid)
 
-    OpenWFE::Xml.fei_to_xml fei, 2
+    OpenWFE::Xml.fei_to_xml fei, :indent => 2
   end
 
 end

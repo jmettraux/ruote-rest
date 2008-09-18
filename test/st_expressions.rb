@@ -29,6 +29,8 @@ class StExpressionsTest < Test::Unit::TestCase
       end
     EOS
 
+    p OpenWFE::Xml.launchitem_to_xml(li)
+
     post(
       "/processes",
       OpenWFE::Xml.launchitem_to_xml(li),
@@ -146,6 +148,8 @@ class StExpressionsTest < Test::Unit::TestCase
       "/expressions/#{fei.wfid}/0_1/raw",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
+
+    assert false # TODO : add test for form input !!!!!!!!!!!!!!!!!!!!!!!!
 
     assert_equal ["surfbis", {}, []], json_parse(@response.body)
 

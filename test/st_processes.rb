@@ -48,12 +48,12 @@ class StProcessesTest < Test::Unit::TestCase
     #li.attributes.merge!(
     #  "customer" => "toto", "amount" => 5, "discount" => false )
     #puts
-    #puts OpenWFE::Xml.launchitem_to_xml(li, 2)
+    #puts OpenWFE::Xml.launchitem_to_xml(li, :indent => 2)
     #puts
 
     post(
       '/processes',
-      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
       { 'CONTENT_TYPE' => 'application/xml' })
 
     #puts @response.body
@@ -116,7 +116,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     post(
       '/processes',
-      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
       { 'CONTENT_TYPE' => 'application/xml' })
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
@@ -159,7 +159,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     post(
       '/processes',
-      OpenWFE::Xml.launchitem_to_xml(li, 2),
+      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
       { 'CONTENT_TYPE' => 'application/xml' })
 
     fei = OpenWFE::Xml.fei_from_xml @response.body

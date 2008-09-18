@@ -210,7 +210,7 @@ helpers do
   #
   def render_process_variables_xml (variables)
 
-    OpenWFE::Xml.to_xml(variables, 2, true)
+    OpenWFE::Xml.to_xml(variables, :indent => 2)
   end
 
 end

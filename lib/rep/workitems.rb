@@ -65,13 +65,14 @@ helpers do
 
   def render_workitems_xml (wis)
 
-    builder(2) do |xml|
-      xml.instruct!
+    options = { :indent => 2 }
+
+    OpenWFE::Xml::builder(options) do |xml|
       xml.workitems :count => wis.size do
         wis.each do |wi|
           owi = wi.as_owfe_workitem
           owi.uri = owi.href(request)
-          OpenWFE::Xml._workitem_to_xml(xml, owi)
+          OpenWFE::Xml.workitem_to_xml(owi, options)
         end
       end
     end
@@ -79,11 +80,12 @@ helpers do
 
   def render_workitem_xml (wi)
 
-    builder(2) do |xml|
-      xml.instruct!
+    options = { :indent => 2 }
+
+    OpenWFE::Xml::builder(options) do |xml|
       owi = wi.as_owfe_workitem
       owi.uri = owi.href(request)
-      OpenWFE::Xml._workitem_to_xml(xml, owi)
+      OpenWFE::Xml.workitem_to_xml(owi, options)
     end
   end
 

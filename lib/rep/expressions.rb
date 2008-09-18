@@ -83,14 +83,14 @@ helpers do
 
   def render_expressions_xml (es)
 
-    builder(2) do |xml|
+    options = { :indent => 2 }
 
-      xml.instruct!
+    OpenWFE::Xml::builder(options) do |xml|
 
       xml.expressions :count => es.size do
 
         es.sort_by { |e| e.fei.expid }.each do |fexp|
-          _render_expression_xml xml, fexp
+          render_expression_xml(fexp, options)
         end
 
         xml.process_representation es.representation.to_json
@@ -109,16 +109,6 @@ helpers do
 #
 # expression
 
-  def render_expression_xml (e)
-
-    builder(2) do |xml|
-
-      xml.instruct!
-
-      _render_expression_xml xml, e, true
-    end
-  end
-
   def render_expression_html (e, detailed=true)
 
     _erb(
@@ -127,14 +117,14 @@ helpers do
       :locals => { :expression => e, :detailed => detailed })
   end
 
-  def _expression_link (xml, tagname, fei, env=false)
+  def expression_link (tagname, fei, options={})
 
     return unless fei
 
     expid = fei.expid
-    expid += "e" if env
+    expid += "e" if fei.expname == 'environment'
 
-    xml.tag!(
+    options[:builder].tag!(
       tagname,
       fei.to_s,
       :href => request.href(
@@ -143,39 +133,37 @@ helpers do
         swapdots(expid)))
   end
 
-  def _render_expression_xml (xml, e, detailed=false)
+  def render_expression_xml (e, options={ :indent => 2})
 
-    params = {}
+    OpenWFE::Xml::builder(options) do |xml|
 
-    params[:href] = request.href(
-      :expressions, e.fei.wfid, swapdots(e.fei.expid)) unless detailed
+      params = {
+        :href => request.href(:expressions, e.fei.wfid, swapdots(e.fei.expid)) }
 
-    xml.expression params do
+      xml.expression(params) do
 
-      xml.tag! "class", e.class.name
-      xml.name e.fei.expression_name
-      xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
+        xml.tag! "class", e.class.name
+        xml.name e.fei.expression_name
+        xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
 
-      if detailed
-
-        OpenWFE::Xml._fei_to_xml(xml, e.fei)
+        OpenWFE::Xml.fei_to_xml(e.fei, options)
 
         #
         # parent id
 
-        _expression_link xml, 'parent', e.parent_id
+        expression_link('parent', e.parent_id, options)
 
         #
         # environment id
 
-        _expression_link xml, 'environment', e.environment_id
+        expression_link('environment', e.environment_id, options)
 
         #
         # children
 
         xml.children do
           e.children.each do |c|
-            _expression_link(xml, 'child', c)
+            expression_link('child', c, options)
           end
         end if e.children
 
@@ -192,9 +180,6 @@ helpers do
 
         hash_to_xml(xml, :variables, e, :variables) \
           if e.is_a?(OpenWFE::Environment)
-      else
-
-        xml.fei e.fei.to_s
       end
     end
   end
