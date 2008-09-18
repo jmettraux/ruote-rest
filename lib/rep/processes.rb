@@ -37,8 +37,6 @@
 # John Mettraux at openwfe.org
 #
 
-require 'openwfe/util/xml'
-
 
 helpers do
 
@@ -50,7 +48,8 @@ helpers do
     OpenWFE::Xml::builder(options) do |xml|
       xml.processes :href => request.href(:processes), :count => ps.size do
         ps.each do |fei, process_status|
-          render_process_xml process_status, options
+          options[:href] = request.method(:href)
+          OpenWFE::Xml.process_to_xml(process_status, options)
         end
       end
     end
@@ -87,70 +86,8 @@ helpers do
 
   def render_process_xml (p, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
-
-      xml.process :href => request.href(:processes, p.wfid) do
-
-        xml.wfid p.wfid
-        xml.wfname p.wfname
-        xml.wfrevision p.wfrevision
-
-        xml.launch_time p.launch_time
-        xml.paused p.paused
-
-        xml.timestamp p.timestamp.to_s
-
-        xml.tags do
-          p.tags.each { |t| xml.tag t }
-        end
-
-        xml.branches p.branches
-
-        hash_to_xml xml, :variables, p, :variables
-
-        xml.scheduled_jobs do
-          p.scheduled_jobs.each do |j|
-            xml.job do
-              xml.type j.class.name
-              xml.schedule_info j.schedule_info
-              xml.next_time j.next_time.to_s
-              xml.tags do
-                j.tags.each { |t| xml.tag t }
-              end
-            end
-          end
-        end
-
-        xml.active_expressions :href => request.href(:expressions, p.wfid) do
-
-          p.expressions.each do |fexp|
-
-            fei = fexp.fei
-
-            xml.expression(
-              "#{fei.to_s}",
-              :short => fei.to_web_s,
-              :href => fei.href(request))
-          end
-        end
-
-        xml.errors :href => request.href(:errors, p.wfid), :count => p.errors.size do
-          p.errors.each do |k, v|
-            xml.error do
-              #xml.stacktrace do
-              #  xml.cdata! "\n#{v.stacktrace}\n"
-              #end
-              xml.fei v.fei.to_s
-              xml.message v.stacktrace.split("\n")[0]
-            end
-          end
-        end
-
-        xml.tree(
-          p.all_expressions.tree.to_json,
-          :href => request.href(:processes, p.wfid, :tree))
-      end
-    end
+    options[:href] = request.method(:href)
+    OpenWFE::Xml.process_to_xml(p, options)
   end
 
   #
