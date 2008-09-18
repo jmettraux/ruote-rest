@@ -81,9 +81,7 @@ helpers do
     e.to_yaml
   end
 
-  def render_expressions_xml (es)
-
-    options = { :indent => 2 }
+  def render_expressions_xml (es, options={ :indent => 2 })
 
     OpenWFE::Xml::builder(options) do |xml|
 

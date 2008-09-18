@@ -29,7 +29,7 @@ class StExpressionsTest < Test::Unit::TestCase
       end
     EOS
 
-    p OpenWFE::Xml.launchitem_to_xml(li)
+    #p OpenWFE::Xml.launchitem_to_xml(li)
 
     post(
       "/processes",
