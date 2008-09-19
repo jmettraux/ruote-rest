@@ -45,19 +45,13 @@ helpers do
 
   def render_processes_xml (ps, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
-      xml.processes :href => request.href(:processes), :count => ps.size do
-        ps.each do |fei, process_status|
-          options[:href] = request.method(:href)
-          OpenWFE::Xml.process_to_xml(process_status, options)
-        end
-      end
-    end
+    options[:request] = request
+    OpenWFE::Xml.processes_to_xml(ps, options)
   end
 
   def render_processes_json (ps)
 
-    ps.collect { |fei, s| s.to_h(request) }.to_json
+    ps.collect { |fei, s| s.to_h(request.method(:href)) }.to_json
   end
 
   def render_processes_html (ps)
@@ -81,12 +75,12 @@ helpers do
 
   def render_process_json (p)
 
-    p.to_h(request).to_json
+    p.to_h(request.method(:href)).to_json
   end
 
   def render_process_xml (p, options={ :indent => 2 })
 
-    options[:href] = request.method(:href)
+    options[:request] = request
     OpenWFE::Xml.process_to_xml(p, options)
   end
 

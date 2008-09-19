@@ -32,7 +32,7 @@ class StProcessesTest < Test::Unit::TestCase
     #assert_equal(
     #  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\" href=\"http://example.org/processes\">\n</processes>\n",
     #  @response.body)
-    assert @response.body.index('count="0"')
+    assert_match(/count="0"/,  @response.body)
   end
 
   def test_1
