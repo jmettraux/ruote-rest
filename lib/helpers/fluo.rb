@@ -78,12 +78,12 @@ helpers do
     </script>
 
     <div style="text-align: right;">
-    <br/>
-    <a id="dataurl_link" href="">graph data url</a>
-    <script>
-      var a = document.getElementById('dataurl_link');
-      a.href = document.getElementById('fluo').toDataURL();
-    </script>
+      <br/>
+      <a id="dataurl_link" href="">graph data url</a>
+      <script>
+        var a = document.getElementById('dataurl_link');
+        a.href = document.getElementById('fluo').toDataURL();
+      </script>
     </div>
 
   </div>

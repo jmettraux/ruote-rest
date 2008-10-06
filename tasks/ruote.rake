@@ -13,9 +13,11 @@ namespace :ruote do
   desc "Installs under vendor/ the latest source of OpenWFEru (and required subprojects)."
   task :install => :get_from_github do
 
-    sh "sudo gem install --no-rdoc --no-ri activerecord"
-    sh "sudo gem install --no-rdoc --no-ri rogue_parser"
-    sh "sudo gem install --no-rdoc --no-ri atom-tools"
+    %w{
+      activerecord rogue_parser atom-tools mongrel rack
+    }.each do |gem|
+      sh "sudo gem install --no-rdoc --no-ri #{gem}"
+    end
   end
 
   task :get_from_github do
@@ -47,6 +49,8 @@ namespace :ruote do
     GEMS << 'ruote'
     GEMS << 'activerecord'
     GEMS << 'atom-tools'
+    GEMS << 'rack'
+    GEMS << 'mongrel'
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
 
