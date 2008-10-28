@@ -44,7 +44,7 @@ class StExpressionsTest < Test::Unit::TestCase
     #puts
     #puts @response.body
     #puts
-    assert_not_nil @response.body.index(' count="5"')
+    assert_not_nil @response.body.index(' count="4"')
 
 
     get "/expressions/#{fei.wfid}/0_0"
@@ -141,6 +141,8 @@ class StExpressionsTest < Test::Unit::TestCase
       "/expressions/#{fei.wfid}/0_1/raw",
       '["surfbis",{},[]]',
       { 'CONTENT_TYPE' => 'application/json' })
+
+    #puts @response.body
 
     assert_equal 303, @response.status
 

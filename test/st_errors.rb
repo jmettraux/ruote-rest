@@ -53,7 +53,7 @@ class StErrorsTest < Test::Unit::TestCase
     assert_not_nil @response.body.index(
       '<errors count="1">')
     assert_not_nil @response.body.index(
-      "<text>No participant named 'tonto'</text>")
+      "<text>No participant named \"tonto\"</text>")
 
     assert_not_nil @response.headers['ETag']
     assert_not_nil @response.headers['Last-Modified']

@@ -91,7 +91,7 @@ helpers do
           render_expression_xml(fexp, options)
         end
 
-        xml.process_representation es.representation.to_json
+        xml.process_representation es.tree.to_json
       end
     end
   end
