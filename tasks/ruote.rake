@@ -14,7 +14,7 @@ namespace :ruote do
   task :install => :get_from_github do
 
     %w{
-      activerecord rogue_parser atom-tools mongrel rack
+      activerecord ruby_parser atom-tools mongrel rack
     }.each do |gem|
       sh "sudo gem install --no-rdoc --no-ri #{gem}"
     end
