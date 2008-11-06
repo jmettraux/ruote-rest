@@ -194,6 +194,8 @@ class OpenWFE::InFlowWorkItem
   #
   def href (request=nil)
 
+    # TODO : maybe it'd be better to stick with only the db_id
+
     i = "#{fei.wfid}_#{db_id}"
 
     return request.href(:workitems, i) if request

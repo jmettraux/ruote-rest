@@ -7,7 +7,6 @@ configure do
   #
   # other participants
 
-  #$engine.register_participant :kilroy do
   application.engine.register_participant :kilroy do
     puts 'Kilroy was here'
   end
@@ -19,3 +18,4 @@ configure do
     application.engine,
     "conf/participants_#{application.environment}.yaml")
 end
+

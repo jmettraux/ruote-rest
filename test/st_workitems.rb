@@ -8,7 +8,6 @@
 #
 
 
-
 #require 'test/unit'
 
 require 'rubygems'
@@ -24,14 +23,14 @@ class StWorkitemsTest < Test::Unit::TestCase
 
   def test_0
 
-    fei = $app.engine.launch <<-EOS
+    fei = $app.engine.launch %{
       class Test0 < OpenWFE::ProcessDefinition
         sequence do
           alpha
           bravo
         end
       end
-    EOS
+    }
 
     sleep 0.200
 
@@ -49,11 +48,13 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, workitems.size
 
+    #p workitems.first.uri
     get workitems.first.uri
 
-    workitem = OpenWFE::Xml.workitem_from_xml @response.body
+    #puts @response.body
+    workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
 
-    assert_equal workitems.first.uri, workitem.uri
+    assert_equal(workitems.first.uri, workitem.uri)
 
     #
     # get /workitems?wfid=x

@@ -63,26 +63,20 @@ helpers do
   #
   # OUT
 
-  def render_workitems_xml (wis)
+  def render_workitems_xml (wis, options={ :indent => 2 })
 
-    options = { :indent => 2 }
+    options[:request] = request
 
-    OpenWFE::Xml::builder(options) do |xml|
-      xml.workitems :count => wis.size do
-        wis.each do |wi|
-          render_workitem_xml(wi, options)
-        end
-      end
-    end
+    OpenWFE::Xml.workitems_to_xml(
+      wis.collect { |wi| wi.to_owfe_workitem(options) },
+      options)
   end
 
   def render_workitem_xml (wi, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
-      owi = wi.as_owfe_workitem
-      owi.uri = owi.href(request)
-      OpenWFE::Xml.workitem_to_xml(owi, options)
-    end
+    options[:request] = request
+
+    OpenWFE::Xml.workitem_to_xml(wi.to_owfe_workitem(options), options)
   end
 
   def render_workitems_json (wis)
@@ -99,6 +93,7 @@ helpers do
 
     owi = wi.as_owfe_workitem
     h = owi.to_h
+    # TODO : insert complete 'link' => { href, rel, ... }
     h['href'] = owi.href(request)
     h
   end

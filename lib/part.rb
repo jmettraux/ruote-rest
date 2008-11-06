@@ -62,7 +62,7 @@ module Participants
 
   def self.add (pregex, classname, *args)
 
-    register pregex, classname, *args
+    register(pregex, classname, *args)
 
     participants = load_all
 
@@ -80,7 +80,7 @@ module Participants
     participant = args ? clazz.new(*args) : clazz.new
       # patch by Nick Petrella
 
-    @engine.register_participant pregex, participant
+    @engine.register_participant(pregex, participant)
   end
 
   def self.remove (pregex)
@@ -100,7 +100,7 @@ module Participants
     ps = load_all
 
     ps.each do |pregex, classname, args|
-      register pregex, classname, args
+      register(pregex, classname, args)
     end
   end
 
