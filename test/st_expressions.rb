@@ -81,15 +81,17 @@ class StExpressionsTest < Test::Unit::TestCase
 
   def test_1
 
-    li = OpenWFE::LaunchItem.new <<-EOS
+    li = OpenWFE::LaunchItem.new %{
       class TestStExpressions < OpenWFE::ProcessDefinition
-        nada
-        surf
+        sequence do
+          nada
+          surf
+        end
       end
-    EOS
+    }
 
     post(
-      "/processes",
+      '/processes',
       OpenWFE::Xml.launchitem_to_xml(li),
       { "CONTENT_TYPE" => "application/xml" })
 
@@ -97,7 +99,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     sleep 0.350
 
-    get "/expressions/#{fei.wfid}/0_0?format=yaml"
+    get "/expressions/#{fei.wfid}/0_0_0?format=yaml"
 
     assert_equal 'application/yaml', @response['Content-Type']
 
@@ -107,18 +109,18 @@ class StExpressionsTest < Test::Unit::TestCase
     exp.attributes = { :toto => :surf }
 
     put(
-      "/expressions/#{fei.wfid}/0_0",
+      "/expressions/#{fei.wfid}/0_0_0",
       exp.to_yaml,
       { 'CONTENT_TYPE' => 'application/yaml' })
 
     assert_equal(
-      "http://example.org/expressions/#{fei.wfid}/0_0",
+      "http://example.org/expressions/#{fei.wfid}/0_0_0",
       @response['Location'])
 
     # GET expression as yaml
 
     get(
-      "/expressions/#{fei.wfid}/0_0",
+      "/expressions/#{fei.wfid}/0_0_0",
       nil,
       { 'HTTP_ACCEPT' => 'application/yaml' })
 
@@ -129,17 +131,26 @@ class StExpressionsTest < Test::Unit::TestCase
     # GET expression/raw as json
 
     get(
-      "/expressions/#{fei.wfid}/0_0/raw",
+      "/expressions/#{fei.wfid}/0_0_0/raw",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
 
     assert_equal ["nada", {}, []], json_parse(@response.body)
 
+    # GET some expression not yet active
+
+    get(
+      "/expressions/#{fei.wfid}/0_0_1/raw",
+      nil,
+      { 'HTTP_ACCEPT' => 'application/json' })
+
+    assert_equal 404, @response.status
+
     # PUT some other expression/raw
 
     put(
-      "/expressions/#{fei.wfid}/0_1/raw",
-      '["surfbis",{},[]]',
+      "/expressions/#{fei.wfid}/0_0/raw",
+      '["sequence", {}, [["nada", {}, []], ["surfbis", {}, []]]]',
       { 'CONTENT_TYPE' => 'application/json' })
 
     #puts @response.body
@@ -147,9 +158,11 @@ class StExpressionsTest < Test::Unit::TestCase
     assert_equal 303, @response.status
 
     get(
-      "/expressions/#{fei.wfid}/0_1/raw",
+      "/expressions/#{fei.wfid}/0_0/raw",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
+
+    puts @response.body
 
     assert false # TODO : add test for form input !!!!!!!!!!!!!!!!!!!!!!!!
 
