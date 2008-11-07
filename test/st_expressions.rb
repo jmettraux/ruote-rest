@@ -128,28 +128,30 @@ class StExpressionsTest < Test::Unit::TestCase
 
     assert_equal :surf, exp.attributes[:toto]
 
-    # GET expression/raw as json
+    # GET expression/tree as json
 
     get(
-      "/expressions/#{fei.wfid}/0_0_0/raw",
+      "/expressions/#{fei.wfid}/0_0_0/tree",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
+
+    #puts @response.body
 
     assert_equal ["nada", {}, []], json_parse(@response.body)
 
     # GET some expression not yet active
 
     get(
-      "/expressions/#{fei.wfid}/0_0_1/raw",
+      "/expressions/#{fei.wfid}/0_0_1/tree",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
 
     assert_equal 404, @response.status
 
-    # PUT some other expression/raw
+    # PUT some other expression/tree
 
     put(
-      "/expressions/#{fei.wfid}/0_0/raw",
+      "/expressions/#{fei.wfid}/0_0/tree",
       '["sequence", {}, [["nada", {}, []], ["surfbis", {}, []]]]',
       { 'CONTENT_TYPE' => 'application/json' })
 
@@ -158,7 +160,7 @@ class StExpressionsTest < Test::Unit::TestCase
     assert_equal 303, @response.status
 
     get(
-      "/expressions/#{fei.wfid}/0_0/raw",
+      "/expressions/#{fei.wfid}/0_0/tree",
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
 

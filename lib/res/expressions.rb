@@ -57,7 +57,7 @@ end
 
 put '/expressions/:wfid/:expid' do
 
-  expression = rparse :expression
+  expression = rparse(:expression)
 
   application.engine.update_expression expression
 
@@ -68,20 +68,20 @@ end
 
 get '/expressions/:wfid/:expid' do
 
-  rrender :expression, find_expression
+  rrender(:expression, find_expression)
 end
 
-get '/expressions/:wfid/:expid/raw' do
+get '/expressions/:wfid/:expid/tree' do
 
-  rrender :expression_raw, find_expression
+  rrender(:expression_tree, find_expression)
 end
 
-put '/expressions/:wfid/:expid/raw' do
+put '/expressions/:wfid/:expid/tree' do
 
-  raw = rparse :expression_raw
+  tree = rparse(:expression_tree)
   e = find_expression
 
-  application.engine.update_raw_expression(e, raw)
+  application.engine.update_expression_tree(e, tree)
 
   response.status = 303
   response.location = e.href(request)

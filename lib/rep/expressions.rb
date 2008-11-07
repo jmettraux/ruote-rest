@@ -60,12 +60,12 @@ helpers do
     YAML.load yaml
   end
 
-  def parse_expression_raw_json (json)
+  def parse_expression_tree_json (json)
 
     json_parse(json)
   end
 
-  def parse_expression_raw_form (_)
+  def parse_expression_tree_form (_)
 
     json_parse(request.params['tree'])
   end
@@ -182,12 +182,12 @@ helpers do
     end
   end
 
-  def render_expression_raw_html (fexp)
+  def render_expression_tree_html (fexp)
 
-    _erb :expression_raw, :layout => :html, :locals => { :expression => fexp }
+    _erb(:expression_tree, :layout => :html, :locals => { :expression => fexp })
   end
 
-  def render_expression_raw_json (fexp)
+  def render_expression_tree_json (fexp)
 
     fexp.raw_representation.to_json
   end
@@ -201,7 +201,7 @@ helpers do
   def expression_symbol_src (fexp)
 
     src = case fexp
-      when OpenWFE::RawExpression then 'raw.png'
+      when OpenWFE::RawExpression then 'raw.png' # should not happen
       when OpenWFE::Environment then 'env.png'
       else 'exp.png'
     end

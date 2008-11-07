@@ -55,7 +55,7 @@
   
       <% if expression.raw_representation %>
       <div id="rawrep">
-        raw :
+        tree (raw representation) :
         <div>
           json :
           <span class="raw"><%= expression.raw_representation.to_json %></span>
@@ -68,10 +68,11 @@
 
         <% unless expression.is_a?(OpenWFE::Environment)
 
-             onclick = "return confirm('Really want to edit the raw representation of this expression ? It is not a RawExpression, It is a rather advanced operation, proceed with care...');"
-             onclick = "" if expression.is_a?(OpenWFE::RawExpression)
+             #onclick = "return confirm('Really want to edit the raw representation of this expression ? It is not a RawExpression, It is a rather advanced operation, proceed with care...');"
+             #onclick = '' if expression.is_a?(OpenWFE::RawExpression)
+             onclick = ''
         %>
-        <div>edition : <a onclick="<%= onclick %>" href="<%= expression.href %>/raw">GET <%= expression.href %>/raw</a></div>
+        <div>edition : <a onclick="<%= onclick %>" href="<%= expression.href %>/tree">GET <%= expression.href %>/tree</a></div>
         <% end %>
       </div>
       <% end %>

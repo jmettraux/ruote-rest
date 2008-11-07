@@ -1,8 +1,8 @@
 
-<h4>GET <%= expression.href %>/raw</h4>
+<h4>GET <%= expression.href %>/tree</h4>
 
 <div class="explanation">
-expression 'raw representation' edition
+expression 'raw representation'/'tree' edition
 </div>
 
 <div>
@@ -37,14 +37,14 @@ back to <%= rlink(expression) %>
   </div>
 
   <div>
-    <form 
-      action="<%= expression.href %>/raw" 
-      method="POST" 
+    <form
+      action="<%= expression.href %>/tree"
+      method="POST"
       enctype="multipart/form-data"
     >
       <input type="hidden" name="_method" value="PUT" />
       <input type="hidden" id="formTree" name="tree" />
-      <input type="submit" value="PUT <%= expression.href %>/raw" title="replaces the current raw representation for this expression with the one just edited here" />
+      <input type="submit" value="PUT <%= expression.href %>/tree" title="replaces the current raw representation/tree for this expression with the one just edited here" />
     </form>
   </div>
 </div>
