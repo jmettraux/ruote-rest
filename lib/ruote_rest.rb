@@ -65,7 +65,8 @@ require 'misc'
 # representations (I'd prefer another name...)
 
 load 'inout.rb'
-load 'rep/xml.rb'
+
+load 'rep/links.rb'
 
 load 'rep/service.rb'
 load 'rep/fei.rb'

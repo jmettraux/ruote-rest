@@ -38,17 +38,17 @@
 #
 
 
-get "/workitems" do
+get '/workitems' do
 
   rrender :workitems, find_workitems
 end
 
-get "/workitems/:wid" do
+get '/workitems/:wid' do
 
   rrender :workitem, find_workitem
 end
 
-put "/workitems/:wid" do
+put '/workitems/:wid' do
 
   wi = find_workitem
 

@@ -45,13 +45,16 @@ helpers do
 
   def render_processes_xml (ps, options={ :indent => 2 })
 
-    options[:request] = request
+    options[:linkgen] = RackLinkGenerator.new(request)
+
     OpenWFE::Xml.processes_to_xml(ps, options)
   end
 
-  def render_processes_json (ps)
+  def render_processes_json (ps, options={})
 
-    ps.collect { |fei, s| s.to_h(request.method(:href)) }.to_json
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Json.processes_to_h(ps, options).to_json
   end
 
   def render_processes_html (ps)
@@ -73,16 +76,21 @@ helpers do
       :locals => { :process => p, :detailed => detailed })
   end
 
-  def render_process_json (p)
+  def render_process_json (p, options={})
 
-    p.to_h(request.method(:href)).to_json
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Json.process_to_h(p, options).to_json
   end
 
   def render_process_xml (p, options={ :indent => 2 })
 
-    options[:request] = request
+    options[:linkgen] = RackLinkGenerator.new(request)
+
     OpenWFE::Xml.process_to_xml(p, options)
   end
+
+  # some parsing...
 
   #
   # Receiving a process representation in XML
@@ -104,7 +112,7 @@ helpers do
     }
   end
 
-  # json
+  # misc...
 
   #
   # Renders the process definition tree (potientally updated) as some JSON

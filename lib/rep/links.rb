@@ -1,4 +1,3 @@
-
 #
 #--
 # Copyright (c) 2008, John Mettraux, OpenWFE.org
@@ -39,20 +38,28 @@
 #
 
 
-#
-# applies the accessor on the object and then renders under the tag in
-# the xml (Builder).
-#
-def hash_to_xml (xml, tag, object, accessor)
+helpers do
 
-  vars = object.send accessor
+  #
+  # Leveraging the info in the Rack request to produce a set of absolute
+  # resource links.
+  #
+  class RackLinkGenerator < OpenWFE::PlainLinkGenerator
 
-  xml.variables do
-    vars.each do |k, v|
-      xml.entry do
-        xml.string k.to_s
-        xml.string v.to_json
-      end
+    def initialize (request)
+      @request = request
     end
+
+    protected
+
+      #
+      # overriding ...
+      #
+      def link (rel, res, id=nil)
+        href, _ = super
+        [ "#{@request.scheme}://#{@request.host}:#{@request.port}#{href}", rel ]
+      end
   end
+
 end
+

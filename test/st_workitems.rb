@@ -44,13 +44,14 @@ class StWorkitemsTest < Test::Unit::TestCase
     assert_not_nil @response.headers['ETag']
     assert_not_nil @response.headers['Last-Modified']
 
-    workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    workitems = OpenWFE::Xml.workitems_from_xml(@response.body)
 
     assert_equal 1, workitems.size
 
-    #p workitems.first.uri
+    #p workitems.first
     get workitems.first.uri
 
+    #p @response.status
     #puts @response.body
     workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
 
@@ -76,7 +77,7 @@ class StWorkitemsTest < Test::Unit::TestCase
     #
     # save workitem
 
-    workitem.owner = "toto"
+    workitem.owner = 'toto'
 
     put(
       workitem.uri,

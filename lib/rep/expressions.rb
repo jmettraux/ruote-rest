@@ -176,8 +176,9 @@ helpers do
         #
         # variables
 
-        hash_to_xml(xml, :variables, e, :variables) \
-          if e.is_a?(OpenWFE::Environment)
+        OpenWFE::Xml.hash_to_xml(
+          e.variables, :builder => xml, :tag => 'variables'
+        ) if e.is_a?(OpenWFE::Environment)
       end
     end
   end

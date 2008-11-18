@@ -55,6 +55,7 @@ helpers do
     wi.attributes = json_parse(params[:attributes])
 
     wi._state = 'proceeded' if params[:proceed] == 'proceed'
+      # TODO : align with ruote-web2 params[:state]
 
     wi
   end
@@ -65,7 +66,7 @@ helpers do
 
   def render_workitems_xml (wis, options={ :indent => 2 })
 
-    options[:request] = request
+    options[:linkgen] = RackLinkGenerator.new(request)
 
     OpenWFE::Xml.workitems_to_xml(
       wis.collect { |wi| wi.to_owfe_workitem(options) },
@@ -74,28 +75,23 @@ helpers do
 
   def render_workitem_xml (wi, options={ :indent => 2 })
 
-    options[:request] = request
+    options[:linkgen] = RackLinkGenerator.new(request)
 
     OpenWFE::Xml.workitem_to_xml(wi.to_owfe_workitem(options), options)
   end
 
-  def render_workitems_json (wis)
+  def render_workitems_json (wis, options={})
 
-    wis.collect { |wi| workitem_to_h(wi) }.to_json
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Json.workitems_to_h(wis, options).to_json
   end
 
-  def render_workitem_json (wi)
+  def render_workitem_json (wi, options={})
 
-    workitem_to_h(wi).to_json
-  end
+    options[:linkgen] = RackLinkGenerator.new(request)
 
-  def workitem_to_h (wi)
-
-    owi = wi.as_owfe_workitem
-    h = owi.to_h
-    # TODO : insert complete 'link' => { href, rel, ... }
-    h['href'] = owi.href(request)
-    h
+    OpenWFE::Json.workitem_to_h(wi, options).to_json
   end
 
   def render_workitems_html (wis)
