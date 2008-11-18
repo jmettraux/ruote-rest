@@ -43,37 +43,42 @@ get '/workitems' do
   rrender :workitems, find_workitems
 end
 
-get '/workitems/:wid' do
+get '/workitems/:wfid' do
+
+  rrender :workitem, find_workitems
+end
+
+get '/workitems/:wfid/:expid' do
 
   rrender :workitem, find_workitem
 end
 
-put '/workitems/:wid' do
+put '/workitems/:wfid/:expid' do
 
   wi = find_workitem
 
-  owi = rparse :workitem
+  owi = rparse(:workitem)
 
-  owi.attributes.delete '_uri'
-  state = owi.attributes.delete '_state'
+  #owi.attributes.delete('_uri')
+  state = owi.attributes.delete('_state')
 
   if state == 'proceeded'
 
     owi.fei = wi.full_fei
 
-    application.engine.reply owi
+    application.engine.reply(owi)
     wi.destroy
 
     response.location = request.href(:workitems)
 
-    rrender :workitems, find_workitems
+    rrender(:workitems, find_workitems)
   else
 
     # TODO : notify HTML clients of the update ? flash.notice ?
 
-    wi.replace_fields owi.attributes
+    wi.replace_fields(owi.attributes)
 
-    rrender :workitem, wi
+    rrender(:workitem, wi)
   end
 end
 
@@ -85,13 +90,11 @@ helpers do
 
   def find_workitem
 
-    wid = nil
-    begin
-      wid = params[:wid].split('_')[-1]
-      OpenWFE::Extras::Workitem.find wid
-    rescue Exception => e
-      throw :done, [ 404, "no workitem with id #{wid}" ]
-    end
+    wfid = OpenWFE.swapdots(params[:wfid])
+    expid = OpenWFE.swapdots(params[:expid])
+
+    OpenWFE::Extras::Workitem.find_by_wfid_and_expid(wfid, expid) ||
+      throw(:done, [ 404, "no workitem #{params[:wfid]}/#{params[:expid]}" ])
   end
 
   def find_workitems
@@ -102,13 +105,13 @@ helpers do
     q = params[:q]
 
     workitems = if p
-      OpenWFE::Extras::Workitem.find_all_by_participant_name p
+      OpenWFE::Extras::Workitem.find_all_by_participant_name(p)
     elsif q
-      OpenWFE::Extras::Workitem.search q, sn
+      OpenWFE::Extras::Workitem.search(q, sn)
     elsif sn
-      OpenWFE::Extras::Workitem.find_in_stores sn
+      OpenWFE::Extras::Workitem.find_in_stores(sn)
     elsif wfid
-      OpenWFE::Extras::Workitem.find_all_by_wfid wfid
+      OpenWFE::Extras::Workitem.find_all_by_wfid(wfid)
     else
       OpenWFE::Extras::Workitem.find :all
     end
@@ -128,8 +131,7 @@ helpers do
   def get_store_names
 
     sname = params[:store]
-    return nil unless sname
-    sname.split ","
+    sname ? sname.split(',') : nil
   end
 end
 

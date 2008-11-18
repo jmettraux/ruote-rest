@@ -128,7 +128,7 @@ helpers do
       :href => request.href(
         :expressions,
         fei.wfid,
-        swapdots(expid)))
+        OpenWFE.swapdots(expid)))
   end
 
   def render_expression_xml (e, options={ :indent => 2})
@@ -136,7 +136,11 @@ helpers do
     OpenWFE::Xml::builder(options) do |xml|
 
       params = {
-        :href => request.href(:expressions, e.fei.wfid, swapdots(e.fei.expid)) }
+        :href => request.href(
+          :expressions,
+          e.fei.wfid,
+          OpenWFE.swapdots(e.fei.expid))
+      }
 
       xml.expression(params) do
 

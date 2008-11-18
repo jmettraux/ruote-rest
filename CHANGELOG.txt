@@ -4,7 +4,8 @@
 
 == ruote-rest - 0.9.20    not yet released
 
-- todo  #22834 : adapted to new lib/openwfe/representations.rb
+- todo  #22866 : /workitems/:wfid/:expid is now the norm
+- todo  #22834 : adapted to new ruote:lib/openwfe/representations.rb
 - todo  #22699 : expressions/X/Y/raw -> expressions/X/Y/tree
 - todo  #22005 : moved process_to_xml to ruote (openwfe/representations.rb)
 - todo  #20613 : cleaned up xml generation (builder(options) do |xml|)
@@ -27,7 +28,7 @@
 - todo  #21413 : showing workitem search form
 - patch #21497 : participant initialization parameter fix by Nick Petrella
 - todo  #21419 : removed direct dependency on json gem, relying on whatever is 
-                  present (activesupport or json)
+                 present (activesupport or json)
 - bug   #21096 : reordered participant load order in conf/participants.rb
 - todo  #20647 : showing scheduled jobs for /processes
 

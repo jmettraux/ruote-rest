@@ -39,19 +39,6 @@
 
 
 #
-# swap from dots to underscores
-#
-#   swapdots "0_0_1" # => "0.0.1"
-#
-#   swapdots "0.0.1" # => "0_0_1"
-#
-def swapdots (s)
-
-  return s.gsub(/\./, '_') if s.index(".")
-  s.gsub(/\_/, '.')
-end
-
-#
 # Basically, it's CGI escape(), but it makes sure that dots '.' are escaped
 # as well.
 #

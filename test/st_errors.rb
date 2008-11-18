@@ -25,7 +25,7 @@ class StErrorsTest < Test::Unit::TestCase
     #p @response
 
     assert_equal(
-      "application/xml",
+      'application/xml',
       @response.content_type)
 
     assert_equal(
@@ -48,7 +48,7 @@ class StErrorsTest < Test::Unit::TestCase
 
     get '/errors'
 
-    #puts @response.body
+    puts @response.body
 
     assert_not_nil @response.body.index(
       '<errors count="1">')

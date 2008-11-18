@@ -93,14 +93,15 @@ class StExpressionsTest < Test::Unit::TestCase
     post(
       '/processes',
       OpenWFE::Xml.launchitem_to_xml(li),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
-    fei = OpenWFE::Xml.fei_from_xml @response.body
+    fei = OpenWFE::Xml.fei_from_xml(@response.body)
 
     sleep 0.350
 
     get "/expressions/#{fei.wfid}/0_0_0?format=yaml"
 
+    #puts @response.body
     assert_equal 'application/yaml', @response['Content-Type']
 
     exp = YAML.load @response.body
@@ -137,7 +138,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     #puts @response.body
 
-    assert_equal ["nada", {}, []], json_parse(@response.body)
+    assert_equal ['nada', {}, []], json_parse(@response.body)
 
     # GET some expression not yet active
 

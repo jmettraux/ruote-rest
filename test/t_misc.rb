@@ -19,13 +19,6 @@ class MiscTest < Test::Unit::TestCase
 
   def test_0
 
-    assert_equal "0.0.1", swapdots("0_0_1")
-    assert_equal "0_0_1", swapdots("0.0.1")
-    assert_equal "nada", swapdots("nada")
-  end
-
-  def test_1
-
     a = [ 1, 2, 3 ]
 
     assert_equal a, json_parse(a.to_json)

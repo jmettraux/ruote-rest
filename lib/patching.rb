@@ -111,7 +111,7 @@ class OpenWFE::FlowExpressionId
   def href (req=nil, resource_name='expressions')
 
     env = self.expname == "environment" ? "e" : ""
-    ei = "#{swapdots self.expid}#{env}"
+    ei = "#{OpenWFE.swapdots(self.expid)}#{env}"
 
     return req.href(resource_name, wfid, ei) if req
 
@@ -228,8 +228,8 @@ class OpenWFE::ProcessError
 
   def error_id
 
-    swapdots(fei.expid) +
-    "_" +
+    OpenWFE.swapdots(fei.expid) +
+    '_' +
     Rufus::Mnemo.from_integer(date.to_i.abs)
       # 2008 AD, but what about 2008 BC ?
   end

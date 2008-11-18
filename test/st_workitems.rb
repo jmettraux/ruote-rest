@@ -48,7 +48,7 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, workitems.size
 
-    #p workitems.first
+    #p workitems.first.uri
     get workitems.first.uri
 
     #p @response.status
@@ -82,28 +82,30 @@ class StWorkitemsTest < Test::Unit::TestCase
     put(
       workitem.uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     get workitem.uri
 
-    workitem = OpenWFE::Xml.workitem_from_xml @response.body
+    workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
 
-    assert_equal "toto", workitem.owner
+    assert_equal 'toto', workitem.owner
 
     #
     # proceed workitem
 
-    workitem._state = "proceeded"
+    workitem._state = 'proceeded'
 
     put(
       workitem.uri,
       OpenWFE::Xml.workitem_to_xml(workitem),
-      { "CONTENT_TYPE" => "application/xml" })
+      { 'CONTENT_TYPE' => 'application/xml' })
 
     sleep 0.350
 
+    #p workitem.uri
     get workitem.uri
 
+    #puts @response.body
     assert_equal 404, @response.status
 
     #
@@ -111,10 +113,10 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     get '/workitems'
 
-    workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    workitems = OpenWFE::Xml.workitems_from_xml(@response.body)
 
     assert_equal 1, workitems.size
-    assert_equal "bravo", workitems.first.participant_name
+    assert_equal 'bravo', workitems.first.participant_name
   end
 
 end

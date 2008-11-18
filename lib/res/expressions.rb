@@ -107,8 +107,8 @@ helpers do
 
   def find_expression
 
-    wfid = params[:wfid]
-    expid = swapdots params[:expid]
+    wfid = OpenWFE.swapdots(params[:wfid])
+    expid = OpenWFE.swapdots(params[:expid])
 
     env = false
 
