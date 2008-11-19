@@ -45,27 +45,19 @@ helpers do
 
   def render_errors_xml (errors, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
-      xml.errors :count => errors.size do
-        errors.each { |error| render_error_xml error, options }
-      end
-    end
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Xml.errors_to_xml(errors, options)
   end
 
   def render_error_xml (error, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
-      xml.error do
-        #xml.raw error.inspect
-        xml.href error.error_id
-        xml.wfid error.wfid
-        xml.fei error.fei
-        xml.call error.message.to_s
-        xml.date error.date
-        xml.text error.stacktrace.split("\n").first
-      end
-    end
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Xml.error_to_xml(error, options)
   end
+
+  # TODO : json
 
   def render_errors_html (errors)
 

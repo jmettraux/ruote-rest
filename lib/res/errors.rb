@@ -38,7 +38,7 @@
 #
 
 
-get "/errors" do
+get '/errors' do
 
   logs = application.engine.get_error_journal.get_error_logs
 
@@ -47,10 +47,10 @@ get "/errors" do
 
   errors.extend(ArrayEtagMixin)
 
-  rrender :errors, errors
+  rrender(:errors, errors)
 end
 
-get "/errors/:wfid" do
+get '/errors/:wfid' do
 
   wfid = params[:wfid]
 
@@ -58,21 +58,21 @@ get "/errors/:wfid" do
 
   errors.extend(ArrayEtagMixin)
 
-  rrender :errors, errors
+  rrender(:errors, errors)
 end
 
-get "/errors/:wfid/:error_id" do
+get '/errors/:wfid/:error_id' do
 
-  rrender :error, find_error
+  rrender(:error, find_error)
 end
 
-delete "/errors/:wfid/:error_id" do
+delete '/errors/:wfid/:error_id' do
 
   error = find_error
 
-  application.engine.replay_at_error error
+  application.engine.replay_at_error(error)
 
-  "replayed"
+  'replayed'
 end
 
 

@@ -29,7 +29,7 @@ class StErrorsTest < Test::Unit::TestCase
       @response.content_type)
 
     assert_equal(
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors count=\"0\">\n</errors>\n",
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<errors count=\"0\">\n  <link href=\"/\" rel=\"via\"/>\n  <link href=\"/errors\" rel=\"self\"/>\n</errors>\n",
       @response.body)
 
     assert_not_nil @response.headers['ETag']
@@ -48,12 +48,12 @@ class StErrorsTest < Test::Unit::TestCase
 
     get '/errors'
 
-    puts @response.body
+    #puts @response.body
 
     assert_not_nil @response.body.index(
       '<errors count="1">')
     assert_not_nil @response.body.index(
-      "<text>No participant named \"tonto\"</text>")
+      "<message>No participant named \"tonto\"</message>")
 
     assert_not_nil @response.headers['ETag']
     assert_not_nil @response.headers['Last-Modified']
