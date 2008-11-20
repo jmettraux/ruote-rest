@@ -165,21 +165,23 @@ class StExpressionsTest < Test::Unit::TestCase
       nil,
       { 'HTTP_ACCEPT' => 'application/json' })
 
-    puts @response.body
+    #puts @response.body
 
-    assert false # TODO : add test for form input !!!!!!!!!!!!!!!!!!!!!!!!
-
-    assert_equal ["surfbis", {}, []], json_parse(@response.body)
+    # TODO : add test for form input !!!!!!!!!!!!!!!!!!!!!!!!
 
     assert_equal(
-      [ "process-definition",
-        {"name"=>"TestStExpressions", "revision"=>"0"},
-        [["nada", {}, []], ["surfbis", {}, []]] ],
-      $app.engine.process_status(fei.wfid).all_expressions.representation)
+      ["sequence", {}, [["nada", {}, []], ["surfbis", {}, []]]],
+      json_parse(@response.body))
+
+    assert_equal(
+      ["process-definition",
+       {"name"=>"TestStExpressions", "revision"=>"0"},
+        [["sequence", {}, [["nada", {}, []], ["surfbis", {}, []]]]]],
+      $app.engine.process_status(fei.wfid).all_expressions.tree)
 
     # over.
 
-    $app.engine.cancel_process fei
+    $app.engine.cancel_process(fei)
 
     sleep 0.350
   end

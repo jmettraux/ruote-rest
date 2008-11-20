@@ -40,9 +40,6 @@
 
 helpers do
 
-  #
-  # ERRORS
-
   def render_errors_xml (errors, options={ :indent => 2 })
 
     options[:linkgen] = RackLinkGenerator.new(request)
@@ -57,7 +54,19 @@ helpers do
     OpenWFE::Xml.error_to_xml(error, options)
   end
 
-  # TODO : json
+  def render_errors_json (errors, options={})
+
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Json.errors_to_h(errors, options).to_json
+  end
+
+  def render_error_json (error, options={})
+
+    options[:linkgen] = RackLinkGenerator.new(request)
+
+    OpenWFE::Json.error_to_h(error, options).to_json
+  end
 
   def render_errors_html (errors)
 

@@ -48,7 +48,7 @@ helpers do
   #
   def parse_expression_yaml (yaml)
 
-    YAML.load yaml
+    YAML.load(yaml)
   end
 
   #
@@ -57,7 +57,7 @@ helpers do
   def parse_expression_form (_)
 
     yaml = request.params['yaml']
-    YAML.load yaml
+    YAML.load(yaml)
   end
 
   def parse_expression_tree_json (json)
@@ -83,17 +83,18 @@ helpers do
 
   def render_expressions_xml (es, options={ :indent => 2 })
 
-    OpenWFE::Xml::builder(options) do |xml|
+    options[:linkgen] = RackLinkGenerator.new(request)
+    options[:short] = true
 
-      xml.expressions :count => es.size do
+    OpenWFE::Xml.expressions_to_xml(es, options)
+  end
 
-        es.sort_by { |e| e.fei.expid }.each do |fexp|
-          render_expression_xml(fexp, options)
-        end
+  def render_expressions_json (es, options={})
 
-        xml.process_representation es.tree.to_json
-      end
-    end
+    options[:linkgen] = RackLinkGenerator.new(request)
+    options[:short] = true
+
+    OpenWFE::Json.expressions_to_h(es, options).to_json
   end
 
   def render_expressions_html (es)
@@ -104,8 +105,8 @@ helpers do
       :locals => { :expressions => es })
   end
 
-#
-# expression
+  #
+  # expression
 
   def render_expression_html (e, detailed=true)
 
@@ -120,7 +121,7 @@ helpers do
     return unless fei
 
     expid = fei.expid
-    expid += "e" if fei.expname == 'environment'
+    expid += 'e' if fei.expname == 'environment'
 
     options[:builder].tag!(
       tagname,
@@ -133,58 +134,16 @@ helpers do
 
   def render_expression_xml (e, options={ :indent => 2})
 
-    OpenWFE::Xml::builder(options) do |xml|
+    options[:linkgen] = RackLinkGenerator.new(request)
 
-      params = {
-        :href => request.href(
-          :expressions,
-          e.fei.wfid,
-          OpenWFE.swapdots(e.fei.expid))
-      }
+    OpenWFE::Xml.expression_to_xml(e, options)
+  end
 
-      xml.expression(params) do
+  def render_expression_json (e, options={})
 
-        xml.tag! "class", e.class.name
-        xml.name e.fei.expression_name
-        xml.apply_time OpenWFE::Xml.to_httpdate(e.apply_time)
+    options[:linkgen] = RackLinkGenerator.new(request)
 
-        OpenWFE::Xml.fei_to_xml(e.fei, options)
-
-        #
-        # parent id
-
-        expression_link('parent', e.parent_id, options)
-
-        #
-        # environment id
-
-        expression_link('environment', e.environment_id, options)
-
-        #
-        # children
-
-        xml.children do
-          e.children.each do |c|
-            expression_link('child', c, options)
-          end
-        end if e.children
-
-        #
-        # process/expression representations
-
-        xml.raw_representation(e.raw_representation.to_json) \
-          if e.raw_representation
-        xml.raw_rep_updated(e.raw_rep_updated.to_json) \
-          if e.raw_rep_updated
-
-        #
-        # variables
-
-        OpenWFE::Xml.hash_to_xml(
-          e.variables, :builder => xml, :tag => 'variables'
-        ) if e.is_a?(OpenWFE::Environment)
-      end
-    end
+    OpenWFE::Json.expression_to_h(e, options).to_json
   end
 
   def render_expression_tree_html (fexp)

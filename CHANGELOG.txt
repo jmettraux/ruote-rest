@@ -4,7 +4,10 @@
 
 == ruote-rest - 0.9.20    not yet released
 
-- todo  #22868 : errors_to_xml moved to ruote itself
+- todo  #22890 : error_to_json integrated
+- todo  #22898 : expression_to_json integrated
+- todo  #22864 : expression_to_xml moved to ruote itself
+- todo  #22868 : error_to_xml moved to ruote itself
 - todo  #22866 : /workitems/:wfid/:expid is now the norm
 - todo  #22834 : adapted to new ruote:lib/openwfe/representations.rb
 - todo  #22699 : expressions/X/Y/raw -> expressions/X/Y/tree
