@@ -38,26 +38,26 @@
 #
 
 
-get "/participants" do
+get '/participants' do
 
   rrender :participants, application.engine.list_participants
 end
 
-get "/participants/:pid" do
+get '/participants/:pid' do
 
   rrender :participant, get_participant
 end
 
-post "/participants" do
+post '/participants' do
 
-  regex, pclass, store_name = rparse :participant
+  regex, pclass, store_name = rparse(:participant)
 
-  Participants.add regex, pclass, store_name
+  Participants.add(regex, pclass, store_name)
 
-  rrender :participants, application.engine.list_participants, :status => 201
+  rrender(:participants, application.engine.list_participants, :status => 201)
 end
 
-delete "/participants/:pid" do
+delete '/participants/:pid' do
 
   pid, part = get_participant
   Participants.remove pid
@@ -79,13 +79,13 @@ helpers do
 
     if pid
 
-      #pid = CGI.unescape(pid) # no need :)
+      pid = CGI.unescape(pid) # no need :)
 
       regex, part = application.engine.list_participants.find do |pr, pa|
         pr.original_string == pid
       end
 
-      throw :done, [ 404, "no participant at #{pid}" ] unless part
+      throw(:done, [ 404, "no participant at #{pid}" ]) unless part
 
       [ regex, part ]
 

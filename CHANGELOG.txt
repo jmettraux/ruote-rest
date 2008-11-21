@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- bug   #22920 : no participant at /participants/.* fixed.
 - todo  #22919 : now emitting 400 when failing to parse incoming representation
 - todo  #22918 : workitems/:wfid instead of workitems?wfid=:wfid
 - todo  #22890 : error_to_json integrated
