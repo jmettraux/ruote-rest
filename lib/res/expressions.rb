@@ -117,11 +117,6 @@ helpers do
       env = true
     end
 
-    #es = application.engine.process_stack wfid, true
-    #es.find { |e|
-    #  (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-    #} or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
-
     get_process_status.all_expressions.find { |e|
       (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
     } or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]

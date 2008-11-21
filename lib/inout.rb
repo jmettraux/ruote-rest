@@ -47,7 +47,8 @@ def rparse (type)
 
   format = determine_in_format
 
-  send "parse_#{type}_#{format}", representation
+  send("parse_#{type}_#{format}", representation) \
+    rescue throw :done, [ 400, "failed to parse incoming representation" ]
 end
 
 #
