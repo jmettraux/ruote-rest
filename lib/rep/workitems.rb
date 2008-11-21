@@ -96,7 +96,7 @@ helpers do
 
   def render_workitems_html (wis)
 
-    wis = wis.sort_by { |wi| wi.participant_name }
+    wis = wis.sort_by { |wi| wi.participant_name.to_s }
     wis = wis.collect { |wi| wi.as_owfe_workitem }
 
     _erb(

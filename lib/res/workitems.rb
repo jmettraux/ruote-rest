@@ -45,7 +45,7 @@ end
 
 get '/workitems/:wfid' do
 
-  rrender :workitem, find_workitems
+  rrender :workitems, find_workitems
 end
 
 get '/workitems/:wfid/:expid' do

@@ -62,9 +62,23 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     get "/workitems?wfid=#{fei.wfid}"
 
-    workitems = OpenWFE::Xml.workitems_from_xml @response.body
+    workitems = OpenWFE::Xml.workitems_from_xml(@response.body)
 
     assert_equal 1, workitems.size
+
+    #
+    # get /workitems/wfid
+
+    get "/workitems/#{fei.wfid}"
+
+    #puts @response.body
+
+    workitems = OpenWFE::Xml.workitems_from_xml(@response.body)
+
+    assert_equal 1, workitems.size
+
+    #
+    # non existent process instance's workitems
 
     get "/workitems?wfid=#{fei.wfid}nada"
 

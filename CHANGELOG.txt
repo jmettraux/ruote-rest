@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- todo  #22918 : workitems/:wfid instead of workitems?wfid=:wfid
 - todo  #22890 : error_to_json integrated
 - todo  #22898 : expression_to_json integrated
 - todo  #22864 : expression_to_xml moved to ruote itself

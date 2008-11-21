@@ -14,7 +14,7 @@
   <div>paused : <span class="paused"><%= process.paused %></div>
   <div>tags : <span class="tags"><%= process.tags.join(", ") %></div>
   <div>all expressions : <%= rlink('expressions', process.wfid) %></div>
-  <div>workitems : <%= rlink('workitems', { 'wfid' => process.wfid }) %></div>
+  <div>workitems : <%= rlink('workitems', process.wfid) %></div>
 
   <% if detailed %>
 
