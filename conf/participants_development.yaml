@@ -8,3 +8,6 @@
 - - .*
   - OpenWFE::Extras::ActiveParticipant
   - 
+- - test
+  - OpenWFE::Extras::ActiveParticipant
+  - 

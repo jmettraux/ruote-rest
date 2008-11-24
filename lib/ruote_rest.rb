@@ -110,5 +110,4 @@ end
 $rr = new_sixjo_rack_app(Rack::File.new('public'), :environment => $env)
 $app = $rr
 
-load 'auth.rb' unless $env == 'test'
-
+load 'auth.rb'
