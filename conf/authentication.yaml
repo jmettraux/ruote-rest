@@ -1,4 +1,4 @@
-# route-rest authentication configuration
+# ruote-rest authentication configuration
 # 
 # Configuration is broken up per environment
 #
@@ -9,7 +9,7 @@ development:
   allowed_hosts:
     - 127.0.0.1
   basic_auth: true
-  basic_auth_realm: route-rest
+  basic_auth_realm: ruote-rest
   users:
     # Hash keyed with username, and value for password
     development: secret

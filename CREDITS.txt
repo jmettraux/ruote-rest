@@ -16,6 +16,7 @@ John Mettraux ( project lead ( john >at< openwfe.org ) )
 Contributors
 ------------
 
+Kenneth Kalmer - enhanced authentication
 Nicholas Petrella - participant patches
 
 
