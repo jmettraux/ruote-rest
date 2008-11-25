@@ -58,6 +58,15 @@ class OpenWFE::RackBasicAuth < Rack::Auth::Basic
 
     @app.call(env)
   end
+
+  private
+
+  def valid? (auth)
+
+    user, pass = auth.credentials
+
+    (AUTH_CONF['users'][user] == pass)
+  end
 end
 
 
@@ -74,8 +83,14 @@ raise(
 
 
 if AUTH_CONF['enabled']
+
   $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
-  $app = OpenWFE::RackBasicAuth.new($app) if AUTH_CONF['basic_auth']
+
+  if AUTH_CONF['basic_auth']
+
+    $app = OpenWFE::RackBasicAuth.new($app)
+    $app.realm = AUTH_CONF['basic_auth_realm']
+  end
 end
 
 # ($app always pointing to 'top' app, while $rr points to ruote-rest itself)
