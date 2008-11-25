@@ -12,7 +12,6 @@ require 'rack/auth/basic'
 class OpenWFE::RackWhiteListing
 
   def initialize (rack_app)
-
     @rack_app = rack_app
   end
 
@@ -21,13 +20,7 @@ class OpenWFE::RackWhiteListing
   #
   def call (env)
 
-    unless env['RUOTE_AUTHENTICATED']
-
-      return [ 401, {}, 'get off !' ] \
-        unless AUTH_CONF['allowed_hosts'].include?(env['REMOTE_ADDR'])
-
-      env['RUOTE_AUTHENTICATED'] = true
-    end
+    env['RUOTE_AUTHENTICATED'] = AUTH_CONF['allowed_hosts'].include?(env['REMOTE_ADDR'])
 
     @rack_app.call(env)
   end
@@ -83,14 +76,15 @@ raise(
 
 
 if AUTH_CONF['enabled']
-
-  $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
-
+  
   if AUTH_CONF['basic_auth']
 
     $app = OpenWFE::RackBasicAuth.new($app)
     $app.realm = AUTH_CONF['basic_auth_realm']
   end
+  
+  $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
+
 end
 
 # ($app always pointing to 'top' app, while $rr points to ruote-rest itself)
