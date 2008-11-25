@@ -1,59 +1,82 @@
 
+require 'rack/auth/basic'
+
 #
-# tune authentication at will here
+# TODO : maybe move the two auth classes to lib/
+#        (and leave the real config stuff here)
 #
 
 #
 # a wrapper for handling our authentication options
-# 
-class OpenWFE::RackAuth
-  
-  def initialize( rack_app )
+#
+class OpenWFE::RackWhiteListing
+
+  def initialize (rack_app)
+
     @rack_app = rack_app
-    
-    @config = YAML::load_file( 
-      File.join( File.dirname(__FILE__), 'authentication.yaml' ) 
-    )[$env]
-    
-    raise ArgumentError, "No configuration specified for #{$env} environment!" if @config.nil?
   end
-  
+
   #
   # authenticate the request against all our enable authentication options
-  def call( env )
-    if @config['enabled']
-      authenticate_by_ip(env) || authenticate_by_password
+  #
+  def call (env)
+
+    unless env['RUOTE_AUTHENTICATED']
+
+      return [ 401, {}, 'get off !' ] \
+        unless AUTH_CONF['allowed_hosts'].include?(env['REMOTE_ADDR'])
+
+      env['RUOTE_AUTHENTICATED'] = true
     end
-    
-    @rack_app.call( env )
+
+    @rack_app.call(env)
   end
-  
-  def authenticate_by_ip(env)
-    if @config['whitelisting']
-      auth_passed = @config['allowed_hosts'].include?(env['REMOTE_ADDR'])
+
+  #def authenticate_by_password
+  #  @rack_app = Rack::Auth::Basic.new(@rack_app) do |username, password|
+  #    @config['users'][username] && @config['users'][username] == password
+  #  end
+  #  @rack_app.realm = @config['basic_auth_realm']
+  #end
+end
+
+class OpenWFE::RackBasicAuth < Rack::Auth::Basic
+
+  def call (env)
+
+    unless env['RUOTE_AUTHENTICATED']
+
+      auth = Rack::Auth::Basic::Request.new(env)
+
+      return unauthorized unless auth.provided?
+      return bad_request unless auth.basic?
+      return unauthorized unless valid?(auth)
+
+      env['REMOTE_USER'] = auth.username
+      env['RUOTE_AUTHENTICATED'] = true
     end
-    
-    if !auth_passed && !@config['basic_auth']
-      throw :done, [ 401, "get off !" ]
-    end
-    auth_passed
-  end
-  
-  def authenticate_by_password
-    @rack_app = Rack::Auth::Basic.new(@rack_app) do |username, password|
-      @config['users'][username] && @config['users'][username] == password
-    end
-    @rack_app.realm = @config['basic_auth_realm']
-  end
-  
-  # Is this sane?!? It gets the tests to run and I'm not familiar with Rack...
-  def method_missing( method_name, *args )
-    @rack_app.send( method_name, *args )
+
+    @app.call(env)
   end
 end
 
-# Only continue if allowed
-$app = OpenWFE::RackAuth.new( $app )
+
+#
+# the actual configuration job
+
+AUTH_CONF = YAML::load_file(
+  File.join( File.dirname(__FILE__), 'authentication.yaml' )
+)[$env]
+
+raise(
+  ArgumentError, "No configuration specified for #{$env} environment!"
+) if AUTH_CONF.nil?
+
+
+if AUTH_CONF['enabled']
+  $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
+  $app = OpenWFE::RackBasicAuth.new($app) if AUTH_CONF['basic_auth']
+end
 
 # ($app always pointing to 'top' app, while $rr points to ruote-rest itself)
 # (will certainly change)
