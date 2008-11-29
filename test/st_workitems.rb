@@ -23,6 +23,10 @@ class StWorkitemsTest < Test::Unit::TestCase
 
   def test_0
 
+    $app.engine.get_participant_map.add_observer '.*' do |channel, args|
+      p [ channel, args.to_s ]
+    end
+
     fei = $app.engine.launch %{
       class Test0 < OpenWFE::ProcessDefinition
         sequence do
@@ -32,7 +36,13 @@ class StWorkitemsTest < Test::Unit::TestCase
       end
     }
 
+    $app.engine.lwarn '===here!==='
+
     sleep 0.350
+
+    #ps = $app.engine.process_status(fei)
+    #p ps.errors.size
+    #p $app.engine.participants.collect { |r, p| r }
 
     assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
 
@@ -126,6 +136,9 @@ class StWorkitemsTest < Test::Unit::TestCase
     # proceeded ?
 
     get '/workitems'
+
+    #puts @response.body
+    assert_equal 200, @response.status
 
     workitems = OpenWFE::Xml.workitems_from_xml(@response.body)
 

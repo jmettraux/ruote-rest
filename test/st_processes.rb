@@ -106,7 +106,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_2
 
-    $app.engine.register_participant :alpha, OpenWFE::HashParticipant
+    #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses < OpenWFE::ProcessDefinition
@@ -149,7 +149,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_3
 
-    $app.engine.register_participant :alpha, OpenWFE::HashParticipant
+    #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses < OpenWFE::ProcessDefinition
