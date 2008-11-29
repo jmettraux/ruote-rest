@@ -10,15 +10,16 @@ require 'openwfe/representations'
 
 configure do
 
-  FileUtils.mkdir 'logs' unless File.exist?('logs')
+  log_dir = File.join( RUOTE_BASE_DIR, 'logs' )
+  FileUtils.mkdir log_dir unless File.exist?( log_dir )
 
   ac = {}
 
   ac[:engine_name] = "ruote_rest"
 
-  ac[:work_directory] = "work_#{$env}"
+  ac[:work_directory] = File.join( RUOTE_BASE_DIR, "work_#{$env}" )
 
-  ac[:logger] = Logger.new "logs/openwferu_#{$env}.log", 10, 1024000
+  ac[:logger] = Logger.new "#{log_dir}/openwferu_#{$env}.log", 10, 1024000
   ac[:logger].level = ($env == 'production') ? Logger::INFO : Logger::DEBUG
 
   ac[:remote_definitions_allowed] = true

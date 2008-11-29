@@ -100,14 +100,13 @@ load 'helpers/fluo.rb'
 # '/' redirection
 
 get '/' do
-
   redirect request.href(:service)
 end
 
 #
 # Racking
 
-$rr = new_sixjo_rack_app(Rack::File.new('public'), :environment => $env)
+$rr = new_sixjo_rack_app(Rack::File.new( File.join(RUOTE_BASE_DIR,'public')), :environment => $env)
 $app = $rr
 
 load 'auth.rb'

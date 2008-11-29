@@ -16,6 +16,6 @@ configure do
 
   Participants.init_all(
     application.engine,
-    "conf/participants_#{application.environment}.yaml")
+    "#{RUOTE_BASE_DIR}/conf/participants_#{application.environment}.yaml")
 end
 
