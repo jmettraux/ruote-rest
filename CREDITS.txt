@@ -11,12 +11,12 @@ The main project team
 ---------------------
 
 John Mettraux ( project lead ( john >at< openwfe.org ) )
+Kenneth Kalmer - enhanced authentication, daemonization
 
 
 Contributors
 ------------
 
-Kenneth Kalmer - enhanced authentication
 Nicholas Petrella - participant patches
 
 

@@ -32,7 +32,7 @@ class StWorkitemsTest < Test::Unit::TestCase
       end
     }
 
-    sleep 0.200
+    sleep 0.350
 
     assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
 

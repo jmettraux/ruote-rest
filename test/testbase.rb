@@ -9,6 +9,8 @@
 
 require 'test/unit'
 
+RUOTE_BASE_DIR = File.expand_path( File.dirname( File.dirname(__FILE__) ) )
+
 
 module TestBase
 

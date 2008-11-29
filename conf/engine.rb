@@ -19,7 +19,7 @@ configure do
 
   ac[:work_directory] = File.join( RUOTE_BASE_DIR, "work_#{$env}" )
 
-  ac[:logger] = Logger.new "#{log_dir}/openwferu_#{$env}.log", 10, 1024000
+  ac[:logger] = Logger.new "#{log_dir}/ruote_#{$env}.log", 10, 1024000
   ac[:logger].level = ($env == 'production') ? Logger::INFO : Logger::DEBUG
 
   ac[:remote_definitions_allowed] = true
