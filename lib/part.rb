@@ -47,9 +47,12 @@ require 'openwfe/extras/participants/activeparticipants'
 module Participants
 
   def self.load_all
-
-    File.open @filename do |f|
-      YAML.load f
+    if File.exists?( @filename )
+      File.open @filename do |f|
+        YAML.load f
+      end
+    else
+      []
     end
   end
 

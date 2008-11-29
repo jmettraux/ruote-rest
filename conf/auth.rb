@@ -66,13 +66,14 @@ end
 #
 # the actual configuration job
 
-AUTH_CONF = YAML::load_file(
-  File.join( File.dirname(__FILE__), 'authentication.yaml' )
-)[$env]
-
-raise(
-  ArgumentError, "No configuration specified for #{$env} environment!"
-) if AUTH_CONF.nil?
+if File.exists?( auth_config_file = File.join( File.dirname(__FILE__), 'authentication.yaml' ) )
+  AUTH_CONF = YAML::load_file( auth_config_file )[$env]
+  raise(
+    ArgumentError, "No authentication configuration specified for #{$env} environment!"
+  ) if AUTH_CONF.nil?
+else
+  AUTH_CONFIG = { 'enabled' => false }
+end
 
 
 if AUTH_CONF['enabled']
