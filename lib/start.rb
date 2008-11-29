@@ -93,6 +93,10 @@ begin
     end
   end
 rescue => e
+  # Throw the exception back out again if we're not daemonized
+  raise e unless daemonize
+
+  # Write our backtrace
   filename = File.join( RUOTE_BASE_DIR, "backtrace-#{Time.now.strftime("%Y%m%d%H%M%S")}.log" )
   File.open( filename, 'w+' ) do |f|
     f.write("Exception caught: #{e.class}: #{e.message}")

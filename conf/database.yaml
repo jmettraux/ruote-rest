@@ -1,0 +1,22 @@
+defaults: &defaults
+  adapter: mysql
+  host: localhost
+  encoding: utf8
+
+development:
+  database: ruoterest_development
+  username: root
+  password:
+  <<: *defaults
+
+test:
+  database: ruoterest_test
+  username: root
+  password:
+  <<: *defaults
+
+production:
+  database: ruoterest_production
+  username: someone
+  password: supersecret
+  <<: *defaults

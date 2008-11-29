@@ -4,13 +4,20 @@ require 'active_record'
 
 configure do
 
+  configuration = YAML.load_file(
+    File.join( RUOTE_BASE_DIR, 'conf', 'database.yaml' )
+  )[application.environment]
+
+  raise ArgumentError, "No database configuration for #{application.environment} environment!" \
+    if configuration.nil?
+
   ActiveRecord::Base.establish_connection(
-    :adapter => 'mysql',
-    #:database => "ruoterest_#{Sinatra.application.options.env}",
-    :database => "ruoterest_#{application.environment}",
-    #:username => 'toto',
-    #:password => 'secret',
-    #:host => 'localhost',
-    :encoding => 'utf8')
+    :adapter => configuration['adapter'],
+    :database => configuration['database'],
+    :username => configuration['username'],
+    :password => configuration['password'],
+    :host => configuration['host'],
+    :encoding => configuration['encoding']
+  )
 end
 
