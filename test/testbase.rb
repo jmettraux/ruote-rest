@@ -35,9 +35,9 @@ module TestBase
     #
     # resetting the participant file
 
-    FileUtils.rm "conf/participants_test.yaml"
+    FileUtils.rm 'conf/participants_test.yaml'
 
-    File.open "conf/participants_test.yaml", "w" do |f|
+    File.open 'conf/participants_test.yaml', 'w' do |f|
       f.puts(YAML.dump([
         [ 'alpha', 'OpenWFE::Extras::ActiveParticipant', nil ],
         [ 'bravo', 'OpenWFE::Extras::ActiveParticipant', nil ],

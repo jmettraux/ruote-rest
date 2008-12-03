@@ -23,9 +23,14 @@ class StWorkitemsTest < Test::Unit::TestCase
 
   def test_0
 
-    $app.engine.get_participant_map.add_observer '.*' do |channel, args|
-      p [ channel, args.to_s ]
-    end
+    #$OWFE_LOG.level = Logger::DEBUG
+
+    #$app.engine.get_participant_map.add_observer :all do |channel, args|
+    #  p [ :pmap, channel, args.to_s ]
+    #end
+    #$app.engine.get_expression_pool.add_observer :all do |channel, args|
+    #  p [ :expool, channel, args.to_s ]
+    #end
 
     fei = $app.engine.launch %{
       class Test0 < OpenWFE::ProcessDefinition
@@ -36,13 +41,12 @@ class StWorkitemsTest < Test::Unit::TestCase
       end
     }
 
-    $app.engine.lwarn '===here!==='
-
-    sleep 0.350
+    sleep 0.450
+    sleep 5
 
     #ps = $app.engine.process_status(fei)
     #p ps.errors.size
-    #p $app.engine.participants.collect { |r, p| r }
+    #p $app.engine.participants.collect { |r, p| [ r, p.class ] }
 
     assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
 
@@ -124,13 +128,15 @@ class StWorkitemsTest < Test::Unit::TestCase
       OpenWFE::Xml.workitem_to_xml(workitem),
       { 'CONTENT_TYPE' => 'application/xml' })
 
-    sleep 0.350
+    sleep 0.450
 
     #p workitem.uri
     get workitem.uri
 
     #puts @response.body
     assert_equal 404, @response.status
+
+    #sleep 10 # :( activerecord 2.2.2, I hate you
 
     #
     # proceeded ?
