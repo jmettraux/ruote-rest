@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- todo  #23041 : daemonize patch (Kenneth Kalmer)
 - todo  #22966 : enhanced authentication (Kenneth Kalmer)
 - bug   #22920 : no participant at /participants/.* fixed.
 - todo  #22919 : now emitting 400 when failing to parse incoming representation
