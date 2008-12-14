@@ -106,6 +106,7 @@ end
 #
 # Racking
 
+Rufus::Sixjo.view_path = RUOTE_BASE_DIR + '/views'
 $rr = new_sixjo_rack_app(
   Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')), :environment => $env)
 $app = $rr
