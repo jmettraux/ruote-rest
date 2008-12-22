@@ -1,12 +1,18 @@
 
-require 't_misc'
+[
 
-require 'st_service'
-require 'st_errors'
-require 'st_expressions'
-require 'st_participants'
-require 'st_history'
+  't_misc',
 
-require 'st_processes'
-require 'st_workitems'
+  'st_service',
+  'st_errors',
+  'st_expressions',
+  'st_participants',
+  'st_history',
+
+  'st_processes',
+  'st_workitems'
+
+].each do |t|
+  require File.dirname(__FILE__) + '/' + t
+end
 

@@ -8,8 +8,18 @@
 #
 
 require 'test/unit'
+require 'fileutils'
+
+require 'rubygems'
+
 
 RUOTE_BASE_DIR = File.expand_path( File.dirname( File.dirname(__FILE__) ) )
+
+FileUtils.rm_f(File.dirname(__FILE__) + '/../conf/participants_test.yaml')
+  # making sure that this test file gets removed before ruote_rest is required
+
+require File.dirname(__FILE__) + '/test_paths'
+require 'ruote_rest'
 
 
 module TestBase
@@ -34,8 +44,6 @@ module TestBase
 
     #
     # resetting the participant file
-
-    FileUtils.rm 'conf/participants_test.yaml'
 
     File.open 'conf/participants_test.yaml', 'w' do |f|
       f.puts(YAML.dump([

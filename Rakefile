@@ -31,13 +31,14 @@ CLEAN.include 'work_test', 'work_development', 'log', 'tmp', 'pkg'
 #
 Rake::TestTask.new(:test) do |t|
 
-  ENV['ruote.environment'] = 'test'
-
-  t.libs << 'test'
-  t.libs << 'conf'
-  t.libs << 'vendor'
-  t.libs << RUOTE_LIB
+  #ENV['ruote.environment'] = 'test'
+  #t.libs << 'test'
+  #t.libs << 'conf'
+  #t.libs << 'vendor'
+  #t.libs << RUOTE_LIB
   #t.libs << '~/rufus/rufus-sixjo/lib'
+    # all of this is now done in test/test_paths
+
   t.test_files = FileList['test/test.rb']
   t.verbose = true
 end

@@ -7,14 +7,7 @@
 # Tue Apr 29 18:07:46 JST 2008
 #
 
-
-
-#require 'test/unit'
-
-require 'rubygems'
-
-require 'testbase'
-require 'ruote_rest.rb'
+require File.dirname(__FILE__) + '/testbase'
 
 
 class StHistoryTest < Test::Unit::TestCase

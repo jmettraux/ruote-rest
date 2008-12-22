@@ -7,10 +7,7 @@
 # Sun Apr 13 14:44:10 JST 2008
 #
 
-require 'rubygems'
-
-require 'testbase'
-require 'ruote_rest.rb'
+require File.dirname(__FILE__) + '/testbase'
 
 
 class StProcessesTest < Test::Unit::TestCase
