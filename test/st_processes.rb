@@ -101,7 +101,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   # pause / resume
   #
-  def _test_2 ######################################## test disabled for now :(
+  def test_2
 
     #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
