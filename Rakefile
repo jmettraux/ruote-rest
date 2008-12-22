@@ -37,7 +37,7 @@ Rake::TestTask.new(:test) do |t|
   t.libs << 'conf'
   t.libs << 'vendor'
   t.libs << RUOTE_LIB
-  t.libs << '~/rufus/rufus-sixjo/lib'
+  #t.libs << '~/rufus/rufus-sixjo/lib'
   t.test_files = FileList['test/test.rb']
   t.verbose = true
 end
