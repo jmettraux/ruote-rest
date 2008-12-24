@@ -49,6 +49,8 @@ def parse_launchitem_xml (xml)
   OpenWFE::Xml.launchitem_from_xml xml
 end
 
+# TODO : parse_launchitem_json (json)
+
 #
 # builds a launchitem from the request parameters (html form)
 #
