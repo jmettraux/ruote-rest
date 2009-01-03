@@ -36,7 +36,7 @@ class StWorkitemsTest < Test::Unit::TestCase
     }
 
     sleep 0.450
-    sleep 5
+    #sleep 5
 
     #ps = $app.engine.process_status(fei)
     #p ps.errors.size

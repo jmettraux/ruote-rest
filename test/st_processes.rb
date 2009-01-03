@@ -103,6 +103,10 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_2
 
+    assert_equal 0, OpenWFE::Extras::Workitem.find(:all).size
+      #
+      # this fixes an AR 2.2.2 issue, grumpf...
+
     #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
