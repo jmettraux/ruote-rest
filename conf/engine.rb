@@ -55,10 +55,11 @@ configure do
     #
     # tracking history
 
-  engine.reload
-  sleep 0.350
+  #engine.reload
+  #sleep 0.350
     #
     # let the engine reschedule/repause stuff in the expool
+    # (now done at the end of conf/participants.rb)
 
   class << application
     attr_reader :engine

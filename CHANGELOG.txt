@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- bug   #23580 : engine.reload performed before participants are ready. Fixed.
 - todo  #23226 : fixed path issue with daemons (Kenneth Kalmer)
 - todo  #23041 : daemonize patch (Kenneth Kalmer)
 - todo  #22966 : enhanced authentication (Kenneth Kalmer)
