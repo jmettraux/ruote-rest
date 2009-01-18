@@ -7,7 +7,6 @@
 # Fri May 30 21:13:22 JST 2008
 #
 
-
 require File.dirname(__FILE__) + '/testbase'
 
 

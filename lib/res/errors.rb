@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -42,7 +42,7 @@ get '/errors' do
 
   logs = application.engine.get_error_journal.get_error_logs
 
-  errors = logs.values.inject([]) { |r, log| r += log }
+  errors = logs.values.inject([]) { |a, log| a = a + log }
   errors = errors.sort_by { |err| err.fei.wfid }
 
   errors.extend(ArrayEtagMixin)

@@ -17,7 +17,8 @@ configure do
     :username => configuration['username'],
     :password => configuration['password'],
     :host => configuration['host'],
-    :encoding => configuration['encoding']
+    :encoding => configuration['encoding'],
+    :pool => 30
   )
 end
 
