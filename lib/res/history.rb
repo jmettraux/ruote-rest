@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -37,15 +37,15 @@
 # John Mettraux at openwfe.org
 #
 
-require 'openwfe/extras/expool/dbhistory'
+require 'openwfe/extras/expool/db_history'
 
 
-get "/history" do
+get '/history' do
 
   rrender :history, find_entries(params)
 end
 
-get "/history/:wfid" do
+get '/history/:wfid' do
 
   rrender :history, find_entries(params)
 end
