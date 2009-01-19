@@ -48,8 +48,8 @@ configure do
 
   engine = engine_class.new ac
 
-  #engine.init_service('history', OpenWFE::Extras::DbHistory)
-  engine.init_service('history', OpenWFE::Extras::QueuedDbHistory)
+  #engine.init_service(:s_history, OpenWFE::Extras::DbHistory)
+  engine.init_service(:s_history, OpenWFE::Extras::QueuedDbHistory)
     #
     # tracking history
 
