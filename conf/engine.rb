@@ -2,7 +2,6 @@
 require 'openwfe/engine'
 require 'openwfe/engine/file_persisted_engine'
 require 'openwfe/extras/expool/db_history'
-require 'openwfe/storage/yaml_custom'
 require 'openwfe/representations'
 
 
