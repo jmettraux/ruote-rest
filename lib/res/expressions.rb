@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -57,13 +57,11 @@ end
 
 put '/expressions/:wfid/:expid' do
 
-  expression = rparse(:expression)
+  e = rparse(:expression)
 
-  application.engine.update_expression expression
+  application.engine.update_expression e
 
-  response.status = 303
-  response.location = expression.href(request)
-  "expression at #{e.href} updated"
+  render_ok(e.href(request), "expression at #{e.href} updated")
 end
 
 get '/expressions/:wfid/:expid' do
@@ -83,9 +81,7 @@ put '/expressions/:wfid/:expid/tree' do
 
   application.engine.update_expression_tree(e, tree)
 
-  response.status = 303
-  response.location = e.href(request)
-  "expression at #{e.href} updated"
+  render_ok(e.href(request), "expression at #{e.href} updated")
 end
 
 delete '/expressions/:wfid/:expid' do
@@ -94,9 +90,9 @@ delete '/expressions/:wfid/:expid' do
 
   application.engine.cancel_expression e
 
-  response.status = 303
-  response.location = request.href(:expressions, params[:wfid])
-  "expression at #{e.href} cancelled (terminated)"
+  render_ok(
+    request.href(:expressions, params[:wfid]),
+    "expression at #{e.href} cancelled (terminated)")
 end
 
 
@@ -112,7 +108,7 @@ helpers do
 
     env = false
 
-    if expid[-1, 1] == "e"
+    if expid[-1, 1] == 'e'
       expid = expid[0..-2]
       env = true
     end

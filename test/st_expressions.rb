@@ -69,7 +69,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     delete "/expressions/#{fei.wfid}/0"
 
-    assert_equal 303, @response.status
+    assert_equal 200, @response.status
 
     sleep 0.350
 
@@ -111,9 +111,7 @@ class StExpressionsTest < Test::Unit::TestCase
       exp.to_yaml,
       { 'CONTENT_TYPE' => 'application/yaml' })
 
-    assert_equal(
-      "http://example.org/expressions/#{fei.wfid}/0_0_0",
-      @response['Location'])
+    assert_equal 200, @response.status
 
     # GET expression as yaml
 
@@ -155,7 +153,7 @@ class StExpressionsTest < Test::Unit::TestCase
 
     #puts @response.body
 
-    assert_equal 303, @response.status
+    assert_equal 200, @response.status
 
     get(
       "/expressions/#{fei.wfid}/0_0/tree",

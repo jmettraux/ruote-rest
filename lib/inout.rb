@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -58,7 +58,7 @@ end
 #
 def rrender (type, object, options={})
 
-  format, ctype = determine_out_format options
+  format, ctype = determine_out_format(options)
 
   ctype = 'text/plain' if params[:plain]
     # useful for debugging
@@ -127,7 +127,7 @@ FTYPES = FORMATS.keys.collect { |k| k.to_s } \
 #
 # determines the format the client is expecting
 #
-def determine_out_format (options)
+def determine_out_format (options={})
 
   f = options[:format] || params[:format] || request.env['_FORMAT']
 

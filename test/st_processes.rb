@@ -85,7 +85,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     delete "/processes/#{fei.wfid}"
 
-    assert_equal 303, @response.status
+    assert_equal 200, @response.status
 
     sleep 0.350
 
@@ -176,4 +176,20 @@ class StProcessesTest < Test::Unit::TestCase
     #puts @response.body
     assert_match(/Rufus::AtJob/, @response.body)
   end
+
+  def test_cancel_process_over_json
+
+    fei = $app.engine.launch(%{
+      <process-definition name="test">
+        <alpha/>
+      </process-definition>
+    })
+
+    sleep 0.350
+
+    delete "/processes/#{fei.wfid}.json"
+
+    assert_equal 200, @response.status
+  end
 end
+
