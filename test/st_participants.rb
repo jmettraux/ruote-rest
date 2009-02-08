@@ -45,7 +45,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     delete '/participants/toto'
 
-    assert_equal 303, @response.status
+    assert_equal 200, @response.status
 
     get '/participants'
 

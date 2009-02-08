@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- todo  #23850 : making sure to reply 200 when deleting a res over json or xml
 - todo  #23600 : adapted to file renaming in ruote itself
 - bug   #23580 : engine.reload performed before participants are ready. Fixed.
 - todo  #23226 : fixed path issue with daemons (Kenneth Kalmer)

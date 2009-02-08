@@ -1,7 +1,6 @@
-
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -104,7 +103,7 @@ helpers do
 
   def paging (respath, offset, limit, total)
 
-    s = ""
+    s = ''
 
     s << page_link(respath, 0, limit, '|&lt;') \
       if offset != 0
@@ -121,6 +120,23 @@ helpers do
       if offset + limit < total
 
     "<div class=\"pager\">#{s}</div>"
+  end
+
+  def render_ok (location, message)
+
+    format, type = determine_out_format
+
+    if format == 'xml'
+      #response.status = 200
+      "<message>#{message}</message>"
+    elsif format == 'json'
+      #response.status = 200
+      message.to_json
+    else
+      response.status = 303
+      response.location = request.href(:processes)
+      message
+    end
   end
 
 end
