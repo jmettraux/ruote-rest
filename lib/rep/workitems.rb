@@ -1,6 +1,6 @@
 #
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -58,6 +58,11 @@ helpers do
       # TODO : align with ruote-web2 params[:state]
 
     wi
+  end
+
+  def parse_workitem_json (json)
+
+    OpenWFE::workitem_from_h(json_parse(json))
   end
 
 
