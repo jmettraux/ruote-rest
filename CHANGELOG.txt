@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.20    not yet released
 
+- todo  #23869 : adapted to new ProcessStatus#workitem_expids
 - todo  #23851 : implemented missing #parse_workitem_json
 - todo  #23850 : making sure to reply 200 when deleting a res over json or xml
 - todo  #23600 : adapted to file renaming in ruote itself

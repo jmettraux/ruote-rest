@@ -106,5 +106,5 @@
 
 </div>
 
-<%= render_fluo_foot(process.all_expressions.tree, nil, process.expressions.collect { |e| e.fei.expid }) if detailed %>
+<%= render_fluo_foot(process.all_expressions.tree, nil, process.workitem_expids) if detailed %>
 
