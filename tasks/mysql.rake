@@ -45,10 +45,13 @@ namespace :mysql do
     require 'openwfe/extras/participants/activeparticipants'
     OpenWFE::Extras::WorkitemTables.up
 
-    require 'openwfe/extras/expool/dbhistory'
+    require 'openwfe/extras/expool/db_history'
     OpenWFE::Extras::HistoryTables.up
 
+    #require 'vendor/openwfe/extras/expool/db_errorjournal'
     #OpenWFE::Extras::ProcessErrorTables.up
+
+    #require 'vendor/openwfe/extras/expool/db_expstorage'
     #OpenWFE::Extras::ExpressionTables.up
   end
 
