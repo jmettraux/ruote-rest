@@ -29,6 +29,8 @@ class StParticipantsTest < Test::Unit::TestCase
       '["toto","OpenWFE::HashParticipant"]',
       { 'CONTENT_TYPE' => 'application/json' })
 
+    #puts @response.body
+
     assert_equal 201, @response.status
     assert_not_equal '', @response.body
 
@@ -40,6 +42,8 @@ class StParticipantsTest < Test::Unit::TestCase
       @response.body.index(' count="4"'), "expected 4 participants")
 
     get '/participants/toto'
+
+    #puts @response.body
 
     assert_not_nil @response.body.index('>toto<')
 
