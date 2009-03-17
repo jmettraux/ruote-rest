@@ -43,7 +43,7 @@
 #
 get '/processes' do
 
-  rrender :processes, application.engine.list_process_status
+  rrender :processes, application.engine.process_statuses
 end
 
 #
