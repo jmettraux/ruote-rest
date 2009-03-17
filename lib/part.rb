@@ -88,11 +88,11 @@ module Participants
 
   def self.remove (pregex)
 
-    part = @engine.list_participants.find do |pr, pa|
+    part = @engine.participants.find do |pr, pa|
       pr == pregex
     end
 
-    @engine.list_participants.delete part
+    @engine.participants.delete part
   end
 
   def self.init_all (engine, filename)
