@@ -1,6 +1,6 @@
 
 require 'openwfe/engine'
-require 'openwfe/engine/file_persisted_engine'
+require 'openwfe/engine/fs_engine'
 require 'openwfe/extras/expool/db_history'
 require 'openwfe/representations'
 
@@ -36,24 +36,18 @@ configure do
     #
     # a transient, in-memory engine
 
-  #engine_class = OpenWFE::FilePersistedEngine
-  engine_class = OpenWFE::CachedFilePersistedEngine
+  engine_class = OpenWFE::FsPersistedEngine
     #
-    # file based persistence
+    # file system based persistence
 
-  #engine_class = OpenWFE::Extras::CachedDbPersistedEngine
-    #
-    # database persistence for the engine
-
-  engine = engine_class.new ac
+  engine = engine_class.new(ac)
 
   #engine.init_service(:s_history, OpenWFE::Extras::DbHistory)
   engine.init_service(:s_history, OpenWFE::Extras::QueuedDbHistory)
     #
     # tracking history
 
-  #engine.reload
-  #sleep 0.350
+  #engine.reload; sleep 0.350
     #
     # let the engine reschedule/repause stuff in the expool
     # (now done at the end of conf/participants.rb)
