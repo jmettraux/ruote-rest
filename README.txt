@@ -6,7 +6,7 @@ A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.o
 
 == required gems
 
-    sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools rogue_parser mysql
+    sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools mysql
 
 
 == getting it
