@@ -6,7 +6,7 @@ A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.o
 
 == required gems
 
-    sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools mysql
+  sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools mysql
 
 
 == getting it
@@ -15,16 +15,16 @@ Get it from GitHub or download a prepackaged release at http://rubyforge.org/frs
 
 To get Ruote and Ruote-Rest :
 
-    git clone git://github.com/jmettraux/ruote-rest.git
+  git clone git://github.com/jmettraux/ruote-rest.git
 
 Then
 
-    cd ruote-rest 
-    rake ruote:install
+  cd ruote-rest 
+  rake ruote:install
 
 to install the Ruote (OpenWFEru) workflow engine and its dependencies (in a vendor/ subdirectory). Alternatively, you could do 
 
-    rake ruote:gem_install
+  rake ruote:gem_install
 
 to get the dependencies as gems.
 
@@ -33,7 +33,7 @@ to get the dependencies as gems.
 
 To prepare the development database
 
-    rake mysql:setup
+  rake mysql:setup
 
 Expects a mysql db with a 'root' admin account with sufficient access rights. 
 It will create a database named "ruoterest_development".
@@ -41,27 +41,27 @@ It will create a database named "ruoterest_development".
 (
 To prepare the test database
 
-    rake mysql:setup stage=test
+  rake mysql:setup stage=test
 
 To prepare the dev database with the admin 'toto'
 
-    rake mysql:setup dbadmin=toto
+  rake mysql:setup dbadmin=toto
 )
 
 
 == starting it
 
-    ruby lib/start.rb
+  ruby lib/start.rb
 
 
 Then head to
 
-    http://localhost:4567/
+  http://localhost:4567/
 
 (
 to start it on port 3333 :
 
-    ruby lib/start.rb -p 3333
+  ruby lib/start.rb -p 3333
 )
 
 it will lead you to the "service document" with links to all the resources/
@@ -77,22 +77,22 @@ Just navigate the interface with your browser, everything is there.
 
 conf/db.rb
 
-    database configuration
+  database configuration
 
 conf/engine.rb
 
-    engine configuration
+  engine configuration
 
 conf/participants.rb
 conf/participants_development.yaml
 
-    participants configuration, the yaml file holds the list of 
-    'active participants' (the worklist in fact).
+  participants configuration, the yaml file holds the list of 
+  'active participants' (the worklist in fact).
 
 conf/auth.rb
 
-    authentication filters, contains an HTTP basic authentication example
-    and a "whitelist" authentication example.
+  authentication filters, contains an HTTP basic authentication example
+  and a "whitelist" authentication example.
 
 
 == license

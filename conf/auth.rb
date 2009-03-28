@@ -69,7 +69,8 @@ end
 if File.exists?( auth_config_file = File.join( File.dirname(__FILE__), 'authentication.yaml' ) )
   AUTH_CONF = YAML::load_file( auth_config_file )[$env]
   raise(
-    ArgumentError, "No authentication configuration specified for #{$env} environment!"
+    ArgumentError,
+    "No authentication configuration specified for #{$env} environment!"
   ) if AUTH_CONF.nil?
 else
   AUTH_CONFIG = { 'enabled' => false }
@@ -77,13 +78,13 @@ end
 
 
 if AUTH_CONF['enabled']
-  
+
   if AUTH_CONF['basic_auth']
 
     $app = OpenWFE::RackBasicAuth.new($app)
     $app.realm = AUTH_CONF['basic_auth_realm']
   end
-  
+
   $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
 
 end
