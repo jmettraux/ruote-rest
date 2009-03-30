@@ -59,10 +59,12 @@ if daemonize
 end
 
 begin
+
   $:.unshift "#{RUOTE_BASE_DIR}/lib"
   $:.unshift "#{RUOTE_BASE_DIR}/conf"
 
   $:.unshift "#{RUOTE_BASE_DIR}/vendor" # if any
+  require 'vendorf/frozen' if File.exist?('vendorf/frozen.rb')
 
   $:.unshift "~/ruote/lib"
   $:.unshift "~/rufus/rufus-sixjo/lib"

@@ -12,7 +12,7 @@ configure do
 
   ac = {}
 
-  ac[:engine_name] = "ruote_rest"
+  ac[:engine_name] = 'ruote_rest'
 
   ac[:work_directory] = File.join( RUOTE_BASE_DIR, "work_#{$env}" )
 
