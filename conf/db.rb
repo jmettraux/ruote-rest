@@ -1,5 +1,5 @@
 
-gem 'activerecord'
+#gem 'activerecord'
 require 'active_record'
 
 configure do
