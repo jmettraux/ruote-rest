@@ -42,8 +42,8 @@ namespace :mysql do
     $:.unshift RUOTE_LIB
     $:.unshift VENDOR_LIB
 
-    require 'openwfe/extras/participants/activeparticipants'
-    OpenWFE::Extras::WorkitemTables.up
+    require 'openwfe/extras/participants/ar_participants'
+    OpenWFE::Extras::ArWorkitemTables.up
 
     require 'openwfe/extras/expool/db_history'
     OpenWFE::Extras::HistoryTables.up

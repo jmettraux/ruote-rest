@@ -38,8 +38,8 @@ module TestBase
     FileUtils.rm_rf 'work_test'
     FileUtils.mkdir 'logs' unless File.exist?('logs')
 
-    OpenWFE::Extras::Workitem.delete_all
-    OpenWFE::Extras::Field.delete_all
+    OpenWFE::Extras::ArWorkitem.delete_all
+    #OpenWFE::Extras::Field.delete_all
     OpenWFE::Extras::HistoryEntry.delete_all
 
     #
@@ -47,8 +47,8 @@ module TestBase
 
     File.open 'conf/participants_test.yaml', 'w' do |f|
       f.puts(YAML.dump([
-        [ 'alpha', 'OpenWFE::Extras::ActiveParticipant', nil ],
-        [ 'bravo', 'OpenWFE::Extras::ActiveParticipant', nil ],
+        [ 'alpha', 'OpenWFE::Extras::ArParticipant', nil ],
+        [ 'bravo', 'OpenWFE::Extras::ArParticipant', nil ],
         [ 'carlito', 'TestBase::TestParticipant', [ 'one', 'two', 'three' ] ]
       ]))
     end

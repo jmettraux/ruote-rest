@@ -103,7 +103,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_2
 
-    assert_equal 0, OpenWFE::Extras::Workitem.find(:all).size
+    assert_equal 0, OpenWFE::Extras::ArWorkitem.find(:all).size
       #
       # this fixes an AR 2.2.2 issue, grumpf...
 
@@ -146,7 +146,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     sleep 0.450
 
-    assert_equal 0, OpenWFE::Extras::Workitem.find(:all).size
+    assert_equal 0, OpenWFE::Extras::ArWorkitem.find(:all).size
   end
 
   #

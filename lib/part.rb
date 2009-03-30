@@ -38,7 +38,7 @@
 #
 
 require 'openwfe/participants/store_participants'
-require 'openwfe/extras/participants/active_participants'
+require 'openwfe/extras/participants/ar_participants'
 
 
 #

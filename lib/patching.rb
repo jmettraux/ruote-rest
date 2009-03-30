@@ -202,13 +202,32 @@ class OpenWFE::InFlowWorkItem
 end
 
 #
-# The activerecord based workitem, adding etag and timestamp...
+# The deprecated activerecord based workitem, adding etag and timestamp...
 #
 class OpenWFE::Extras::Workitem
 
   def pretag
     "#{fei} #{store_name} #{last_modified} #{dispatch_time} " +
     "#{fields.collect { |f| f.fkey.to_s + ' ' + f.value.to_s }.join(', ')}"
+  end
+
+  def etag
+    @etag ||= md5(pretag)
+  end
+
+  def timestamp
+    last_modified
+  end
+end
+
+#
+# The new activerecord based workitem, adding etag and timestamp...
+#
+class OpenWFE::Extras::ArWorkitem
+  
+  def pretag
+    "#{fei} #{store_name} #{last_modified} #{dispatch_time} " +
+    "#{field_hash.collect { |key,value| key.to_s + ' ' + value.to_s }.join(', ')}"
   end
 
   def etag

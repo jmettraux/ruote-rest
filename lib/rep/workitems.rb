@@ -74,7 +74,7 @@ helpers do
     options[:linkgen] = RackLinkGenerator.new(request)
 
     OpenWFE::Xml.workitems_to_xml(
-      wis.collect { |wi| wi.to_owfe_workitem(options) },
+      wis.collect { |wi| wi.is_a?( OpenWFE::Extras::Workitem ) ? wi.to_owfe_workitem(options) : wi.to_owfe_workitem },
       options)
   end
 
@@ -82,7 +82,9 @@ helpers do
 
     options[:linkgen] = RackLinkGenerator.new(request)
 
-    OpenWFE::Xml.workitem_to_xml(wi.to_owfe_workitem(options), options)
+    OpenWFE::Xml.workitem_to_xml(
+      wi.is_a?( OpenWFE::Extras::Workitem ) ? wi.to_owfe_workitem(options) : wi.to_owfe_workitem,
+      options)
   end
 
   def render_workitems_json (wis, options={})
@@ -112,7 +114,7 @@ helpers do
 
   def render_workitem_html (wi, detailed=true)
 
-    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::Workitem)
+    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::ArWorkitem)
 
     _erb(
       :workitem,

@@ -1,13 +1,13 @@
 --- 
 - - alpha
-  - OpenWFE::Extras::ActiveParticipant
+  - OpenWFE::Extras::ArParticipant
   - 
 - - bravo
-  - OpenWFE::Extras::ActiveParticipant
+  - OpenWFE::Extras::ArParticipant
   - 
 - - .*
-  - OpenWFE::Extras::ActiveParticipant
+  - OpenWFE::Extras::ArParticipant
   - 
 - - test
-  - OpenWFE::Extras::ActiveParticipant
+  - OpenWFE::Extras::ArParticipant
   - 
