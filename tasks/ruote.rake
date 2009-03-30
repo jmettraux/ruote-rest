@@ -58,5 +58,18 @@ namespace :ruote do
     #puts "installed gems  #{GEMS.join(' ')}"
     #puts
   end
+
+  desc "Fetches ruote and all its dependencies, then puts the frozen gems under vendorf/"
+  task :freeze do
+
+    require File.dirname(__FILE__) + '/frigo'
+
+    Frigo.verbose = true
+
+    Frigo.fetch_with_dependencies('activerecord', nil, 'vendorf')
+    Frigo.fetch_with_dependencies('rack', nil, 'vendorf')
+    Frigo.fetch_with_dependencies('atom-tools', nil, 'vendorf')
+    Frigo.fetch_with_dependencies('ruote', nil, 'vendorf')
+  end
 end
 
