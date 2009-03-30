@@ -114,7 +114,7 @@ helpers do
 
   def render_workitem_html (wi, detailed=true)
 
-    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::Workitem)
+    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::ArWorkitem)
 
     _erb(
       :workitem,
