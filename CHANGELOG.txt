@@ -2,8 +2,9 @@
 = ruote-rest CHANGELOG.txt
 
 
-== ruote-rest - 0.9.20    not yet released
+== ruote-rest - 0.9.21    not yet released
 
+- bug   #25016 : gem 'activerecord' getting in the way of frozen.rb. Removed.
 - todo  #23769 : moved to fs_engine
 - todo  #23869 : adapted to new ProcessStatus#workitem_expids
 - todo  #23851 : implemented missing #parse_workitem_json
