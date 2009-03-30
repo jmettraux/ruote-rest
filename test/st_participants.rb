@@ -62,9 +62,12 @@ class StParticipantsTest < Test::Unit::TestCase
 
     post(
       '/participants',
-      '["toto","OpenWFE::Extras::ActiveStoreParticipant", "totostore"]',
+      '["toto","OpenWFE::Extras::ArParticipant", "totostore"]',
       { 'CONTENT_TYPE' => 'application/json' })
 
+    #p @response.status
+    #puts @response.body
+    
     assert_equal 201, @response.status
     assert_not_equal '', @response.body
 

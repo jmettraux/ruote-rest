@@ -42,7 +42,7 @@ class StWorkitemsTest < Test::Unit::TestCase
     #p ps.errors.size
     #p $app.engine.participants.collect { |r, p| [ r, p.class ] }
 
-    assert_equal 1, OpenWFE::Extras::Workitem.find(:all).size
+    assert_equal 1, OpenWFE::Extras::ArWorkitem.find(:all).size
 
     get '/workitems'
 

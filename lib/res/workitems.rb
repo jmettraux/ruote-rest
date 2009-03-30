@@ -93,7 +93,7 @@ helpers do
     wfid = OpenWFE.swapdots(params[:wfid])
     expid = OpenWFE.swapdots(params[:expid])
 
-    OpenWFE::Extras::Workitem.find_by_wfid_and_expid(wfid, expid) ||
+    OpenWFE::Extras::ArWorkitem.find_by_wfid_and_expid(wfid, expid) ||
       throw(:done, [ 404, "no workitem #{params[:wfid]}/#{params[:expid]}" ])
   end
 
@@ -105,15 +105,15 @@ helpers do
     q = params[:q]
 
     workitems = if p
-      OpenWFE::Extras::Workitem.find_all_by_participant_name(p)
+      OpenWFE::Extras::ArWorkitem.find_all_by_participant_name(p)
     elsif q
-      OpenWFE::Extras::Workitem.search(q, sn)
+      OpenWFE::Extras::ArWorkitem.search(q, sn)
     elsif sn
-      OpenWFE::Extras::Workitem.find_in_stores(sn)
+      OpenWFE::Extras::ArWorkitem.find_in_stores(sn)
     elsif wfid
-      OpenWFE::Extras::Workitem.find_all_by_wfid(wfid)
+      OpenWFE::Extras::ArWorkitem.find_all_by_wfid(wfid)
     else
-      OpenWFE::Extras::Workitem.find :all
+      OpenWFE::Extras::ArWorkitem.find :all
     end
 
     workitems = workitems.sort_by { |wi| wi.id }
