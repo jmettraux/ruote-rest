@@ -30,16 +30,33 @@
 #++
 
 
+PROCESS_LOOKUP_KEYS = %w{
+ value val name variable var v field f
+}.collect { |k| k.to_sym }
+
 #
 # Returns the statuses of all the process currently running in this ruote_rest
 #
 get '/processes' do
 
-  # TODO : introduce var/field looked as a query here
-  #
-  # see : http://github.com/jmettraux/ruote/blob/master/lib/openwfe/engine/lookup_methods.rb
+  lookup_options = PROCESS_LOOKUP_KEYS.inject({}) do |h, k|
+    if v = params[k]; h[k] = v; end; h
+  end
 
-  rrender :processes, application.engine.process_statuses
+  #p lookup_options
+
+  processes = application.engine.process_statuses
+
+  if not lookup_options.empty?
+
+    wfids = application.engine.lookup_processes(lookup_options)
+
+    processes = processes.inject({}) do |h, (wfid, ps)|
+      h[wfid] = ps if wfids.delete(wfid); h
+    end
+  end
+
+  rrender(:processes, processes)
 end
 
 #
@@ -49,7 +66,7 @@ post '/processes' do
 
   launchitem = rparse :launchitem
 
-  fei = application.engine.launch launchitem
+  fei = application.engine.launch(launchitem)
 
   rrender(
     :fei, fei,
