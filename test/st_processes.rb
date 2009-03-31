@@ -132,12 +132,21 @@ class StProcessesTest < Test::Unit::TestCase
         alpha
       end
     end)
+    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'four') do
+      sequence do
+        _set :field => 'nes', :val => { 'ted' => 'val0' }
+        alpha
+      end
+    end)
 
     sleep 0.350
 
-    assert_process_count 3, nil
+    assert_process_count 4, nil
     assert_process_count 2, 'variable=v'
     assert_process_count 1, 'field=f'
+    assert_process_count 1, 'field=nes.ted'
+    assert_process_count 1, 'field=nes.ted&val=val0'
+    assert_process_count 0, 'field=nes.ted&val=val1'
 
     #assert_process_count 2, 'val=val0'
       # not yet
