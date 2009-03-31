@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -29,19 +28,16 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
 #
 # Returns the statuses of all the process currently running in this ruote_rest
 #
 get '/processes' do
+
+  # TODO : introduce var/field looked as a query here
+  #
+  # see : http://github.com/jmettraux/ruote/blob/master/lib/openwfe/engine/lookup_methods.rb
 
   rrender :processes, application.engine.process_statuses
 end

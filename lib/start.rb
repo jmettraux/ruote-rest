@@ -60,14 +60,20 @@ end
 
 begin
 
+  #$:.unshift "#{RUOTE_BASE_DIR}/vendor" # if any
+  if File.exist?('vendor/frozen.rb')
+    require 'vendor/frozen'
+  elsif File.exist?('vendorf/frozen.rb')
+    require 'vendorf/frozen'
+  end
+
   $:.unshift "#{RUOTE_BASE_DIR}/lib"
   $:.unshift "#{RUOTE_BASE_DIR}/conf"
 
-  $:.unshift "#{RUOTE_BASE_DIR}/vendor" # if any
-  require 'vendorf/frozen' if File.exist?('vendorf/frozen.rb')
-
-  $:.unshift "~/ruote/lib"
-  $:.unshift "~/rufus/rufus-sixjo/lib"
+  $:.unshift '~/ruote/lib'
+  $:.unshift '~/rufus/rufus-sixjo/lib'
+    #
+    # feel free to nuke those two lines (dev only !)
 
   #
   # run ruote-rest
@@ -94,7 +100,9 @@ begin
       puts ".. [#{Time.now}] stopped."
     end
   end
+
 rescue => e
+
   # Throw the exception back out again if we're not daemonized
   raise e unless daemonize
 
