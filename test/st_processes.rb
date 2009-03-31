@@ -98,10 +98,57 @@ class StProcessesTest < Test::Unit::TestCase
     assert_equal 404, @response.status
   end
 
-  #
-  # pause / resume
-  #
-  def test_2
+
+  def assert_process_count (count, query_string)
+
+    query_string = "?#{query_string}" if query_string
+
+    get "/processes.json#{query_string}"
+
+    puts @response.body
+
+    elts = json_parse(@response.body)['elements']
+
+    assert_equal(count, elts.size)
+  end
+
+  def test_process_lookup
+
+    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'one') do
+      sequence do
+        _set :var => 'v', :val => 'val0'
+        alpha
+      end
+    end)
+    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'two') do
+      sequence do
+        _set :var => 'v', :val => 'val1'
+        alpha
+      end
+    end)
+    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'three') do
+      sequence do
+        _set :field => 'f', :val => 'val0'
+        alpha
+      end
+    end)
+
+    sleep 0.350
+
+    assert_process_count 3, nil
+    assert_process_count 2, 'variable=v'
+    assert_process_count 1, 'field=f'
+    assert_process_count 2, 'val=val0'
+
+    # over.
+
+    $app.engine.cancel_process(fei)
+
+    sleep 0.350
+  end
+
+
+  def test_pause_resume
 
     assert_equal 0, OpenWFE::Extras::ArWorkitem.find(:all).size
       #
