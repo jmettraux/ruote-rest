@@ -82,6 +82,7 @@ a new version.
     Frigo.fetch_with_dependencies('rack', nil, 'vendorf')
     Frigo.fetch_with_dependencies('atom-tools', nil, 'vendorf')
     Frigo.fetch_with_dependencies('ruote', nil, 'vendorf')
+    Frigo.fetch_with_dependencies('rufus-sixjo', nil, 'vendorf')
   end
 end
 
