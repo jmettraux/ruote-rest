@@ -1,6 +1,12 @@
 
 ENV['ruote.environment'] = 'test'
 
+if File.exist?('vendor/frozen.rb')
+  require 'vendor/frozen'
+elsif File.exist?('vendorf/frozen.rb')
+  require 'vendorf/frozen'
+end
+
 %w{ lib conf ~/ruote/lib test }.each do |path|
 
   path = File.dirname(__FILE__) + '/../' + path unless path[0, 1] == '~'

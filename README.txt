@@ -4,11 +4,6 @@
 A RESTful instance of OpenWFEru (ruote) powered by Rack (http://rack.rubyforge.org/)
 
 
-== required gems
-
-  sudo gem install -y --no-ri --no-rdoc activerecord rack atom-tools mysql
-
-
 == getting it
 
 Get it from GitHub or download a prepackaged release at http://rubyforge.org/frs/?group_id=2609 (and jump to '== preparing it')
@@ -27,6 +22,10 @@ to install the Ruote (OpenWFEru) workflow engine and its dependencies (in a vend
   rake ruote:gem_install
 
 to get the dependencies as gems.
+
+If you want to grab the gem and freeze them under vendorf/ do :
+
+  rake ruote:install_freeze
 
 
 == preparing it

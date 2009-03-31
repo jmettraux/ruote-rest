@@ -72,7 +72,7 @@ a new version.
   end
 
   desc "Fetches ruote and all its dependencies, then puts the frozen gems under vendorf/"
-  task :freeze do
+  task :install_freeze do
 
     require File.dirname(__FILE__) + '/frigo'
 

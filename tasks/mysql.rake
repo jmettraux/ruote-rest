@@ -1,5 +1,9 @@
 
-require 'vendorf/frozen' if File.exist?('vendorf/frozen.rb')
+if File.exist?('vendor/frozen.rb')
+  require 'vendor/frozen'
+elsif File.exist?('vendorf/frozen.rb')
+  require 'vendorf/frozen'
+end
 
 namespace :mysql do
 
