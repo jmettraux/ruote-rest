@@ -1,4 +1,6 @@
 
+require 'vendorf/frozen' if File.exist?('vendorf/frozen.rb')
+
 namespace :mysql do
 
   desc "Sets up a mysql database for ruote-rest"
@@ -18,6 +20,8 @@ namespace :mysql do
     db_admin = ENV['dbadmin'] || 'root'
     #db_user = 'densha'
 
+    puts " .. db is '#{db}'"
+
     # drop & create
 
     sh "mysql -u #{db_admin} -p -e \"drop database if exists #{db}\""
@@ -27,7 +31,7 @@ namespace :mysql do
 
     # run the migrations
 
-    gem 'activerecord'
+    #gem 'activerecord'
     require 'active_record'
 
     ActiveRecord::Base.establish_connection(
@@ -37,7 +41,7 @@ namespace :mysql do
       #:password => 'secret',
       #:host => 'localhost',
       #:socket => '/var/run/mysqld/mysqld.sock',
-      :encoding => "utf8")
+      :encoding => 'utf8')
 
     $:.unshift RUOTE_LIB
     $:.unshift VENDOR_LIB

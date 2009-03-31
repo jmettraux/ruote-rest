@@ -1,4 +1,9 @@
 
+#
+# tasks for installing / fetching ruote and co
+#
+# TODO : add doc for each tasks
+#
 namespace :ruote do
 
   RUFUSES = %w{ 
@@ -13,6 +18,8 @@ namespace :ruote do
   desc "Installs under vendor/ the latest source of OpenWFEru (and required subprojects)."
   task :install => :get_from_github do
 
+    puts "\n... now installing the gems required by ruote\n"
+    print "(sudoing) "
     %w{
       activerecord ruby_parser atom-tools mongrel rack
     }.each do |gem|
@@ -22,35 +29,40 @@ namespace :ruote do
 
   task :get_from_github do
 
-    mkdir 'tmp' unless File.exists?('tmp')
-
-    rm_r 'vendor/openwfe' if File.exists?('vendor/openwfe')
-    rm_r 'vendor/rufus' if File.exists?('vendor/rufus')
-    mkdir 'vendor' unless File.exists?('vendor')
+    rm_r 'vendor' if File.exists?('vendor')
+    mkdir 'vendor' #unless File.exists?('vendor')
 
     RUFUSES.each { |e| git_clone(e) }
     git_clone 'ruote'
+
+    require File.dirname(__FILE__) + '/frigo'
+    Frigo.create_frozen_rb('vendor')
+
+    File.open('vendor/README.txt', 'w') do |f|
+      f.write %{
+= vendor
+
+This directory contains ruote and its rufus dependencies, directly checked
+out of http://github.com
+
+Each subdir contains the .git/ repository, in case you might want to 'git pull'
+a new version.
+
+      }
+    end
   end
 
   def git_clone (elt)
 
-    chdir 'tmp' do
+    chdir 'vendor' do
       sh "git clone git://github.com/jmettraux/#{elt}.git"
     end
-    cp_r "tmp/#{elt}/lib/.", 'vendor/'
-    rm_r "tmp/#{elt}"
   end
 
   desc "Install Ruote and its dependencies as gems"
   task :gem_install do
 
-    GEMS = RUFUSES.dup
-
-    GEMS << 'ruote'
-    GEMS << 'activerecord'
-    GEMS << 'atom-tools'
-    GEMS << 'rack'
-    GEMS << 'mongrel'
+    GEMS = RUFUSES.merge %w{ ruote activerecord atom-tools rack mongrel }
 
     sh "sudo gem install --no-rdoc --no-ri #{GEMS.join(' ')}"
 
