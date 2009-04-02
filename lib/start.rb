@@ -61,10 +61,10 @@ end
 begin
 
   #$:.unshift "#{RUOTE_BASE_DIR}/vendor" # if any
-  if File.exist?('vendor/frozen.rb')
-    require 'vendor/frozen'
-  elsif File.exist?('vendorf/frozen.rb')
-    require 'vendorf/frozen'
+  if File.exist?("#{RUOTE_BASE_DIR}/vendor/frozen.rb")
+    require "#{RUOTE_BASE_DIR}/vendor/frozen"
+  elsif File.exist?("#{RUOTE_BASE_DIR}/vendorf/frozen.rb")
+    require "#{RUOTE_BASE_DIR}/vendorf/frozen"
   end
 
   $:.unshift "#{RUOTE_BASE_DIR}/lib"
