@@ -35,7 +35,11 @@
 require 'rexml/document'
 
 #require 'sinatra'
-require 'rufus/sixjo'
+begin
+  require 'rufus/sixjo'
+rescue LoadError
+  require 'rufus-sixjo'
+end
 
 include Rufus::Sixjo
 
