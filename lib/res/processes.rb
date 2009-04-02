@@ -31,7 +31,7 @@
 
 
 PROCESS_LOOKUP_KEYS = %w{
- value val name variable var v field f recursive to_string
+ value val name variable var v field f
 }.collect { |k| k.to_sym }
 
 #
@@ -43,7 +43,8 @@ get '/processes' do
     if v = params[k]; h[k] = v; end; h
   end
 
-  #p lookup_options
+  lookup_options[:recursive] = true if has?(:recursive)
+  lookup_options[:to_string] = true if has?(:to_string)
 
   processes = application.engine.process_statuses
 
@@ -161,6 +162,11 @@ helpers do
 
     application.engine.process_status(wfid) ||
       throw(:done, [ 404, "no process '#{wfid}'" ])
+  end
+
+  def has? (key)
+    v = params[key]
+    v == 'true' or v == '1'
   end
 end
 

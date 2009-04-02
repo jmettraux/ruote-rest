@@ -138,23 +138,17 @@ class StProcessesTest < Test::Unit::TestCase
         alpha
       end
     end)
-    
-    obj = OpenStruct.new
-    class << obj
-      def to_s
-        "string"
-      end
-    end
+
     running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'five') do
       sequence do
-        _set :field => 'object', :val => obj
+        _set :field => 'object', :val => 77
         alpha
       end
     end)
-    
+
 
     sleep 0.350
-    
+
     # default to all processes
     assert_process_count 5, nil
 
@@ -166,16 +160,16 @@ class StProcessesTest < Test::Unit::TestCase
     assert_process_count 1, 'field=nes.ted'
     assert_process_count 1, 'field=nes.ted&val=val0'
     assert_process_count 0, 'field=nes.ted&val=val1'
-    
+
     # check recursive searches
     assert_process_count 2, 'val=val0'
 
     # check lookups by to_string
-    assert_process_count 0, 'val=string'
-    assert_process_count 1, 'val=string&to_string=1'
+    assert_process_count 0, 'val=77'
+    assert_process_count 1, 'val=77&to_string=true'
 
     # over.
-    
+
     running_expressions.each do |fei|
       $app.engine.cancel_process(fei)
     end
