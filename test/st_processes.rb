@@ -113,47 +113,72 @@ class StProcessesTest < Test::Unit::TestCase
   end
 
   def test_process_lookup
-
-    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'one') do
+    running_expressions = []
+    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'one') do
       sequence do
         _set :var => 'v', :val => 'val0'
         alpha
       end
     end)
-    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'two') do
+    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'two') do
       sequence do
         _set :var => 'v', :val => 'val1'
         alpha
       end
     end)
-    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'three') do
+    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'three') do
       sequence do
         _set :field => 'f', :val => 'val0'
         alpha
       end
     end)
-    fei = $app.engine.launch(OpenWFE.process_definition(:name => 'four') do
+    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'four') do
       sequence do
-        _set :field => 'nes', :val => { 'ted' => 'val0' }
+        _set :field => 'nes', :val => { 'ted' => 'val0', 'tod' => 'val1' }
         alpha
       end
     end)
+    
+    obj = OpenStruct.new
+    class << obj
+      def to_s
+        "string"
+      end
+    end
+    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'five') do
+      sequence do
+        _set :field => 'object', :val => obj
+        alpha
+      end
+    end)
+    
 
     sleep 0.350
+    
+    # default to all processes
+    assert_process_count 5, nil
 
-    assert_process_count 4, nil
+    # simple variable & field name lookups
     assert_process_count 2, 'variable=v'
     assert_process_count 1, 'field=f'
+
+    # simple nested lookups
     assert_process_count 1, 'field=nes.ted'
     assert_process_count 1, 'field=nes.ted&val=val0'
     assert_process_count 0, 'field=nes.ted&val=val1'
+    
+    # check recursive searches
+    assert_process_count 2, 'val=val0'
 
-    #assert_process_count 2, 'val=val0'
-      # not yet
+    # check lookups by to_string
+    assert_process_count 0, 'val=string'
+    assert_process_count 1, 'val=string&to_string=1'
 
     # over.
-
-    $app.engine.cancel_process(fei)
+    
+    running_expressions.each do |fei|
+      $app.engine.cancel_process(fei)
+    end
 
     sleep 0.350
   end

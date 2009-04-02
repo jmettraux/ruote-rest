@@ -9,6 +9,7 @@
 
 require 'test/unit'
 require 'fileutils'
+require 'ostruct'
 
 require 'rubygems'
 

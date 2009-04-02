@@ -31,7 +31,7 @@
 
 
 PROCESS_LOOKUP_KEYS = %w{
- value val name variable var v field f
+ value val name variable var v field f recursive to_string
 }.collect { |k| k.to_sym }
 
 #
