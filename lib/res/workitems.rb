@@ -84,8 +84,8 @@ helpers do
 
   def find_workitem
 
-    wfid = OpenWFE.swapdots(params[:wfid])
-    expid = OpenWFE.swapdots(params[:expid])
+    wfid = OpenWFE.to_dots(params[:wfid])
+    expid = OpenWFE.to_dots(params[:expid])
 
     OpenWFE::Extras::ArWorkitem.find_by_wfid_and_expid(wfid, expid) ||
       throw(:done, [ 404, "no workitem #{params[:wfid]}/#{params[:expid]}" ])

@@ -36,8 +36,8 @@ class AllRepsTest < Test::Unit::TestCase
       url = "/#{name}"
       url = "#{url}/#{rid.join('/')}" if rid
       url = "#{url}.#{ctype}"
-      get url
-      output @response.body, url
+      get(url)
+      output(@response.body, url)
     end
   end
 
@@ -84,7 +84,7 @@ class AllRepsTest < Test::Unit::TestCase
 
     output_res(
       'expressions',
-      :id => [ exp.fei.wfid, swapdots(exp.fei.expid)], :json => false, :yaml => true)
+      :id => [ exp.fei.wfid, OpenWFE.to_uscores(exp.fei.expid)], :json => false, :yaml => true)
   end
 end
 

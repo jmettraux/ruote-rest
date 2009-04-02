@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,14 +27,9 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
 get '/expressions' do
@@ -103,8 +97,8 @@ helpers do
 
   def find_expression
 
-    wfid = OpenWFE.swapdots(params[:wfid])
-    expid = OpenWFE.swapdots(params[:expid])
+    wfid = OpenWFE.to_dots(params[:wfid])
+    expid = OpenWFE.to_dots(params[:expid])
 
     env = false
 

@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,14 +27,10 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
 
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 require 'digest/md5'
 
@@ -67,7 +62,7 @@ class Rack::Request
       base << ":#{port}"
     end
 
-    base + "/" + args.collect {|a| a.to_s }.join("/")
+    "#{base}/#{args.collect {|a| a.to_s }.join('/')}"
   end
 end
 
@@ -110,8 +105,8 @@ class OpenWFE::FlowExpressionId
   #
   def href (req=nil, resource_name='expressions')
 
-    env = self.expname == "environment" ? "e" : ""
-    ei = "#{OpenWFE.swapdots(self.expid)}#{env}"
+    env = self.expname == 'environment' ? 'e' : ''
+    ei = "#{OpenWFE.to_uscores(self.expid)}#{env}"
 
     return req.href(resource_name, wfid, ei) if req
 
@@ -244,7 +239,7 @@ class OpenWFE::ProcessError
 
   def error_id
 
-    OpenWFE.swapdots(fei.expid) +
+    OpenWFE.to_uscores(fei.expid) +
     '_' +
     Rufus::Mnemo.from_integer(date.to_i.abs)
       # 2008 AD, but what about 2008 BC ?

@@ -123,7 +123,7 @@ helpers do
       :href => request.href(
         :expressions,
         fei.wfid,
-        OpenWFE.swapdots(expid)))
+        OpenWFE.to_uscores(expid)))
   end
 
   def render_expression_xml (e, options={ :indent => 2})
