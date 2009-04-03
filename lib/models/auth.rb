@@ -1,3 +1,4 @@
+
 module OpenWFE
   module Extras
 
@@ -9,30 +10,30 @@ module OpenWFE
 
     class HostTables < ActiveRecord::Migration
       def self.up
-	create_table :hosts do |t| 
+	create_table :hosts do |t|
 	  t.column :ip, :string
 	  t.column :trusted, :string
 	  t.column :from, :string
 	  t.column :to, :string
-	end 
-      end 
+	end
+      end
 
       def self.down
 	drop_table :users
-      end 
+      end
     end
 
     class UserTables < ActiveRecord::Migration
       def self.up
-	create_table :users do |t| 
+	create_table :users do |t|
 	  t.column :login, :string
 	  t.column :name, :string
 	  t.column :password, :string
 	  t.column :email, :string
 	  t.column :created_at, :timestamp
 	  t.column :updated_at, :timestamp
-	end 
- 
+	end
+
 	add_index :users, :login, :unique => true
 	add_index :users, :name
 	add_index :users, :email

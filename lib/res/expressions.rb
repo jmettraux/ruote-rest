@@ -42,7 +42,7 @@ module RuoteRest
   get '/expressions/:wfid' do
 
     #wfid = params[:wfid]
-    #es = application.engine.process_stack wfid, true
+    #es = RuoteRest.engine.process_stack wfid, true
     #throw :done, [ 404, "no process #{wfid}" ] unless es
 
     ps = get_process_status
@@ -55,7 +55,7 @@ module RuoteRest
 
     e = rparse(:expression)
 
-    application.engine.update_expression e
+    RuoteRest.engine.update_expression e
 
     render_ok(e.href(request), "expression at #{e.href} updated")
   end
@@ -75,7 +75,7 @@ module RuoteRest
     tree = rparse(:expression_tree)
     e = find_expression
 
-    application.engine.update_expression_tree(e, tree)
+    RuoteRest.engine.update_expression_tree(e, tree)
 
     render_ok(e.href(request), "expression at #{e.href} updated")
   end
@@ -84,7 +84,7 @@ module RuoteRest
 
     e = find_expression
 
-    application.engine.cancel_expression e
+    RuoteRest.engine.cancel_expression e
 
     render_ok(
       request.href(:expressions, params[:wfid]),

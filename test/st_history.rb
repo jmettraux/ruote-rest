@@ -17,7 +17,7 @@ class StHistoryTest < Test::Unit::TestCase
 
   def test_0
 
-    fei = $app.engine.launch <<-EOS
+    fei = RuoteRest.engine.launch <<-EOS
       class Test0 < OpenWFE::ProcessDefinition
         sequence do
           alpha

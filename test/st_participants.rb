@@ -67,7 +67,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     #p @response.status
     #puts @response.body
-    
+
     assert_equal 201, @response.status
     assert_not_equal '', @response.body
 
@@ -86,7 +86,7 @@ class StParticipantsTest < Test::Unit::TestCase
 
     assert_equal(
       [ 'one', 'two', 'three' ],
-      $app.engine.get_participant_map.lookup_participant('carlito').params)
+      RuoteRest.engine.get_participant_map.lookup_participant('carlito').params)
   end
 
 end
