@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,79 +27,78 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-helpers do
+module RuoteRest
 
-  #
-  # IN
+  helpers do
 
-  def parse_participant_json (json)
+    #
+    # IN
 
-    json_parse(json)
-  end
+    def parse_participant_json (json)
 
-  def parse_participant_form (x)
+      json_parse(json)
+    end
 
-    store_name = params[:store_name]
-    store_name = nil if store_name.strip == ''
+    def parse_participant_form (x)
 
-    [ params[:regex], params[:class], store_name ]
-  end
+      store_name = params[:store_name]
+      store_name = nil if store_name.strip == ''
 
-  #
-  # OUT
+      [ params[:regex], params[:class], store_name ]
+    end
 
-  def render_participants_xml (ps, options={ :indent => 2 })
+    #
+    # OUT
 
-    OpenWFE::Xml::builder(options) do |xml|
-      xml.participants :count => ps.size do
-        ps.each do |participant|
-          render_participant_xml participant, options
+    def render_participants_xml (ps, options={ :indent => 2 })
+
+      OpenWFE::Xml::builder(options) do |xml|
+        xml.participants :count => ps.size do
+          ps.each do |participant|
+            render_participant_xml participant, options
+          end
         end
       end
     end
-  end
 
-  def render_participants_html (ps)
+    def render_participants_html (ps)
 
-    _erb(
-      :participants,
-      :layout => :html,
-      :locals => { :participants => ps })
-  end
+      _erb(
+        :participants,
+        :layout => :html,
+        :locals => { :participants => ps })
+    end
 
-  def render_participant_html (part, detailed=true)
+    def render_participant_html (part, detailed=true)
 
-    _erb(
-      :participant,
-      :layout => detailed ? :html : nil,
-      :locals => { :participant => part, :detailed => detailed })
-  end
+      _erb(
+        :participant,
+        :layout => detailed ? :html : nil,
+        :locals => { :participant => part, :detailed => detailed })
+    end
 
-  def render_participant_xml (part, options={ :indent => 2})
+    def render_participant_xml (part, options={ :indent => 2})
 
-    OpenWFE::Xml::builder(options) do |xml|
+      OpenWFE::Xml::builder(options) do |xml|
 
-      regex, participant = part
+        regex, participant = part
 
-      params = {
-        :href =>
-        request.href(:participants, uri_escape(regex.original_string)) }
+        params = {
+          :href =>
+          request.href(:participants, uri_escape(regex.original_string)) }
 
-      xml.participant(params) do
-        xml.regex regex.original_string
-        xml.tag! :class, participant.class.name
+        xml.participant(params) do
+          xml.regex regex.original_string
+          xml.tag! :class, participant.class.name
+        end
       end
     end
+
   end
 
 end

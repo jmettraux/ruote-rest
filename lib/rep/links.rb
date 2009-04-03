@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,29 +27,26 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-helpers do
+module RuoteRest
 
-  #
-  # Leveraging the info in the Rack request to produce a set of absolute
-  # resource links.
-  #
-  class RackLinkGenerator < OpenWFE::PlainLinkGenerator
+  helpers do
 
-    def initialize (request)
-      @request = request
-    end
+    #
+    # Leveraging the info in the Rack request to produce a set of absolute
+    # resource links.
+    #
+    class RackLinkGenerator < OpenWFE::PlainLinkGenerator
 
-    protected
+      def initialize (request)
+        @request = request
+      end
+
+      protected
 
       #
       # overriding ...
@@ -61,8 +57,10 @@ helpers do
 
         return [ href, rel ] if @request.host == 'example.org' # tests...
 
-        [ "#{@request.scheme}://#{@request.host}:#{@request.port}#{href}", rel ]
+        ["#{@request.scheme}://#{@request.host}:#{@request.port}#{href}", rel ]
       end
+    end
+
   end
 
 end

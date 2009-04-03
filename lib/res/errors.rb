@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,67 +27,65 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
 
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
+module RuoteRest
 
+  get '/errors' do
 
-get '/errors' do
+    logs = application.engine.get_error_journal.get_error_logs
 
-  logs = application.engine.get_error_journal.get_error_logs
+    errors = logs.values.inject([]) { |a, log| a = a + log }
+    errors = errors.sort_by { |err| err.fei.wfid }
 
-  errors = logs.values.inject([]) { |a, log| a = a + log }
-  errors = errors.sort_by { |err| err.fei.wfid }
+    errors.extend(ArrayEtagMixin)
 
-  errors.extend(ArrayEtagMixin)
+    rrender(:errors, errors)
+  end
 
-  rrender(:errors, errors)
-end
-
-get '/errors/:wfid' do
-
-  wfid = params[:wfid]
-
-  errors = application.engine.get_error_journal.get_error_log(wfid)
-
-  errors.extend(ArrayEtagMixin)
-
-  rrender(:errors, errors)
-end
-
-get '/errors/:wfid/:error_id' do
-
-  rrender(:error, find_error)
-end
-
-delete '/errors/:wfid/:error_id' do
-
-  error = find_error
-
-  application.engine.replay_at_error(error)
-
-  'replayed'
-end
-
-
-#
-# well, helpers...
-
-helpers do
-
-  def find_error
+  get '/errors/:wfid' do
 
     wfid = params[:wfid]
-    error_id = params[:error_id]
 
     errors = application.engine.get_error_journal.get_error_log(wfid)
 
-    errors.find { |e| e.error_id == error_id }
+    errors.extend(ArrayEtagMixin)
+
+    rrender(:errors, errors)
   end
+
+  get '/errors/:wfid/:error_id' do
+
+    rrender(:error, find_error)
+  end
+
+  delete '/errors/:wfid/:error_id' do
+
+    error = find_error
+
+    application.engine.replay_at_error(error)
+
+    'replayed'
+  end
+
+
+  #
+  # well, helpers...
+
+  helpers do
+
+    def find_error
+
+      wfid = params[:wfid]
+      error_id = params[:error_id]
+
+      errors = application.engine.get_error_journal.get_error_log(wfid)
+
+      errors.find { |e| e.error_id == error_id }
+    end
+  end
+
 end
 

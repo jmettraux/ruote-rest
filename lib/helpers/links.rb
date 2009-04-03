@@ -32,56 +32,60 @@
 #++
 
 
-helpers do
+module RuoteRest
 
-  #
-  # builds a GET link (<a ...>GET ...</a>)
-  #
-  def rlink (*args)
+  helpers do
 
-    # rel= ?
-    # http://microformats.org/wiki/rel-design-pattern
+    #
+    # builds a GET link (<a ...>GET ...</a>)
+    #
+    def rlink (*args)
 
-    return args.first.link(request) \
-      if args.size == 1 and args.first.respond_to?(:link)
+      # rel= ?
+      # http://microformats.org/wiki/rel-design-pattern
 
-    params = args.last.is_a?(Hash) ? args.pop : nil
+      return args.first.link(request) \
+        if args.size == 1 and args.first.respond_to?(:link)
 
-    params = "?" + params.collect { |k, v|
-      "#{k}=#{OpenWFE.to_uscores(v)}"
-    }.join("&") if params
+      params = args.last.is_a?(Hash) ? args.pop : nil
 
-    params = '' unless params
+      params = "?" + params.collect { |k, v|
+        "#{k}=#{OpenWFE.to_uscores(v)}"
+      }.join("&") if params
 
-    args = args.collect { |a| has_filetype?(a) ? a : OpenWFE.to_uscores(a) }
+      params = '' unless params
 
-    "<a href=\"#{request.href(*args)}#{params}\">" +
-    "GET /#{args.join('/')}#{params}" +
-    "</a>"
-  end
+      args = args.collect { |a| has_filetype?(a) ? a : OpenWFE.to_uscores(a) }
 
-  #
-  # returns the current URI
-  #
-  def here
+      "<a href=\"#{request.href(*args)}#{params}\">" +
+      "GET /#{args.join('/')}#{params}" +
+      "</a>"
+    end
 
-    "#{request.scheme}://#{request.host}:#{request.port}" +
-    "#{request.fullpath}"
-  end
+    #
+    # returns the current URI
+    #
+    def here
 
-  #
-  # returns the special href for debugging formats (plain=true)
-  #
-  def as_x_href (format)
+      "#{request.scheme}://#{request.host}:#{request.port}" +
+      "#{request.fullpath}"
+    end
 
-    #href = here
-    #href += href.index('?') ? '&' : '?'
-    #href + "format=#{format}&plain=true"
+    #
+    # returns the special href for debugging formats (plain=true)
+    #
+    def as_x_href (format)
 
-    r = "#{request.scheme}://#{request.host}:#{request.port}"
-    r << "#{request.script_name}#{request.path_info}.#{format}?plain=true"
-    r << "&#{request.query_string}" if request.query_string.length > 0
-    r
+      #href = here
+      #href += href.index('?') ? '&' : '?'
+      #href + "format=#{format}&plain=true"
+
+      r = "#{request.scheme}://#{request.host}:#{request.port}"
+      r << "#{request.script_name}#{request.path_info}.#{format}?plain=true"
+      r << "&#{request.query_string}" if request.query_string.length > 0
+      r
+    end
+
   end
 
 end

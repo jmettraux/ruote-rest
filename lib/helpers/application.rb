@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,14 +27,10 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
 
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 module Rufus::Sixjo::Erb
 
@@ -52,10 +47,12 @@ module Rufus::Sixjo::Erb
 end
 
 
-helpers do
+module RuoteRest
 
-  def some_javascript
-    <<-EOS
+  helpers do
+
+    def some_javascript
+      <<-EOS
 <script>
   function show (eltid) {
     elt = document.getElementById(eltid);
@@ -66,77 +63,77 @@ helpers do
     elt.style.display = "none";
   }
 </script>
-    EOS
-  end
-
-  #
-  #     display_time(workitem, :dispatch_time)
-  #         # => Sat Mar 1 20:29:44 2008 (1d16h18m)
-  #
-  def display_time (object, accessor)
-
-    t = object.send accessor
-
-    return "" unless t
-
-    "#{t.ctime} (#{display_since(t)})"
-  end
-
-  #
-  #     display_since(workitem, :dispatch_time)
-  #         # => 1d16h18m
-  #
-  def display_since (object, accessor=nil)
-
-    t = accessor ? object.send(accessor) : object
-
-    return "" unless t
-
-    d = Time.now - t
-
-    Rufus::to_duration_string(d, :drop_seconds => true)
-  end
-
-  def page_link (respath, offset, limit, text)
-    "<a href=\"#{respath}?offset=#{offset}&limit=#{limit}\">#{text}</a> "
-  end
-
-  def paging (respath, offset, limit, total)
-
-    s = ''
-
-    s << page_link(respath, 0, limit, '|&lt;') \
-      if offset != 0
-
-    s << page_link(respath, offset - limit, limit, '&lt;') \
-      if offset - limit > 0
-
-    s << " #{offset} to #{offset + limit} / #{total} "
-
-    s << page_link(respath, offset + limit, limit, '&gt;') \
-      if offset + 2 * limit < total
-
-    s << page_link(respath, total - limit, limit, '&gt;|') \
-      if offset + limit < total
-
-    "<div class=\"pager\">#{s}</div>"
-  end
-
-  def render_ok (location, message)
-
-    format, type = determine_out_format
-
-    if format == 'xml'
-      #response.status = 200
-      "<message>#{message}</message>"
-    elsif format == 'json'
-      #response.status = 200
-      message.to_json
-    else
-      response.status = 303
-      response.location = request.href(:processes)
-      message
+      EOS
     end
+
+    #
+    #     display_time(workitem, :dispatch_time)
+    #         # => Sat Mar 1 20:29:44 2008 (1d16h18m)
+    #
+    def display_time (object, accessor)
+
+      t = object.send(accessor)
+
+      t ? "#{t.ctime} (#{display_since(t)})" : ''
+    end
+
+    #
+    #     display_since(workitem, :dispatch_time)
+    #         # => 1d16h18m
+    #
+    def display_since (object, accessor=nil)
+
+      t = accessor ? object.send(accessor) : object
+
+      return '' unless t
+
+      d = Time.now - t
+
+      Rufus::to_duration_string(d, :drop_seconds => true)
+    end
+
+    def page_link (respath, offset, limit, text)
+      "<a href=\"#{respath}?offset=#{offset}&limit=#{limit}\">#{text}</a> "
+    end
+
+    def paging (respath, offset, limit, total)
+
+      s = ''
+
+      s << page_link(respath, 0, limit, '|&lt;') \
+        if offset != 0
+
+      s << page_link(respath, offset - limit, limit, '&lt;') \
+        if offset - limit > 0
+
+      s << " #{offset} to #{offset + limit} / #{total} "
+
+      s << page_link(respath, offset + limit, limit, '&gt;') \
+        if offset + 2 * limit < total
+
+      s << page_link(respath, total - limit, limit, '&gt;|') \
+        if offset + limit < total
+
+      "<div class=\"pager\">#{s}</div>"
+    end
+
+    def render_ok (location, message)
+
+      format, type = determine_out_format
+
+      if format == 'xml'
+        #response.status = 200
+        "<message>#{message}</message>"
+      elsif format == 'json'
+        #response.status = 200
+        message.to_json
+      else
+        response.status = 303
+        response.location = request.href(:processes)
+        message
+      end
+    end
+
   end
 
 end

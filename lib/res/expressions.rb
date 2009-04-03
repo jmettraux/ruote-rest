@@ -32,84 +32,88 @@
 #++
 
 
-get '/expressions' do
+module RuoteRest
 
-  _erb :expressions_, :layout => :html
-end
+  get '/expressions' do
 
-get '/expressions/:wfid' do
+    _erb :expressions_, :layout => :html
+  end
 
-  #wfid = params[:wfid]
-  #es = application.engine.process_stack wfid, true
-  #throw :done, [ 404, "no process #{wfid}" ] unless es
+  get '/expressions/:wfid' do
 
-  ps = get_process_status
+    #wfid = params[:wfid]
+    #es = application.engine.process_stack wfid, true
+    #throw :done, [ 404, "no process #{wfid}" ] unless es
 
-  #rrender :expressions, es
-  rrender :expressions, ps.all_expressions
-end
+    ps = get_process_status
 
-put '/expressions/:wfid/:expid' do
+    #rrender :expressions, es
+    rrender :expressions, ps.all_expressions
+  end
 
-  e = rparse(:expression)
+  put '/expressions/:wfid/:expid' do
 
-  application.engine.update_expression e
+    e = rparse(:expression)
 
-  render_ok(e.href(request), "expression at #{e.href} updated")
-end
+    application.engine.update_expression e
 
-get '/expressions/:wfid/:expid' do
+    render_ok(e.href(request), "expression at #{e.href} updated")
+  end
 
-  rrender(:expression, find_expression)
-end
+  get '/expressions/:wfid/:expid' do
 
-get '/expressions/:wfid/:expid/tree' do
+    rrender(:expression, find_expression)
+  end
 
-  rrender(:expression_tree, find_expression)
-end
+  get '/expressions/:wfid/:expid/tree' do
 
-put '/expressions/:wfid/:expid/tree' do
+    rrender(:expression_tree, find_expression)
+  end
 
-  tree = rparse(:expression_tree)
-  e = find_expression
+  put '/expressions/:wfid/:expid/tree' do
 
-  application.engine.update_expression_tree(e, tree)
+    tree = rparse(:expression_tree)
+    e = find_expression
 
-  render_ok(e.href(request), "expression at #{e.href} updated")
-end
+    application.engine.update_expression_tree(e, tree)
 
-delete '/expressions/:wfid/:expid' do
+    render_ok(e.href(request), "expression at #{e.href} updated")
+  end
 
-  e = find_expression
+  delete '/expressions/:wfid/:expid' do
 
-  application.engine.cancel_expression e
+    e = find_expression
 
-  render_ok(
-    request.href(:expressions, params[:wfid]),
-    "expression at #{e.href} cancelled (terminated)")
-end
+    application.engine.cancel_expression e
+
+    render_ok(
+      request.href(:expressions, params[:wfid]),
+      "expression at #{e.href} cancelled (terminated)")
+  end
 
 
 #
 # some helper methods
 
-helpers do
+  helpers do
 
-  def find_expression
+    def find_expression
 
-    wfid = OpenWFE.to_dots(params[:wfid])
-    expid = OpenWFE.to_dots(params[:expid])
+      wfid = OpenWFE.to_dots(params[:wfid])
+      expid = OpenWFE.to_dots(params[:expid])
 
-    env = false
+      env = false
 
-    if expid[-1, 1] == 'e'
-      expid = expid[0..-2]
-      env = true
+      if expid[-1, 1] == 'e'
+        expid = expid[0..-2]
+        env = true
+      end
+
+      get_process_status.all_expressions.find { |e|
+        (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
+      } or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
     end
-
-    get_process_status.all_expressions.find { |e|
-      (e.fei.expid == expid) and (env == e.is_a?(OpenWFE::Environment))
-    } or throw :done, [ 404, "no expression #{expid} in process #{wfid}" ]
   end
+
 end
 

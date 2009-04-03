@@ -29,13 +29,6 @@ class OpenWFE::RackWhiteListing
     env['RUOTE_AUTHENTICATED'] = OpenWFE::Extras::Host.exists?(:ip => env['REMOTE_ADDR'], :trusted => true)
     @rack_app.call(env)
   end
-
-  #def authenticate_by_password
-  #  @rack_app = Rack::Auth::Basic.new(@rack_app) do |username, password|
-  #    @config['users'][username] && @config['users'][username] == password
-  #  end
-  #  @rack_app.realm = @config['basic_auth_realm']
-  #end
 end
 
 class OpenWFE::RackBasicAuth < Rack::Auth::Basic
@@ -77,8 +70,7 @@ class OpenWFE::RackBasicAuth < Rack::Auth::Basic
 
     user = OpenWFE::Extras::User.find_by_login(user_login)
 
-    user ? check_password(user.password,user_pass) : false
-
+    user ? check_password(user.password, user_pass) : false
   end
 
   def valid_host? (host_ip)
@@ -126,7 +118,7 @@ end
 
 #  $app = OpenWFE::RackWhiteListing.new($app) if AUTH_CONF['whitelisting']
 
-   $app = OpenWFE::RackWhiteListing.new($app)   
+   $app = OpenWFE::RackWhiteListing.new($app)
 #end
 
 # ($app always pointing to 'top' app, while $rr points to ruote-rest itself)

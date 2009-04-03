@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,31 +28,28 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-helpers do
+module RuoteRest
 
-  #
-  # IN
+  helpers do
 
-  #
-  # OUT
+    #
+    # IN
 
-  def render_fei_html (fei)
+    #
+    # OUT
 
-    _erb :fei, :layout => :html, :locals => { :fei => fei }
-  end
+    def render_fei_html (fei)
 
-  def render_fei_xml (fei)
+      _erb :fei, :layout => :html, :locals => { :fei => fei }
+    end
 
-    OpenWFE::Xml.fei_to_xml fei, :indent => 2, :request => request
+    def render_fei_xml (fei)
+
+      OpenWFE::Xml.fei_to_xml fei, :indent => 2, :request => request
+    end
+
   end
 
 end

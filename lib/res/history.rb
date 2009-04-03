@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,73 +27,73 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 require 'openwfe/extras/expool/db_history'
 
+module RuoteRest
 
-get '/history' do
+  get '/history' do
 
-  rrender :history, find_entries(params)
-end
-
-get '/history/:wfid' do
-
-  rrender :history, find_entries(params)
-end
-
-
-helpers do
-
-  def find_entries (params)
-
-    atom = (determine_out_format({}).first == 'atom')
-
-    offset = (params[:offset] || 0).to_i
-    offset = 0 if atom
-
-    limit = (params[:limit] || 30).to_i
-    limit = 210 if atom
-
-    wfid = params[:wfid]
-
-    event = params[:event]
-
-    order = params[:order] || 'id'
-    desc = params[:desc] || 'true'
-    order = "#{order} #{desc == 'false' ? 'ASC' : 'DESC'}"
-    order = 'id DESC' if atom
-
-    cond = {}
-    cond[:wfid] = wfid if wfid
-    cond[:event] = event if event
-
-    opts = {
-      :offset => offset, :limit => limit, :order => order, :conditions => cond }
-
-    total = ActiveRecord::Base::connection.execute(
-      'select count(*) from history').fetch_row[0].to_i
-
-    entries = {
-      :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
-      :total => total,
-      :offset => offset,
-      :limit => limit
-    }
-
-    class << entries
-      def etag
-        md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
-      end
-    end
-
-    entries
+    rrender :history, find_entries(params)
   end
+
+  get '/history/:wfid' do
+
+    rrender :history, find_entries(params)
+  end
+
+
+  helpers do
+
+    def find_entries (params)
+
+      atom = (determine_out_format({}).first == 'atom')
+
+      offset = (params[:offset] || 0).to_i
+      offset = 0 if atom
+
+      limit = (params[:limit] || 30).to_i
+      limit = 210 if atom
+
+      wfid = params[:wfid]
+
+      event = params[:event]
+
+      order = params[:order] || 'id'
+      desc = params[:desc] || 'true'
+      order = "#{order} #{desc == 'false' ? 'ASC' : 'DESC'}"
+      order = 'id DESC' if atom
+
+      cond = {}
+      cond[:wfid] = wfid if wfid
+      cond[:event] = event if event
+
+      opts = {
+        :offset => offset, :limit => limit, :order => order, :conditions => cond
+      }
+
+      total = ActiveRecord::Base::connection.execute(
+        'select count(*) from history').fetch_row[0].to_i
+
+      entries = {
+        :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),
+        :total => total,
+        :offset => offset,
+        :limit => limit
+      }
+
+      class << entries
+        def etag
+          md5("#{self[:total]}_#{self[:offset]}_#{self[:limit]}")
+        end
+      end
+
+      entries
+    end
+  end
+
 end
+

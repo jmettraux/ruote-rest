@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,37 +27,35 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
 
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
-helpers do
+module RuoteRest
 
-  def render_fluo_head
-    %{
+  helpers do
+
+    def render_fluo_head
+      %{
 <div>
   <div style="float: left; width: 63%;">
-    }
-  end
-
-  def render_fluo_foot (wfid, expid=nil, workitems=[])
-
-    rep = if wfid == nil
-      "<script>var proc_rep = null;</script>"
-    elsif wfid.is_a?(Array)
-      "<script>var proc_rep = #{wfid.to_json};</script>"
-    else
-      "<script src=\"/processes/#{wfid}/tree?format=js&var=proc_rep\"></script>"
+      }
     end
 
-    hl = expid ? "\nFluoCan.highlight('fluo', '#{expid}');" : ""
+    def render_fluo_foot (wfid, expid=nil, workitems=[])
 
-    %{
+      rep = if wfid == nil
+        "<script>var proc_rep = null;</script>"
+      elsif wfid.is_a?(Array)
+        "<script>var proc_rep = #{wfid.to_json};</script>"
+      else
+        "<script src=\"/processes/#{wfid}/tree?format=js&var=proc_rep\"></script>"
+      end
+
+      hl = expid ? "\nFluoCan.highlight('fluo', '#{expid}');" : ""
+
+      %{
   </div>
 
   <script src="/js/fluo-json.js"></script>
@@ -89,7 +86,9 @@ helpers do
   </div>
   <div style="clear: both;"></div>
 </div>
-    }
+      }
+    end
+
   end
 
 end

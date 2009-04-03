@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,69 +27,68 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-get '/participants' do
+module RuoteRest
 
-  rrender :participants, application.engine.participants
-end
+  get '/participants' do
 
-get '/participants/:pid' do
+    rrender :participants, application.engine.participants
+  end
 
-  rrender :participant, get_participant
-end
+  get '/participants/:pid' do
 
-post '/participants' do
+    rrender :participant, get_participant
+  end
 
-  regex, pclass, store_name = rparse(:participant)
+  post '/participants' do
 
-  Participants.add(regex, pclass, store_name)
+    regex, pclass, store_name = rparse(:participant)
 
-  rrender(:participants, application.engine.participants, :status => 201)
-end
+    Participants.add(regex, pclass, store_name)
 
-delete '/participants/:pid' do
+    rrender(:participants, application.engine.participants, :status => 201)
+  end
 
-  pid, part = get_participant
-  Participants.remove pid
+  delete '/participants/:pid' do
 
-  render_ok(request.href(:participants), "participant #{pid} removed")
-end
+    pid, part = get_participant
+    Participants.remove pid
+
+    render_ok(request.href(:participants), "participant #{pid} removed")
+  end
 
 
-#
-# helpers
+  #
+  # helpers
 
-helpers do
+  helpers do
 
-  def get_participant
+    def get_participant
 
-    pid = params[:pid]
+      pid = params[:pid]
 
-    if pid
+      if pid
 
-      pid = Rack::Utils.unescape(pid) # no need :)
+        pid = Rack::Utils.unescape(pid) # no need :)
 
-      regex, part = application.engine.participants.find do |pr, pa|
-        pr.original_string == pid
+        regex, part = application.engine.participants.find do |pr, pa|
+          pr.original_string == pid
+        end
+
+        throw(:done, [ 404, "no participant at #{pid}" ]) unless part
+
+        [ regex, part ]
+
+      else
+
+        [ nil, nil ]
       end
-
-      throw(:done, [ 404, "no participant at #{pid}" ]) unless part
-
-      [ regex, part ]
-
-    else
-
-      [ nil, nil ]
     end
   end
+
 end
 

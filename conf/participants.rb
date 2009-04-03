@@ -2,6 +2,8 @@
 #
 # participants initialization goes here
 
+module RuoteRest
+
 configure do
 
   #
@@ -26,5 +28,7 @@ configure do
   sleep 0.350
     #
     # let the engine reschedule/repause stuff in the expool
+end
+
 end
 
