@@ -34,10 +34,12 @@
 
 require 'rexml/document'
 
-#require 'sinatra'
 require 'rufus/sixjo'
 
-include Rufus::Sixjo
+module RuoteRest
+  extend Rufus::Sixjo
+end
+
 
 #
 # conf
@@ -94,15 +96,19 @@ load 'helpers/fluo.rb'
 #
 # '/' redirection
 
-get '/' do
-  redirect request.href(:service)
+module RuoteRest
+
+  get '/' do
+    redirect request.href(:service)
+  end
 end
 
 #
 # Racking
 
 Rufus::Sixjo.view_path = RUOTE_BASE_DIR + '/views'
-$rr = new_sixjo_rack_app(
+
+$rr = RuoteRest.new_sixjo_rack_app(
   Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')), :environment => $env)
 $app = $rr
 

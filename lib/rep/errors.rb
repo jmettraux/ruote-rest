@@ -32,50 +32,54 @@
 #++
 
 
-helpers do
+module RuoteRest
 
-  def render_errors_xml (errors, options={ :indent => 2 })
+  helpers do
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_errors_xml (errors, options={ :indent => 2 })
 
-    OpenWFE::Xml.errors_to_xml(errors, options)
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_error_xml (error, options={ :indent => 2 })
+      OpenWFE::Xml.errors_to_xml(errors, options)
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_error_xml (error, options={ :indent => 2 })
 
-    OpenWFE::Xml.error_to_xml(error, options)
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_errors_json (errors, options={})
+      OpenWFE::Xml.error_to_xml(error, options)
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_errors_json (errors, options={})
 
-    OpenWFE::Json.errors_to_h(errors, options).to_json
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_error_json (error, options={})
+      OpenWFE::Json.errors_to_h(errors, options).to_json
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_error_json (error, options={})
 
-    OpenWFE::Json.error_to_h(error, options).to_json
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_errors_html (errors)
+      OpenWFE::Json.error_to_h(error, options).to_json
+    end
 
-    _erb(
-      :errors,
-      :layout => :html,
-      :locals => { :errors => errors })
-  end
+    def render_errors_html (errors)
 
-  def render_error_html (error, alone=true)
+      _erb(
+        :errors,
+        :layout => :html,
+        :locals => { :errors => errors })
+    end
 
-    _erb(
-      :error,
-      :layout => alone ? :html : false,
-      :locals => { :error => error, :alone => alone })
+    def render_error_html (error, alone=true)
+
+      _erb(
+        :error,
+        :layout => alone ? :html : false,
+        :locals => { :error => error, :alone => alone })
+    end
+
   end
 
 end

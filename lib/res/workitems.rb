@@ -32,100 +32,104 @@
 #++
 
 
-get '/workitems' do
+module RuoteRest
 
-  rrender :workitems, find_workitems
-end
+  get '/workitems' do
 
-get '/workitems/:wfid' do
-
-  rrender :workitems, find_workitems
-end
-
-get '/workitems/:wfid/:expid' do
-
-  rrender :workitem, find_workitem
-end
-
-put '/workitems/:wfid/:expid' do
-
-  wi = find_workitem
-
-  owi = rparse(:workitem)
-
-  #owi.attributes.delete('_uri')
-  state = owi.attributes.delete('_state')
-
-  if state == 'proceeded'
-
-    owi.fei = wi.full_fei
-
-    application.engine.reply(owi)
-    wi.destroy
-
-    response.location = request.href(:workitems)
-
-    rrender(:workitems, find_workitems)
-  else
-
-    # TODO : notify HTML clients of the update ? flash.notice ?
-
-    wi.replace_fields(owi.attributes)
-
-    rrender(:workitem, wi)
-  end
-end
-
-
-#
-# helpers
-
-helpers do
-
-  def find_workitem
-
-    wfid = OpenWFE.to_dots(params[:wfid])
-    expid = OpenWFE.to_dots(params[:expid])
-
-    OpenWFE::Extras::ArWorkitem.find_by_wfid_and_expid(wfid, expid) ||
-      throw(:done, [ 404, "no workitem #{params[:wfid]}/#{params[:expid]}" ])
+    rrender :workitems, find_workitems
   end
 
-  def find_workitems
+  get '/workitems/:wfid' do
 
-    p = params[:participant]
-    sn = get_store_names
-    wfid = params[:wfid]
-    q = params[:q]
+    rrender :workitems, find_workitems
+  end
 
-    workitems = if p
-      OpenWFE::Extras::ArWorkitem.find_all_by_participant_name(p)
-    elsif q
-      OpenWFE::Extras::ArWorkitem.search(q, sn)
-    elsif sn
-      OpenWFE::Extras::ArWorkitem.find_in_stores(sn)
-    elsif wfid
-      OpenWFE::Extras::ArWorkitem.find_all_by_wfid(wfid)
+  get '/workitems/:wfid/:expid' do
+
+    rrender :workitem, find_workitem
+  end
+
+  put '/workitems/:wfid/:expid' do
+
+    wi = find_workitem
+
+    owi = rparse(:workitem)
+
+    #owi.attributes.delete('_uri')
+    state = owi.attributes.delete('_state')
+
+    if state == 'proceeded'
+
+      owi.fei = wi.full_fei
+
+      application.engine.reply(owi)
+      wi.destroy
+
+      response.location = request.href(:workitems)
+
+      rrender(:workitems, find_workitems)
     else
-      OpenWFE::Extras::ArWorkitem.find :all
+
+      # TODO : notify HTML clients of the update ? flash.notice ?
+
+      wi.replace_fields(owi.attributes)
+
+      rrender(:workitem, wi)
+    end
+  end
+
+
+  #
+  # helpers
+
+  helpers do
+
+    def find_workitem
+
+      wfid = OpenWFE.to_dots(params[:wfid])
+      expid = OpenWFE.to_dots(params[:expid])
+
+      OpenWFE::Extras::ArWorkitem.find_by_wfid_and_expid(wfid, expid) ||
+        throw(:done, [ 404, "no workitem #{params[:wfid]}/#{params[:expid]}" ])
     end
 
-    workitems = workitems.sort_by { |wi| wi.id }
+    def find_workitems
 
-    workitems.extend(ArrayEtagMixin)
+      p = params[:participant]
+      sn = get_store_names
+      wfid = params[:wfid]
+      q = params[:q]
 
-    workitems
+      workitems = if p
+        OpenWFE::Extras::ArWorkitem.find_all_by_participant_name(p)
+      elsif q
+        OpenWFE::Extras::ArWorkitem.search(q, sn)
+      elsif sn
+        OpenWFE::Extras::ArWorkitem.find_in_stores(sn)
+      elsif wfid
+        OpenWFE::Extras::ArWorkitem.find_all_by_wfid(wfid)
+      else
+        OpenWFE::Extras::ArWorkitem.find :all
+      end
+
+      workitems = workitems.sort_by { |wi| wi.id }
+
+      workitems.extend(ArrayEtagMixin)
+
+      workitems
+    end
+
+    #
+    # Returns an array of store names or nil, if the parameter 'store'
+    # is not passed.
+    # Expects a comma separated list of store names
+    #
+    def get_store_names
+
+      sname = params[:store]
+      sname ? sname.split(',') : nil
+    end
   end
 
-  #
-  # Returns an array of store names or nil, if the parameter 'store'
-  # is not passed.
-  # Expects a comma separated list of store names
-  #
-  def get_store_names
-
-    sname = params[:store]
-    sname ? sname.split(',') : nil
-  end
 end
 

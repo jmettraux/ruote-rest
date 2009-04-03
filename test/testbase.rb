@@ -57,7 +57,7 @@ module TestBase
     #
     # initting the participant
 
-    $app.engine.get_participant_map.participants.clear
+    $rr.engine.get_participant_map.participants.clear
 
     Participants.init_all($app.engine, 'conf/participants_test.yaml')
   end

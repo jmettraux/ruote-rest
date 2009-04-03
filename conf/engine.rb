@@ -5,6 +5,8 @@ require 'openwfe/extras/expool/db_history'
 require 'openwfe/representations'
 
 
+module RuoteRest
+
 configure do
 
   log_dir = File.join( RUOTE_BASE_DIR, 'logs' )
@@ -57,4 +59,5 @@ configure do
   end
   application.instance_variable_set(:@engine, engine)
 
+end
 end

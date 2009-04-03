@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,113 +28,110 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-helpers do
+module RuoteRest
 
-  #
-  # PROCESSES
+  helpers do
 
-  def render_processes_xml (ps, options={ :indent => 2 })
+    #
+    # PROCESSES
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_processes_xml (ps, options={ :indent => 2 })
 
-    OpenWFE::Xml.processes_to_xml(ps, options)
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_processes_json (ps, options={})
+      OpenWFE::Xml.processes_to_xml(ps, options)
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_processes_json (ps, options={})
 
-    OpenWFE::Json.processes_to_h(ps, options).to_json
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_processes_html (ps)
+      OpenWFE::Json.processes_to_h(ps, options).to_json
+    end
 
-    _erb(
-      :processes,
-      :layout => :html,
-      :locals => { :processes => ps })
-  end
+    def render_processes_html (ps)
 
-  #
-  # PROCESS
+      _erb(
+        :processes,
+        :layout => :html,
+        :locals => { :processes => ps })
+    end
 
-  def render_process_html (p, detailed=true)
+    #
+    # PROCESS
 
-    _erb(
-      :process,
-      :layout => detailed ? :html : false,
-      :locals => { :process => p, :detailed => detailed })
-  end
+    def render_process_html (p, detailed=true)
 
-  def render_process_json (p, options={})
+      _erb(
+        :process,
+        :layout => detailed ? :html : false,
+        :locals => { :process => p, :detailed => detailed })
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_process_json (p, options={})
 
-    OpenWFE::Json.process_to_h(p, options).to_json
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  def render_process_xml (p, options={ :indent => 2 })
+      OpenWFE::Json.process_to_h(p, options).to_json
+    end
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+    def render_process_xml (p, options={ :indent => 2 })
 
-    OpenWFE::Xml.process_to_xml(p, options)
-  end
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-  # some parsing...
+      OpenWFE::Xml.process_to_xml(p, options)
+    end
 
-  #
-  # Receiving a process representation in XML
-  #
-  def parse_process_xml (xml)
+    # some parsing...
 
-    elt = REXML::Document.new(xml).root
-    elt = elt.owfe_first_elt_child 'paused'
+    #
+    # Receiving a process representation in XML
+    #
+    def parse_process_xml (xml)
 
-    {
-      :paused => (elt.text.downcase == 'true')
-    }
-  end
+      elt = REXML::Document.new(xml).root
+      elt = elt.owfe_first_elt_child 'paused'
 
-  def parse_process_form (x)
+      {
+        :paused => (elt.text.downcase == 'true')
+      }
+    end
 
-    {
-      :paused => (request.params['paused'] == 'true')
-    }
-  end
+    def parse_process_form (x)
 
-  # misc...
+      {
+        :paused => (request.params['paused'] == 'true')
+      }
+    end
 
-  #
-  # Renders the process definition tree (potientally updated) as some JSON
-  #
-  def render_process_tree_json (expressions)
+    # misc...
 
-    expressions.tree.to_json
-  end
+    #
+    # Renders the process definition tree (potientally updated) as some JSON
+    #
+    def render_process_tree_json (expressions)
 
-  #
-  # Renders the variables as JSON.
-  #
-  def render_process_variables_json (variables)
+      expressions.tree.to_json
+    end
 
-    variables.to_json
-  end
+    #
+    # Renders the variables as JSON.
+    #
+    def render_process_variables_json (variables)
 
-  #
-  # Renders the variables as XML.
-  #
-  def render_process_variables_xml (variables)
+      variables.to_json
+    end
 
-    OpenWFE::Xml.to_xml(variables, :indent => 2)
+    #
+    # Renders the variables as XML.
+    #
+    def render_process_variables_xml (variables)
+
+      OpenWFE::Xml.to_xml(variables, :indent => 2)
+    end
+
   end
 
 end

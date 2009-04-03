@@ -80,13 +80,15 @@ begin
 
   require 'rubygems'
 
-  load File.join( RUOTE_BASE_DIR, 'lib', 'ruote_rest.rb' )
+  load File.join(RUOTE_BASE_DIR, 'lib', 'ruote_rest.rb')
 
   b = Rack::Builder.new do
 
     use Rack::CommonLogger
     use Rack::ShowExceptions
-    run $app
+
+    run new_sixjo_rack_app(
+      Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')), :environment => $env)
   end
 
   puts ".. [#{Time.now}] ruote-rest listening on port #{port}"

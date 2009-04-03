@@ -1,6 +1,5 @@
-#
 #--
-# Copyright (c) 2008, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,58 +27,57 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
 
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
+module RuoteRest
 
 SERVICES = [ :processes, :workitems, :errors, :participants, :history ]
 
 
-helpers do
+  helpers do
 
-  def render_service_html (_)
+    def render_service_html (_)
 
-    _erb(:service, :layout => :html)
-  end
+      _erb(:service, :layout => :html)
+    end
 
-  def render_service_xml (_)
+    def render_service_xml (_)
 
-    OpenWFE::Xml::builder(:indent => 2) do |xml|
-      xml.service do
-        xml.workspace do
-          SERVICES.each { |s| xml.collection :href => request.href(s) }
-          xml.collection :href => request.href('processes', 0, 'variables')
+      OpenWFE::Xml::builder(:indent => 2) do |xml|
+        xml.service do
+          xml.workspace do
+            SERVICES.each { |s| xml.collection :href => request.href(s) }
+            xml.collection :href => request.href('processes', 0, 'variables')
+          end
         end
       end
     end
-  end
 
-  def render_service_atom (_)
+    def render_service_atom (_)
 
-    # TODO
+      # TODO
 
-    OpenWFE::Xml::builder(:indent => 2) do |xml|
-      xml.service do
+      OpenWFE::Xml::builder(:indent => 2) do |xml|
+        xml.service do
+        end
       end
     end
-  end
 
-  def render_service_json (_)
+    def render_service_json (_)
 
-    h = SERVICES.collect { |s|
-      { 'name' => s.to_s, 'href' => request.href(s) }
-    }
-    h << {
-      'name' => 'engine_variables',
-      'href' => request.href('processes', 0, 'variables')
-    }
-    h.to_json
+      h = SERVICES.collect { |s|
+        { 'name' => s.to_s, 'href' => request.href(s) }
+      }
+      h << {
+        'name' => 'engine_variables',
+        'href' => request.href('processes', 0, 'variables')
+      }
+      h.to_json
+    end
+
   end
 
 end

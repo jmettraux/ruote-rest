@@ -2,14 +2,17 @@
 #gem 'activerecord'
 require 'active_record'
 
+module RuoteRest
+
 configure do
 
   configuration = YAML.load_file(
-    File.join( RUOTE_BASE_DIR, 'conf', 'database.yaml' )
+    File.join(RUOTE_BASE_DIR, 'conf', 'database.yaml')
   )[application.environment]
 
-  raise ArgumentError, "No database configuration for #{application.environment} environment!" \
-    if configuration.nil?
+  raise(ArgumentError.new(
+    "No database configuration for #{application.environment} environment!")
+  ) if configuration.nil?
 
   ActiveRecord::Base.establish_connection(
     :adapter => configuration['adapter'],
@@ -20,5 +23,7 @@ configure do
     :encoding => configuration['encoding'],
     :pool => 30
   )
+end
+
 end
 

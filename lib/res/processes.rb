@@ -30,143 +30,147 @@
 #++
 
 
-PROCESS_LOOKUP_KEYS = %w{
- value val name variable var v field f
-}.collect { |k| k.to_sym }
+module RuoteRest
 
-#
-# Returns the statuses of all the process currently running in this ruote_rest
-#
-get '/processes' do
+  PROCESS_LOOKUP_KEYS = %w{
+   value val name variable var v field f
+  }.collect { |k| k.to_sym }
 
-  lookup_options = PROCESS_LOOKUP_KEYS.inject({}) do |h, k|
-    if v = params[k]; h[k] = v; end; h
-  end
+  #
+  # Returns the statuses of all the process currently running in this ruote_rest
+  #
+  get '/processes' do
 
-  lookup_options[:recursive] = true if has?(:recursive)
-  lookup_options[:to_string] = true if has?(:to_string)
-
-  processes = application.engine.process_statuses
-
-  if not lookup_options.empty?
-
-    wfids = application.engine.lookup_processes(lookup_options)
-
-    processes = processes.inject({}) do |h, (wfid, ps)|
-      h[wfid] = ps if wfids.delete(wfid); h
+    lookup_options = PROCESS_LOOKUP_KEYS.inject({}) do |h, k|
+      if v = params[k]; h[k] = v; end; h
     end
+
+    lookup_options[:recursive] = true if has?(:recursive)
+    lookup_options[:to_string] = true if has?(:to_string)
+
+    processes = application.engine.process_statuses
+
+    if not lookup_options.empty?
+
+      wfids = application.engine.lookup_processes(lookup_options)
+
+      processes = processes.inject({}) do |h, (wfid, ps)|
+        h[wfid] = ps if wfids.delete(wfid); h
+      end
+    end
+
+    rrender(:processes, processes)
   end
 
-  rrender(:processes, processes)
-end
+  #
+  # Launches a business process
+  #
+  post '/processes' do
 
-#
-# Launches a business process
-#
-post '/processes' do
+    launchitem = rparse :launchitem
 
-  launchitem = rparse :launchitem
+    fei = application.engine.launch(launchitem)
 
-  fei = application.engine.launch(launchitem)
-
-  rrender(
-    :fei, fei,
-    :status => 201, 'Location' => request.href(:processes, fei.wfid))
-end
-
-#
-# just return the process instance tree as JSON
-#
-# (deprecated !)
-#
-get '/processes/:wfid/representation' do
-
-  rrender(
-    :process_tree,
-    get_process_status.all_expressions)
-end
-
-#
-# just return the process instance tree as JSON
-#
-get '/processes/:wfid/tree' do
-
-  rrender(
-    :process_tree,
-    get_process_status.all_expressions)
-end
-
-#
-# Returns the variable of the process (well, the variable set at the
-# process level only)
-#
-get '/processes/:wfid/variables' do
-
-  variables = if params[:wfid] == '0'
-    application.engine.get_variables
-  else
-    get_process_status.variables
+    rrender(
+      :fei, fei,
+      :status => 201, 'Location' => request.href(:processes, fei.wfid))
   end
 
-  rrender :process_variables, variables
-end
+  #
+  # just return the process instance tree as JSON
+  #
+  # (deprecated !)
+  #
+  get '/processes/:wfid/representation' do
 
-#
-# Returns the detailed status of a process instance
-#
-get '/processes/:wfid' do
-
-  rrender :process, get_process_status
-end
-
-#
-# Updates a process instance (pauses or resumes it).
-#
-put '/processes/:wfid' do
-
-  pstatus = get_process_status
-  process = rparse :process
-
-  if process[:paused]
-    application.engine.pause_process pstatus.wfid
-  else
-    application.engine.resume_process pstatus.wfid
+    rrender(
+      :process_tree,
+      get_process_status.all_expressions)
   end
 
-  rrender :process, get_process_status
-end
+  #
+  # just return the process instance tree as JSON
+  #
+  get '/processes/:wfid/tree' do
 
-#
-# Cancels a process instance
-#
-delete '/processes/:wfid' do
+    rrender(
+      :process_tree,
+      get_process_status.all_expressions)
+  end
 
-  wfid = params[:wfid]
+  #
+  # Returns the variable of the process (well, the variable set at the
+  # process level only)
+  #
+  get '/processes/:wfid/variables' do
 
-  application.engine.cancel_process wfid
+    variables = if params[:wfid] == '0'
+      application.engine.get_variables
+    else
+      get_process_status.variables
+    end
 
-  sleep 0.350
+    rrender :process_variables, variables
+  end
 
-  render_ok(request.href(:processes), "process #{wfid} deleted")
-end
+  #
+  # Returns the detailed status of a process instance
+  #
+  get '/processes/:wfid' do
 
+    rrender :process, get_process_status
+  end
 
-#
-# well, helpers...
+  #
+  # Updates a process instance (pauses or resumes it).
+  #
+  put '/processes/:wfid' do
 
-helpers do
+    pstatus = get_process_status
+    process = rparse :process
 
-  def get_process_status
+    if process[:paused]
+      application.engine.pause_process pstatus.wfid
+    else
+      application.engine.resume_process pstatus.wfid
+    end
+
+    rrender :process, get_process_status
+  end
+
+  #
+  # Cancels a process instance
+  #
+  delete '/processes/:wfid' do
 
     wfid = params[:wfid]
 
-    application.engine.process_status(wfid) ||
-      throw(:done, [ 404, "no process '#{wfid}'" ])
+    application.engine.cancel_process wfid
+
+    sleep 0.350
+
+    render_ok(request.href(:processes), "process #{wfid} deleted")
   end
 
-  def has? (key)
-    v = params[key]
-    v == 'true' or v == '1'
+
+  #
+  # well, helpers...
+
+  helpers do
+
+    def get_process_status
+
+      wfid = params[:wfid]
+
+      application.engine.process_status(wfid) ||
+        throw(:done, [ 404, "no process '#{wfid}'" ])
+    end
+
+    def has? (key)
+      v = params[key]
+      v == 'true' or v == '1'
+    end
   end
+
 end
 

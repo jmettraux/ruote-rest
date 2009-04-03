@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,98 +27,101 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-helpers do
+module RuoteRest
 
-  #
-  # IN
+  helpers do
 
-  def parse_workitem_xml (xml)
+    #
+    # IN
 
-    OpenWFE::Xml.workitem_from_xml xml
-  end
+    def parse_workitem_xml (xml)
 
-  def parse_workitem_form (x)
+      OpenWFE::Xml.workitem_from_xml xml
+    end
 
-    wi = OpenWFE::InFlowWorkItem.new
+    def parse_workitem_form (x)
 
-    wi.attributes = json_parse(params[:attributes])
+      wi = OpenWFE::InFlowWorkItem.new
 
-    wi._state = 'proceeded' if params[:proceed] == 'proceed'
-      # TODO : align with ruote-web2 params[:state]
+      wi.attributes = json_parse(params[:attributes])
 
-    wi
-  end
+      wi._state = 'proceeded' if params[:proceed] == 'proceed'
+        # TODO : align with ruote-web2 params[:state]
 
-  def parse_workitem_json (json)
+      wi
+    end
 
-    OpenWFE::workitem_from_h(json_parse(json))
-  end
+    def parse_workitem_json (json)
+
+      OpenWFE::workitem_from_h(json_parse(json))
+    end
 
 
-  #
-  # OUT
+    #
+    # OUT
 
-  def render_workitems_xml (wis, options={ :indent => 2 })
+    def render_workitems_xml (wis, options={ :indent => 2 })
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-    OpenWFE::Xml.workitems_to_xml(
-      wis.collect { |wi| wi.is_a?( OpenWFE::Extras::Workitem ) ? wi.to_owfe_workitem(options) : wi.to_owfe_workitem },
-      options)
-  end
+      OpenWFE::Xml.workitems_to_xml(
+        wis.collect { |wi|
+          wi.is_a?( OpenWFE::Extras::Workitem ) ?
+            wi.to_owfe_workitem(options) : wi.to_owfe_workitem
+        },
+        options)
+    end
 
-  def render_workitem_xml (wi, options={ :indent => 2 })
+    def render_workitem_xml (wi, options={ :indent => 2 })
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-    OpenWFE::Xml.workitem_to_xml(
-      wi.is_a?( OpenWFE::Extras::Workitem ) ? wi.to_owfe_workitem(options) : wi.to_owfe_workitem,
-      options)
-  end
+      OpenWFE::Xml.workitem_to_xml(
+        wi.is_a?( OpenWFE::Extras::Workitem ) ?
+          wi.to_owfe_workitem(options) : wi.to_owfe_workitem,
+        options)
+    end
 
-  def render_workitems_json (wis, options={})
+    def render_workitems_json (wis, options={})
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-    OpenWFE::Json.workitems_to_h(wis, options).to_json
-  end
+      OpenWFE::Json.workitems_to_h(wis, options).to_json
+    end
 
-  def render_workitem_json (wi, options={})
+    def render_workitem_json (wi, options={})
 
-    options[:linkgen] = RackLinkGenerator.new(request)
+      options[:linkgen] = RackLinkGenerator.new(request)
 
-    OpenWFE::Json.workitem_to_h(wi, options).to_json
-  end
+      OpenWFE::Json.workitem_to_h(wi, options).to_json
+    end
 
-  def render_workitems_html (wis)
+    def render_workitems_html (wis)
 
-    wis = wis.sort_by { |wi| wi.participant_name.to_s }
-    wis = wis.collect { |wi| wi.as_owfe_workitem }
+      wis = wis.sort_by { |wi| wi.participant_name.to_s }
+      wis = wis.collect { |wi| wi.as_owfe_workitem }
 
-    _erb(
-      :workitems,
-      :layout => :html,
-      :locals => { :workitems => wis })
-  end
+      _erb(
+        :workitems,
+        :layout => :html,
+        :locals => { :workitems => wis })
+    end
 
-  def render_workitem_html (wi, detailed=true)
+    def render_workitem_html (wi, detailed=true)
 
-    wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::ArWorkitem)
+      wi = wi.as_owfe_workitem if wi.is_a?(OpenWFE::Extras::ArWorkitem)
 
-    _erb(
-      :workitem,
-      :layout => detailed ? :html : nil,
-      :locals => { :workitem => wi, :detailed => detailed })
+      _erb(
+        :workitem,
+        :layout => detailed ? :html : nil,
+        :locals => { :workitem => wi, :detailed => detailed })
+    end
+
   end
 
 end
