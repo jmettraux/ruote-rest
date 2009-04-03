@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
+# Copyright (c) 2009, Gonzalo Suarez, Nando Sola.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,66 +28,47 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 #
-# Made in Japan.
+# Made in Spain.
 #++
 
+require 'base64'
+require 'sha1'
+require 'md5'
 
-module RuoteRest
 
-  get '/participants' do
+module RuoteRest::Password
 
-    rrender :participants, RuoteRest.engine.participants
+  SALT_SIZE = 8
+
+  def generate_salt(length)
+    chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a + '.'.to_a + '/'.to_a
+    salt = ""
+    1.upto(length) { |i| salt << chars[rand(chars.size-1)] }
+    salt
   end
 
-  get '/participants/:pid' do
-
-    rrender :participant, get_participant
+  def generate_ssha (password, salt=nil)
+    salt ||= generate_salt SALT_SIZE
+    "{SSHA}" + Base64.encode64(Digest::SHA1.digest(password + salt) + salt).chomp!
   end
 
-  post '/participants' do
-
-    regex, pclass, store_name = rparse(:participant)
-
-    Participants.add(regex, pclass, store_name)
-
-    rrender(:participants, RuoteRest.engine.participants, :status => 201)
+  def generate_smd5 (password, salt=nil)
+    salt ||= generate_salt SALT_SIZE
+    "{SMD5}" + Base64.encode64(Digest::MD5.digest(password + salt) + salt).chomp!
   end
 
-  delete '/participants/:pid' do
+  def check_password (challenge, password)
+    raise Exception, "Crypt pattern not found" unless /^\{([A-Z][A-Z\d]+)\}/ =~ challenge
 
-    pid, part = get_participant
-    Participants.remove pid
+    data = Regexp.last_match
+    type = data[1].downcase
 
-    render_ok(request.href(:participants), "participant #{pid} removed")
-  end
+    raise Exception, "Unknown crypt mode" unless respond_to? "generate_#{type}"
 
+    salt = (Base64.decode64 data.post_match)[-SALT_SIZE, SALT_SIZE]
+    crypted = send("generate_#{type}", password, salt)
 
-  #
-  # helpers
-
-  helpers do
-
-    def get_participant
-
-      pid = params[:pid]
-
-      if pid
-
-        pid = Rack::Utils.unescape(pid) # no need :)
-
-        regex, part = RuoteRest.engine.participants.find do |pr, pa|
-          pr.original_string == pid
-        end
-
-        throw(:done, [ 404, "no participant at #{pid}" ]) unless part
-
-        [ regex, part ]
-
-      else
-
-        [ nil, nil ]
-      end
-    end
+    challenge == crypted
   end
 
 end

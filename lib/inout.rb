@@ -1,4 +1,3 @@
-#
 #--
 # Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
 # All rights reserved.
@@ -28,134 +27,133 @@
 # CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# Made in Japan.
 #++
-#
-
-#
-# "made in Japan"
-#
-# John Mettraux at openwfe.org
-#
 
 
-#
-# parses the representation sent in the request body
-#
-def rparse (type)
+class Rufus::Sixjo::Context
 
-  representation = request.body.read
+  #
+  # parses the representation sent in the request body
+  #
+  def rparse (type)
 
-  format = determine_in_format
+    representation = request.body.read
 
-  send("parse_#{type}_#{format}", representation) \
-    rescue throw :done, [ 400, "failed to parse incoming representation" ]
-end
+    format = determine_in_format
 
-#
-# the entry point for rendering any ruote-rest object
-#
-# (pronounce with a "rolling r")
-#
-def rrender (type, object, options={})
-
-  format, ctype = determine_out_format(options)
-
-  ctype = 'text/plain' if params[:plain]
-    # useful for debugging
-
-  response.status = options.delete(:status) || 200
-  response.content_type = ctype
-
-  options.each { |k, v| response.header[k] = v }
-
-  set_etag(object.etag) \
-    if object.respond_to?(:etag) and object.etag
-  set_last_modified(object.timestamp) \
-    if object.respond_to?(:timestamp) and object.timestamp
-      #
-      # where the conditional GET happens...
-
-
-  unless format == 'js'
-
-    body = send("render_#{type}_#{format}", object)
-
-    body = body.gsub(", ", ",\n ") if format == 'json' and ctype == 'text/plain'
-      # a bit more readable for 'text/plain' output
-
-    return body
+    send("parse_#{type}_#{format}", representation) \
+      rescue throw :done, [ 400, "failed to parse incoming representation" ]
   end
 
-  varname = params[:var] || 'ruote_js'
-  method = "render_#{type}_json"
+  #
+  # the entry point for rendering any ruote-rest object
+  #
+  # (pronounce with a "rolling r")
+  #
+  def rrender (type, object, options={})
 
-  "var #{varname} = #{send(method, object)}"
-end
+    format, ctype = determine_out_format(options)
 
-#
-# simply reads the "Content-Type" header
-#
-def determine_in_format
+    ctype = 'text/plain' if params[:plain]
+      # useful for debugging
 
-  ct = request.env['CONTENT_TYPE']
+    response.status = options.delete(:status) || 200
+    response.content_type = ctype
 
-  return 'form' if ct.index('form-')
-  return 'json' if ct.index('application/json')
-  return 'yaml' if ct.index('application/yaml')
+    options.each { |k, v| response.header[k] = v }
 
-  'xml'
-end
+    set_etag(object.etag) \
+      if object.respond_to?(:etag) and object.etag
+    set_last_modified(object.timestamp) \
+      if object.respond_to?(:timestamp) and object.timestamp
+        #
+        # where the conditional GET happens...
 
 
-#
-# some common formats
-#
-FORMATS = {
+    unless format == 'js'
 
-  :xml => [ 'xml', 'application/xml' ],
-  :html => [ 'html', 'text/html' ],
-  :json => [ 'json', 'application/json' ],
-  :js => [ 'js', 'text/javascript' ],
-  :yaml => [ 'yaml', 'application/yaml' ],
-  :atom => [ 'atom', 'application/atom+xml' ]
+      body = send("render_#{type}_#{format}", object)
 
-} unless defined?(FORMATS)
+      body = body.gsub(", ", ",\n ") if format == 'json' and ctype == 'text/plain'
+        # a bit more readable for 'text/plain' output
 
-FTYPES = FORMATS.keys.collect { |k| k.to_s } \
-  unless defined?(FTYPES)
+      return body
+    end
 
-#
-# determines the format the client is expecting
-#
-def determine_out_format (options={})
+    varname = params[:var] || 'ruote_js'
+    method = "render_#{type}_json"
 
-  f = options[:format] || params[:format] || request.env['_FORMAT']
+    "var #{varname} = #{send(method, object)}"
+  end
 
-  return FORMATS[:xml] if f == 'xml'
-  return FORMATS[:json] if f == 'json'
-  return FORMATS[:js] if f == 'js'
-  return FORMATS[:yaml] if f == 'yaml'
-  return FORMATS[:atom] if f == 'atom'
+  #
+  # simply reads the "Content-Type" header
+  #
+  def determine_in_format
 
-  accept = request.env['HTTP_ACCEPT'] || ''
+    ct = request.env['CONTENT_TYPE']
 
-  return FORMATS[:html] if accept.index('text/html')
-  return FORMATS[:yaml] if accept.index('yaml')
-  return FORMATS[:json] if accept.index('json')
-  return FORMATS[:js] if accept.index('js')
-  return FORMATS[:atom] if accept.index('atom')
+    return 'form' if ct.index('form-')
+    return 'json' if ct.index('application/json')
+    return 'yaml' if ct.index('application/yaml')
 
-  FORMATS[:xml]
-end
+    'xml'
+  end
 
-#
-# Returns true if the string is something like "xxx.json" or "yyy.xml"
-#
-def has_filetype? (s)
 
-  ss = s.split('.')
-  return false if ss.length != 2
+  #
+  # some common formats
+  #
+  FORMATS = {
 
-  FTYPES.include?(ss.last)
+    :xml => [ 'xml', 'application/xml' ],
+    :html => [ 'html', 'text/html' ],
+    :json => [ 'json', 'application/json' ],
+    :js => [ 'js', 'text/javascript' ],
+    :yaml => [ 'yaml', 'application/yaml' ],
+    :atom => [ 'atom', 'application/atom+xml' ]
+
+  } unless defined?(FORMATS)
+
+  FTYPES = FORMATS.keys.collect { |k| k.to_s } \
+    unless defined?(FTYPES)
+
+  #
+  # determines the format the client is expecting
+  #
+  def determine_out_format (options={})
+
+    f = options[:format] || params[:format] || request.env['_FORMAT']
+
+    return FORMATS[:xml] if f == 'xml'
+    return FORMATS[:json] if f == 'json'
+    return FORMATS[:js] if f == 'js'
+    return FORMATS[:yaml] if f == 'yaml'
+    return FORMATS[:atom] if f == 'atom'
+
+    accept = request.env['HTTP_ACCEPT'] || ''
+
+    return FORMATS[:html] if accept.index('text/html')
+    return FORMATS[:yaml] if accept.index('yaml')
+    return FORMATS[:json] if accept.index('json')
+    return FORMATS[:js] if accept.index('js')
+    return FORMATS[:atom] if accept.index('atom')
+
+    FORMATS[:xml]
+  end
+
+  #
+  # Returns true if the string is something like "xxx.json" or "yyy.xml"
+  #
+  def has_filetype? (s)
+
+    ss = s.split('.')
+    return false if ss.length != 2
+
+    FTYPES.include?(ss.last)
+  end
+
 end
 

@@ -19,14 +19,14 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     #$OWFE_LOG.level = Logger::DEBUG
 
-    #$app.engine.get_participant_map.add_observer :all do |channel, args|
+    #RuoteRest.engine.get_participant_map.add_observer :all do |channel, args|
     #  p [ :pmap, channel, args.to_s ]
     #end
-    #$app.engine.get_expression_pool.add_observer :all do |channel, args|
+    #RuoteRest.engine.get_expression_pool.add_observer :all do |channel, args|
     #  p [ :expool, channel, args.to_s ]
     #end
 
-    fei = $app.engine.launch %{
+    fei = RuoteRest.engine.launch %{
       class Test0 < OpenWFE::ProcessDefinition
         sequence do
           alpha
@@ -38,9 +38,9 @@ class StWorkitemsTest < Test::Unit::TestCase
     sleep 0.450
     #sleep 5
 
-    #ps = $app.engine.process_status(fei)
+    #ps = RuoteRest.engine.process_status(fei)
     #p ps.errors.size
-    #p $app.engine.participants.collect { |r, p| [ r, p.class ] }
+    #p RuoteRest.engine.participants.collect { |r, p| [ r, p.class ] }
 
     assert_equal 1, OpenWFE::Extras::ArWorkitem.find(:all).size
 

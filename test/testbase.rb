@@ -57,9 +57,9 @@ module TestBase
     #
     # initting the participant
 
-    $rr.engine.get_participant_map.participants.clear
+    RuoteRest.engine.get_participant_map.participants.clear
 
-    Participants.init_all($app.engine, 'conf/participants_test.yaml')
+    Participants.init_all(RuoteRest.engine, 'conf/participants_test.yaml')
   end
 
   #def teardown

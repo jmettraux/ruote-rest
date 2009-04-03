@@ -38,6 +38,8 @@ require 'rufus/sixjo'
 
 module RuoteRest
   extend Rufus::Sixjo
+
+  VERSION = '0.9.21'
 end
 
 

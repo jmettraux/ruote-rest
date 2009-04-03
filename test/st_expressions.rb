@@ -172,11 +172,11 @@ class StExpressionsTest < Test::Unit::TestCase
       ["process-definition",
        {"name"=>"TestStExpressions", "revision"=>"0"},
         [["sequence", {}, [["nada", {}, []], ["surfbis", {}, []]]]]],
-      $app.engine.process_status(fei.wfid).all_expressions.tree)
+      RuoteRest.engine.process_status(fei.wfid).all_expressions.tree)
 
     # over.
 
-    $app.engine.cancel_process(fei)
+    RuoteRest.engine.cancel_process(fei)
 
     sleep 0.350
   end

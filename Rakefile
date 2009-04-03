@@ -9,11 +9,9 @@ require 'rake/packagetask'
 require 'rake/testtask'
 
 
-RUOTE_REST_VERSION = '0.9.19'
-
+RUOTE_REST_VERSION = '0.9.21'
 
 RUOTE_LIB = '~/ruote/lib'
-VENDOR_LIB = 'vendor'
 
 #
 # tasks
@@ -45,10 +43,21 @@ end
 
 
 #
+# VERSION
+
+task :change_version do
+
+  version = ARGV.pop
+  `sedip "s/VERSION = '.*'/VERSION = '#{version}'/" Rakefile`
+  `sedip "s/VERSION = '.*'/VERSION = '#{version}'/" lib/ruote_rest.rb`
+  exit 0 # prevent rake from triggering other tasks
+end
+
+
+#
 # other tasks
 
-load 'tasks/ruote.rake'
-load 'tasks/mysql.rake'
+Dir.new('tasks').entries.each { |e| load("tasks/#{e}") if e.match(/\.rake$/) }
 
 
 #
@@ -79,6 +88,9 @@ Rake::PackageTask.new('ruote-rest', RUOTE_REST_VERSION) do |pkg|
   end
 end
 
+#
+# bin distribution
+#
 desc "packages a 'distribution' of ruote-rest"
 task :distribute do
 

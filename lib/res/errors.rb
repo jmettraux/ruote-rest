@@ -35,7 +35,7 @@ module RuoteRest
 
   get '/errors' do
 
-    logs = application.engine.get_error_journal.get_error_logs
+    logs = RuoteRest.engine.get_error_journal.get_error_logs
 
     errors = logs.values.inject([]) { |a, log| a = a + log }
     errors = errors.sort_by { |err| err.fei.wfid }
@@ -49,7 +49,7 @@ module RuoteRest
 
     wfid = params[:wfid]
 
-    errors = application.engine.get_error_journal.get_error_log(wfid)
+    errors = RuoteRest.engine.get_error_journal.get_error_log(wfid)
 
     errors.extend(ArrayEtagMixin)
 
@@ -65,7 +65,7 @@ module RuoteRest
 
     error = find_error
 
-    application.engine.replay_at_error(error)
+    RuoteRest.engine.replay_at_error(error)
 
     'replayed'
   end
@@ -81,7 +81,7 @@ module RuoteRest
       wfid = params[:wfid]
       error_id = params[:error_id]
 
-      errors = application.engine.get_error_journal.get_error_log(wfid)
+      errors = RuoteRest.engine.get_error_journal.get_error_log(wfid)
 
       errors.find { |e| e.error_id == error_id }
     end

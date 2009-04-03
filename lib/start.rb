@@ -10,6 +10,8 @@ pid = nil
 
 opts = OptionParser.new
 
+# TODO : add option for basic auth realm
+
 opts.banner = 'Usage: ruby lib/start.rb [options]'
 opts.separator('')
 opts.separator('options:')
@@ -39,28 +41,27 @@ opts.parse!(ARGV)
 RUOTE_BASE_DIR = File.expand_path( File.dirname( File.dirname(__FILE__) ) )
 
 if daemonize
-  if RUBY_VERSION < "1.9"
+  if RUBY_VERSION < '1.9'
     exit if fork
     Process.setsid
     exit if fork
-    Dir.chdir "/"
+    Dir.chdir '/'
     File.umask 0000
-    STDIN.reopen "/dev/null"
-    STDOUT.reopen "/dev/null", "a"
-    STDERR.reopen "/dev/null", "a"
+    STDIN.reopen '/dev/null'
+    STDOUT.reopen '/dev/null', 'a'
+    STDERR.reopen '/dev/null', 'a'
   else
     Process.daemon
   end
 
   if pid
-    File.open(pid, 'w'){ |f| f.write("#{Process.pid}") }
+    File.open(pid, 'w'){ |f| f.write(Process.pid.to_s) }
     at_exit { File.delete(pid) if File.exist?(pid) }
   end
 end
 
 begin
 
-  #$:.unshift "#{RUOTE_BASE_DIR}/vendor" # if any
   if File.exist?("#{RUOTE_BASE_DIR}/vendor/frozen.rb")
     require "#{RUOTE_BASE_DIR}/vendor/frozen"
   elsif File.exist?("#{RUOTE_BASE_DIR}/vendorf/frozen.rb")
@@ -87,8 +88,13 @@ begin
     use Rack::CommonLogger
     use Rack::ShowExceptions
 
-    run new_sixjo_rack_app(
-      Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')), :environment => $env)
+    # TODO insert whitelisting middleware
+    # TODO insert basic auth middleware
+    # unless 'test'
+
+    run RuoteRest.new_sixjo_rack_app(
+      Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')),
+      :environment => $env)
   end
 
   puts ".. [#{Time.now}] ruote-rest listening on port #{port}"
@@ -97,7 +103,7 @@ begin
     trap(:INT) do
       puts "\n.. [#{Time.now}] stopping webserver and workflow engine ..."
       server.stop
-      $rr.engine.stop
+      RuoteRest.engine.stop
       sleep 1
       puts ".. [#{Time.now}] stopped."
     end
@@ -109,10 +115,14 @@ rescue => e
   raise e unless daemonize
 
   # Write our backtrace
-  filename = File.join( RUOTE_BASE_DIR, "backtrace-#{Time.now.strftime("%Y%m%d%H%M%S")}.log" )
-  File.open( filename, 'w+' ) do |f|
+
+  filename = File.join(
+    RUOTE_BASE_DIR, "backtrace-#{Time.now.strftime('%Y%m%d%H%M%S')}.log")
+
+  File.open(filename, 'w+') do |f|
     f.write("Exception caught: #{e.class}: #{e.message}")
     f.write(e.backtrace.join("\n  "))
     f.write("\n\n")
   end
 end
+

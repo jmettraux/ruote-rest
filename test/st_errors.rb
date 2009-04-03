@@ -19,7 +19,7 @@ class StErrorsTest < Test::Unit::TestCase
 
     get '/errors'
 
-    #p @response
+    #puts @response.body
 
     assert_equal(
       'application/xml',
@@ -35,7 +35,7 @@ class StErrorsTest < Test::Unit::TestCase
 
   def test_1
 
-    fei = $app.engine.launch <<-EOS
+    fei = RuoteRest.engine.launch <<-EOS
 <process-definition name="st_errors" revision="t1">
   <participant ref="tonto" />
 </process-definition>

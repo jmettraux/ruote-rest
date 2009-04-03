@@ -62,7 +62,7 @@ module RuoteRest
 
       owi.fei = wi.full_fei
 
-      application.engine.reply(owi)
+      RuoteRest.engine.reply(owi)
       wi.destroy
 
       response.location = request.href(:workitems)

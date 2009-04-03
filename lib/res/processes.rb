@@ -48,11 +48,11 @@ module RuoteRest
     lookup_options[:recursive] = true if has?(:recursive)
     lookup_options[:to_string] = true if has?(:to_string)
 
-    processes = application.engine.process_statuses
+    processes = RuoteRest.engine.process_statuses
 
     if not lookup_options.empty?
 
-      wfids = application.engine.lookup_processes(lookup_options)
+      wfids = RuoteRest.engine.lookup_processes(lookup_options)
 
       processes = processes.inject({}) do |h, (wfid, ps)|
         h[wfid] = ps if wfids.delete(wfid); h
@@ -69,7 +69,7 @@ module RuoteRest
 
     launchitem = rparse :launchitem
 
-    fei = application.engine.launch(launchitem)
+    fei = RuoteRest.engine.launch(launchitem)
 
     rrender(
       :fei, fei,
@@ -105,7 +105,7 @@ module RuoteRest
   get '/processes/:wfid/variables' do
 
     variables = if params[:wfid] == '0'
-      application.engine.get_variables
+      RuoteRest.engine.get_variables
     else
       get_process_status.variables
     end
@@ -130,9 +130,9 @@ module RuoteRest
     process = rparse :process
 
     if process[:paused]
-      application.engine.pause_process pstatus.wfid
+      RuoteRest.engine.pause_process pstatus.wfid
     else
-      application.engine.resume_process pstatus.wfid
+      RuoteRest.engine.resume_process pstatus.wfid
     end
 
     rrender :process, get_process_status
@@ -145,7 +145,7 @@ module RuoteRest
 
     wfid = params[:wfid]
 
-    application.engine.cancel_process wfid
+    RuoteRest.engine.cancel_process wfid
 
     sleep 0.350
 
@@ -162,7 +162,7 @@ module RuoteRest
 
       wfid = params[:wfid]
 
-      application.engine.process_status(wfid) ||
+      RuoteRest.engine.process_status(wfid) ||
         throw(:done, [ 404, "no process '#{wfid}'" ])
     end
 

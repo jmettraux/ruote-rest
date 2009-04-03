@@ -114,32 +114,32 @@ class StProcessesTest < Test::Unit::TestCase
 
   def test_process_lookup
     running_expressions = []
-    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'one') do
+    running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'one') do
       sequence do
         _set :var => 'v', :val => 'val0'
         alpha
       end
     end)
-    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'two') do
+    running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'two') do
       sequence do
         _set :var => 'v', :val => 'val1'
         alpha
       end
     end)
-    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'three') do
+    running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'three') do
       sequence do
         _set :field => 'f', :val => 'val0'
         alpha
       end
     end)
-    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'four') do
+    running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'four') do
       sequence do
         _set :field => 'nes', :val => { 'ted' => 'val0', 'tod' => 'val1' }
         alpha
       end
     end)
 
-    running_expressions << $app.engine.launch(OpenWFE.process_definition(:name => 'five') do
+    running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'five') do
       sequence do
         _set :field => 'object', :val => 77
         alpha
@@ -171,7 +171,7 @@ class StProcessesTest < Test::Unit::TestCase
     # over.
 
     running_expressions.each do |fei|
-      $app.engine.cancel_process(fei)
+      RuoteRest.engine.cancel_process(fei)
     end
 
     sleep 0.350
@@ -184,7 +184,7 @@ class StProcessesTest < Test::Unit::TestCase
       #
       # this fixes an AR 2.2.2 issue, grumpf...
 
-    #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
+    #RuoteRest.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses2 < OpenWFE::ProcessDefinition
@@ -219,7 +219,7 @@ class StProcessesTest < Test::Unit::TestCase
 
     assert_not_nil @response.body.index('<paused>false</paused>')
 
-    $app.engine.cancel_process(fei)
+    RuoteRest.engine.cancel_process(fei)
 
     sleep 0.450
 
@@ -231,7 +231,7 @@ class StProcessesTest < Test::Unit::TestCase
   #
   def test_3
 
-    #$app.engine.register_participant :alpha, OpenWFE::HashParticipant
+    #RuoteRest.engine.register_participant :alpha, OpenWFE::HashParticipant
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses3 < OpenWFE::ProcessDefinition
@@ -256,7 +256,7 @@ class StProcessesTest < Test::Unit::TestCase
 
   def test_cancel_process_over_json
 
-    fei = $app.engine.launch(%{
+    fei = RuoteRest.engine.launch(%{
       <process-definition name="test">
         <alpha/>
       </process-definition>
