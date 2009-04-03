@@ -1,0 +1,131 @@
+This is a draft for a new authentication model in ruote-rest.
+
+authors: Gonzalo<gonzalo@abstra.cc>
+         "Nando Sola"<nando@abstra.cc>
+
+Our main goal was to avoid storing passwords in plain text (conf/authentication.yaml)
+All authentication info is stored in "ruoterest_#{stage}" - The following tables are created 
+
+USERS (inspired by ruote-web2)
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| id         | int(11)      | NO   | PRI | NULL    | auto_increment | 
+| login      | varchar(255) | YES  | UNI | NULL    |                | 
+| name       | varchar(255) | YES  | MUL | NULL    |                | 
+| password   | varchar(255) | YES  |     | NULL    |                | 
+| email      | varchar(255) | YES  | MUL | NULL    |                | 
+| created_at | datetime     | YES  | MUL | NULL    |                | 
+| updated_at | datetime     | YES  | MUL | NULL    |                | 
++------------+--------------+------+-----+---------+----------------+
+
+HOSTS (IP whitelisting and ToD filter)
++---------+--------------+------+-----+---------+----------------+
+| Field   | Type         | Null | Key | Default | Extra          |
++---------+--------------+------+-----+---------+----------------+
+| id      | int(11)      | NO   | PRI | NULL    | auto_increment | 
+| ip      | varchar(255) | YES  |     | NULL    |                | 
+| trusted | varchar(255) | YES  |     | NULL    |                | 
+| from    | varchar(255) | YES  |     | NULL    |                | 
+| to      | varchar(255) | YES  |     | NULL    |                | 
++---------+--------------+------+-----+---------+----------------+
+
+Passwords
+---------
+So far, we've successfully implemented the following password storage schemes:
+
+  * {SSHA}
+  * {SMD5}
+  * {...} It's easily extensible
+
+An 8-byte salt is included in the b64 passwd string (a la Directory Server)
+
+
+Hosts table:
+------------
+attributes:
+* 'ip': as for now, every host making requests to ruote-rest must be stored in this table.
+* 'trusted': 'false' or 'true' for whitelist inclussion, thus disabling ToD and user/passwd checks.
+* 'from' - 'to': Time of Day filter. Set a valid interval to use ruote-rest or NULL.
+
+Included files:
+---------------
+./newauth-ruoterest
+  +tasks
+    authmodel.rake
+    +fixtures
+      users.yml
+      hosts.yml
+  +test
+    test_newauth.rb
+  README
+  +conf
+    auth_models.rb
+    password.rb
+    auth.rb
+
+Usage:
+------
+git clone git://github.com/jmettraux/ruote-rest.git
+cp newauth.tar ruote-rest; tar xvf newauth.tar
+
+edit Rakefile:
+     50 load 'tasks/ruote.rake'
+     51 load 'tasks/mysql.rake'
+---> 52 load 'tasks/authmodel.rake'
+
+edit tasks/fixtures/hosts.yaml and make sure everything looks OK
+
+gem install rest-client in order to run our tests
+rake ruote:install
+
+edit conf/database.yaml and tasks/mysql.rake and make the appropriate changes to db_name, :user and :passwd
+
+rake mysql:setup; rake authmodel:setup; rake authmodel:fixtures
+
+Now lets rock!
+ruby lib/start.rb & or daemonize
+
+Now we can roll the unit tests:
+cd test
+ruby test_newauth.rb - they aren't complete yet, but the main features are tested. 
+
+Test users:
+-----------
+username: charly, bob, admin, alice
+password: secret
+
+Test hosts:
+-----------
+
+st_01:
+    id: 1
+    ip: "192.168.168.1"
+    trusted: false 
+    from: 9 
+    to: 17
+
+host_02:
+    id: 2
+    ip: "192.168.168.128"
+    trusted: false
+    from: NULL 
+    to: NULL
+
+host_03:
+    id: 3
+    ip: "127.0.0.1"
+    trusted: true
+    from: NULL 
+    to: NULL
+
+******
+Feel free to play with them, i.e. adding/deleting/modifying on the fly.
+If you wanna use a real REST client from a remote host, try: http://code.google.com/p/rest-client/
+
+******
+Post any suggestions/corrections at the list
+
+    http://groups.google.com/group/openwferu-users
+
+Thanks John for this great project
