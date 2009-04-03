@@ -1,0 +1,35 @@
+user_01:
+    id: 1
+    login: admin
+    name: The Admin
+    password: "{SMD5}+52vrCz6JG9/AaZ7zIohgWVSVkQ4NUN3"
+    email: admin@example.com
+    created_at: 2009-01-28 10:40:19
+    updated_at: 2009-01-28 10:40:19
+
+user_02:
+    id: 2
+    login: alice
+    name: Alice Foonderbar
+    password: "{SSHA}nWUg7XIW6HXSSOdg9X99LB7YUpZqZnZtdDFyTQ==" 
+    email: alice@example.com
+    created_at: 2009-01-28 10:40:19
+    updated_at: 2009-01-28 10:40:19
+
+user_03:
+    id: 3
+    login: bob
+    name: Bob Morane
+    password: "{SMD5}8smFhHMcMQkLXJAMqeDAIjhGTFp4dk55" 
+    email: bob@example.com
+    created_at: 2009-01-28 10:40:19
+    updated_at: 2009-01-28 10:40:19
+
+user_04:
+    id: 4
+    login: charly
+    name: Charly
+    password: "{SSHA}ub8LX3pn6nvHBw5e1r8ZcEZqQmtlTndXRXo0YQ==" 
+    email: charly@example.com
+    created_at: 2009-01-28 10:40:19
+    updated_at: 2009-01-28 10:40:19
