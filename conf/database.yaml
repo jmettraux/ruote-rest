@@ -1,3 +1,4 @@
+
 defaults: &defaults
   adapter: mysql
   host: localhost
