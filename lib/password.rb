@@ -36,7 +36,8 @@ require 'sha1'
 require 'md5'
 
 
-module RuoteRest::Password
+module RuoteRest
+module Password
 
   SALT_SIZE = 8
 
@@ -71,5 +72,6 @@ module RuoteRest::Password
     challenge == crypted
   end
 
+end
 end
 
