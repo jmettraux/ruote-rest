@@ -33,42 +33,33 @@
 
 
 require 'rack/auth/basic'
-require 'password'
 require 'models/auth'
 
 
+#
+# Hosts whose IP address is trusted get automatically through.
+#
 class RuoteRest::RackWhiteListing
 
   def initialize (rack_app)
     @rack_app = rack_app
   end
 
-  #
   # authenticate the request against all our enable authentication options
   #
   def call (env)
 
-    env['RUOTE_AUTHENTICATED'] = RuoteRest::Host.exists?(
-      :ip => env['REMOTE_ADDR'], :trusted => true)
+    env['RUOTE_AUTHENTICATED'] =
+      RuoteRest::Host.authenticate(env['REMOTE_ADDR'])
 
     @rack_app.call(env)
   end
-
-  #def valid_host? (host_ip)
-  #  info = RuoteRest::Host.find :first, :conditions => ['ip = ?', host_ip]
-  #  hour = Time.now.hour
-  #  if info
-  #    if ((info.from == nil) && (info.to == nil))
-  #      true
-  #    else
-  #      ((info.from.to_i < hour) && (info.to.to_i > hour))   #simple check for time availability. this may be improved as needed...
-  #    end
-  #  end
-  #end
 end
 
+#
+# HTTP basic authentication
+#
 class RuoteRest::RackBasicAuth < Rack::Auth::Basic
-  include RuoteRest::Password
 
   def initialize (parent_app, realm)
     super(parent_app)
@@ -83,30 +74,13 @@ class RuoteRest::RackBasicAuth < Rack::Auth::Basic
 
       return unauthorized unless auth.provided?
       return bad_request unless auth.basic?
-      return unauthorized unless valid?(auth)
-      #return unauthorized unless valid_host?(env['REMOTE_ADDR'])
+      return unauthorized unless RuoteRest::User.authenticate(*auth.credentials)
 
       env['REMOTE_USER'] = auth.username
       env['RUOTE_AUTHENTICATED'] = true
     end
 
     @app.call(env)
-  end
-
-  private
-
-  #def valid? (auth)
-  #  user, pass = auth.credentials
-  #  (AUTH_CONF['users'][user] == pass)
-  #end
-
-  def valid? (auth)
-
-    user_login, user_pass = auth.credentials
-
-    user = RuoteRest::User.find_by_login(user_login)
-
-    user ? check_password(user.password, user_pass) : false
   end
 end
 
