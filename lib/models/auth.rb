@@ -31,18 +31,55 @@
 # Made in Spain.
 #++
 
+require 'password'
+
 
 module RuoteRest
 
+  #
+  # A ruote-rest user.
+  #
   class User < ActiveRecord::Base
+
+    # Returns true if the combination login/password is valid.
+    #
+    def self.authenticate (login, password)
+
+      user = find_by_login(login)
+
+      user ? RuoteRest::Password.check_password(user.password, password) : false
+    end
   end
 
+  #
+  # An entry in the 'hosts' table.
+  #
   class Host < ActiveRecord::Base
+
+    # Returns true if the remote address is trusted.
+    #
+    def self.authenticate (remote_addr)
+
+      exists?(:ip => remote_addr, :trusted => true)
+    end
+
+    #def valid_host? (host_ip)
+    #  info = RuoteRest::Host.find :first, :conditions => ['ip = ?', host_ip]
+    #  hour = Time.now.hour
+    #  if info
+    #    if ((info.from == nil) && (info.to == nil))
+    #      true
+    #    else
+    #      ((info.from.to_i < hour) && (info.to.to_i > hour))   #simple check for time availability. this may be improved as needed...
+    #    end
+    #  end
+    #end
   end
 
   class HostTables < ActiveRecord::Migration
 
     def self.up
+
       create_table :hosts do |t|
         t.column :ip, :string
         t.column :trusted, :string
@@ -52,6 +89,7 @@ module RuoteRest
     end
 
     def self.down
+
       drop_table :users
     end
   end
@@ -59,6 +97,7 @@ module RuoteRest
   class UserTables < ActiveRecord::Migration
 
     def self.up
+
       create_table :users do |t|
         t.column :login, :string
         t.column :name, :string
@@ -76,6 +115,7 @@ module RuoteRest
     end
 
     def self.down
+
       drop_table :users
     end
   end
