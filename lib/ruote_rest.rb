@@ -39,6 +39,15 @@ require 'rufus/sixjo'
 module RuoteRest
   extend Rufus::Sixjo
 
+  def self.build_rack_app (parent, options={})
+    @app = new_sixjo_rack_app(parent, options)
+    # returns @app
+  end
+
+  def self.app
+    @app
+  end
+
   VERSION = '0.9.21'
 end
 
@@ -109,10 +118,6 @@ end
 # Racking
 
 Rufus::Sixjo.view_path = RUOTE_BASE_DIR + '/views'
-
-$rr = RuoteRest.new_sixjo_rack_app(
-  Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')), :environment => $env)
-$app = $rr
 
 load 'auth.rb'
 

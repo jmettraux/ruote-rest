@@ -81,7 +81,8 @@ begin
 
   require 'rubygems'
 
-  load File.join(RUOTE_BASE_DIR, 'lib', 'ruote_rest.rb')
+  #load File.join(RUOTE_BASE_DIR, 'lib', 'ruote_rest.rb')
+  require 'ruote_rest'
 
   b = Rack::Builder.new do
 
@@ -92,7 +93,7 @@ begin
     # TODO insert basic auth middleware
     # unless 'test'
 
-    run RuoteRest.new_sixjo_rack_app(
+    run RuoteRest.build_rack_app(
       Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')),
       :environment => $env)
   end

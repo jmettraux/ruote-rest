@@ -14,7 +14,7 @@ require 'ostruct'
 require 'rubygems'
 
 
-RUOTE_BASE_DIR = File.expand_path( File.dirname( File.dirname(__FILE__) ) )
+RUOTE_BASE_DIR = File.expand_path(File.dirname(File.dirname(__FILE__)))
 
 FileUtils.rm_f(File.dirname(__FILE__) + '/../conf/participants_test.yaml')
   # making sure that this test file gets removed before ruote_rest is required
@@ -39,8 +39,17 @@ module TestBase
     FileUtils.rm_rf 'work_test'
     FileUtils.mkdir 'logs' unless File.exist?('logs')
 
+    #
+    # prepare rack app
+
+    RuoteRest.build_rack_app(
+      Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')),
+      :environment => 'test')
+
+    #
+    # clean db
+
     OpenWFE::Extras::ArWorkitem.delete_all
-    #OpenWFE::Extras::Field.delete_all
     OpenWFE::Extras::HistoryEntry.delete_all
 
     #
@@ -66,14 +75,15 @@ module TestBase
   #  FileUtils.rm "conf/participants_test.yaml"
   #end
 
-  [ :post, :get, :put, :delete ].each do |v|
+  %w{ post get put delete }.each do |v|
     module_eval <<-EOS
       def #{v} (path, body=nil, options={})
         options[:input] = body if body
-        @response = \
-          Rack::MockRequest.new($app).request('#{v}'.upcase, path, options)
-        @response
+        @response = Rack::MockRequest.new(RuoteRest.app).request(
+          '#{v}'.upcase, path, options)
+        # returns @response
       end
     EOS
   end
 end
+
