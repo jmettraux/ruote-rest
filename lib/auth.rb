@@ -48,15 +48,20 @@ class RuoteRest::RackWhiteListing
   #
   def call (env)
 
-    #env['RUOTE_AUTHENTICATED'] = AUTH_CONF['allowed_hosts'].include?(env['REMOTE_ADDR'])
+    env['RUOTE_AUTHENTICATED'] = RuoteRest::Host.exists?(
+      :ip => env['REMOTE_ADDR'], :trusted => true)
 
-    env['RUOTE_AUTHENTICATED'] = RuoteRest::Host.exists?(:ip => env['REMOTE_ADDR'], :trusted => true)
     @rack_app.call(env)
   end
 end
 
 class RuoteRest::RackBasicAuth < Rack::Auth::Basic
   include RuoteRest::Password
+
+  def initialize (parent_app, realm)
+    super(parent_app)
+    self.realm = realm
+  end
 
   def call (env)
 

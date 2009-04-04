@@ -5,6 +5,12 @@ elsif File.exist?('vendorf/frozen.rb')
   require 'vendorf/frozen'
 end
 
+require 'lib/ar_con'
+
+
+#
+# tasks for setting up mysql
+#
 namespace :mysql do
 
   desc 'Sets up a mysql database for ruote-rest'
@@ -15,10 +21,7 @@ namespace :mysql do
     # (just before Shinagawa)
     #
 
-    stage = ENV['stage']
-
-    stage = 'development' \
-      unless [ 'test', 'development', 'production' ].include?(stage)
+    stage = determine_stage
 
     db = "ruoterest_#{stage}"
     db_admin = ENV['dbadmin'] || 'root'
@@ -35,19 +38,10 @@ namespace :mysql do
 
     # run the migrations
 
-    #gem 'activerecord'
-    require 'active_record'
+    RuoteRest.establish_ar_connection(stage)
 
-    ActiveRecord::Base.establish_connection(
-      :adapter => 'mysql',
-      :database => db,
-      #:username => 'toto',
-      #:password => 'secret',
-      #:host => 'localhost',
-      #:socket => '/var/run/mysqld/mysqld.sock',
-      :encoding => 'utf8')
-
-    $:.unshift RUOTE_LIB
+    $:.unshift('~/ruote/lib')
+      # feel free to remove that, core dev only
 
     require 'openwfe/extras/participants/ar_participants'
     OpenWFE::Extras::ArWorkitemTables.up
@@ -55,7 +49,7 @@ namespace :mysql do
     require 'openwfe/extras/expool/db_history'
     OpenWFE::Extras::HistoryTables.up
 
-    require 'conf/auth_models.rb'
+    require 'lib/models/auth.rb'
     RuoteRest::UserTables.up
     RuoteRest::HostTables.up
 
@@ -69,6 +63,7 @@ namespace :mysql do
   desc 'Populates the authentication data tables'
   task :populate do
 
+    RuoteRest.establish_ar_connection(determine_stage)
     require 'active_record/fixtures'
 
     fixtures = ENV['fixtures'] ?
@@ -79,6 +74,13 @@ namespace :mysql do
       Fixtures.create_fixtures(
         'tasks/fixtures', File.basename(fixture_file, '.*'))
     end
+  end
+
+  def determine_stage
+    stage = ENV['stage']
+    stage = 'development' \
+      unless %w{ test development production }.include?(stage)
+    stage
   end
 
 end

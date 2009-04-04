@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2008-2009, John Mettraux, OpenWFE.org
+# Copyright (c) 2008-2009, John Mettraux, jmettraux@gmail.com
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -31,93 +31,31 @@
 # Made in Japan.
 #++
 
-
-require 'rexml/document'
-
-require 'rufus/sixjo'
-
-module RuoteRest
-  extend Rufus::Sixjo
-
-  def self.build_rack_app (parent, options={})
-    @app = new_sixjo_rack_app(parent, options)
-    # returns @app
-  end
-
-  def self.app
-    @app
-  end
-
-  VERSION = '0.9.21'
-end
-
-
-#
-# conf
-
-$env = ENV['ruote.environment'] || 'development'
-
-require 'part.rb'
-
-require 'db'
-require 'engine'
-require 'participants'
-
-#
-# misc
-
-require 'patching'
-require 'misc'
-
-#
-# representations
-
-load 'inout.rb'
-
-load 'rep/links.rb'
-
-load 'rep/service.rb'
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-load 'rep/history.rb'
-
-#
-# resources
-
-load 'res/service.rb'
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-load 'res/history.rb'
-
-#
-# helpers
-
-load 'helpers/application.rb'
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# '/' redirection and more
+require 'active_record'
 
 module RuoteRest
 
-  get '/' do
-    redirect request.href(:service)
+  def self.establish_ar_connection (env)
+
+    base = defined?(RUOTE_BASE_DIR) ? RUOTE_BASE_DIR : '.'
+
+    configuration = YAML.load_file(
+      File.join(base, 'conf', 'database.yaml')
+    )[env]
+
+    raise(ArgumentError.new(
+      "No database configuration for #{application.environment} environment!")
+    ) if configuration.nil?
+
+    ActiveRecord::Base.establish_connection(
+      :adapter => configuration['adapter'],
+      :database => configuration['database'],
+      :username => configuration['username'],
+      :password => configuration['password'],
+      :host => configuration['host'],
+      :encoding => configuration['encoding'],
+      :pool => 30
+    )
   end
 end
-
-#
-# Racking
-
-Rufus::Sixjo.view_path = RUOTE_BASE_DIR + '/views'
-
-load 'auth.rb'
 
