@@ -7,10 +7,9 @@ require 'optparse'
 port = 4567
 daemonize = false
 pid = nil
+basic_auth_realm = 'ruote-rest'
 
 opts = OptionParser.new
-
-# TODO : add option for basic auth realm
 
 opts.banner = 'Usage: ruby lib/start.rb [options]'
 opts.separator('')
@@ -27,6 +26,9 @@ opts.on('-d', '--daemonize', 'run daemonized in the background') do |d|
 end
 opts.on('-P', '--pid [FILE]', 'file to store PID (default: ruote-rest.pid)') do |f|
   pid = File.expand_path( f || 'ruote-rest.pid' )
+end
+opts.on('-r', '--realm {realm}', 'basic authentication realm name') do |r|
+  basic_auth_realm = r
 end
 opts.on('-h', '--help', 'display this help content') do
   puts
@@ -89,9 +91,8 @@ begin
     use Rack::CommonLogger
     use Rack::ShowExceptions
 
-    # TODO insert whitelisting middleware
-    # TODO insert basic auth middleware
-    # unless 'test'
+    use RuoteRest::RackWhiteListing
+    use RuoteRest::RackBasicAuth, basic_auth_realm
 
     run RuoteRest.build_rack_app(
       Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')),
