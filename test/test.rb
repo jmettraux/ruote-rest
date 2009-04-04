@@ -4,6 +4,8 @@
   t_misc
   t_auth
 
+  ft_auth
+
   st_service
   st_errors
   st_expressions
