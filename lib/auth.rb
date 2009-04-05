@@ -36,51 +36,82 @@ require 'rack/auth/basic'
 require 'models/auth'
 
 
-#
-# Hosts whose IP address is trusted get automatically through.
-#
-class RuoteRest::RackWhiteListing
+module RuoteRest
 
-  def initialize (rack_app)
-    @rack_app = rack_app
-  end
-
-  # authenticate the request against all our enable authentication options
   #
-  def call (env)
+  # The call() impl common to the auth middlewares here.
+  #
+  # Calls a hypothetical clear(env) method if auth is required.
+  #
+  module AuthBehaviourMixin
 
-    env['RUOTE_AUTHENTICATED'] =
-      RuoteRest::Host.authenticate(env['REMOTE_ADDR'])
+    def call (env)
 
-    @rack_app.call(env)
+      return @app.call(env) \
+        if env[:ruote_authenticated] and @opts[:trusting]
+
+      blocking = @opts[:blocking]
+
+      env[:ruote_authenticated] = nil if blocking
+
+      clear(env)
+
+      return @app.call(env) if env[:ruote_authenticated] or (not blocking)
+
+      env[:auth_response] || [ 401, {}, 'get off !' ]
+    end
   end
-end
 
-#
-# HTTP basic authentication
-#
-class RuoteRest::RackBasicAuth < Rack::Auth::Basic
+  #
+  # Hosts whose IP address is trusted get automatically through.
+  #
+  class RackWhiteListing
+    include AuthBehaviourMixin
 
-  def initialize (parent_app, realm)
-    super(parent_app)
-    self.realm = realm
+    def initialize (app, opts={})
+      @app = app
+      @opts = opts
+    end
+
+    protected
+
+    def clear (env)
+
+      env[:ruote_authenticated] =
+        RuoteRest::Host.authenticate(env['REMOTE_ADDR'])
+    end
   end
 
-  def call (env)
+  #
+  # HTTP basic authentication
+  #
+  class RackBasicAuth < Rack::Auth::Basic
+    include AuthBehaviourMixin
 
-    unless env['RUOTE_AUTHENTICATED']
+    def initialize (app, opts={})
+      super(app)
+      self.realm = opts[:realm] || 'ruote-rest'
+      @opts = opts
+    end
+
+    protected
+
+    def clear (env)
 
       auth = Rack::Auth::Basic::Request.new(env)
 
-      return unauthorized unless auth.provided?
-      return bad_request unless auth.basic?
-      return unauthorized unless RuoteRest::User.authenticate(*auth.credentials)
-
-      env['REMOTE_USER'] = auth.username
-      env['RUOTE_AUTHENTICATED'] = true
+      if not auth.provided?
+        env[:auth_response] = unauthorized
+      elsif not auth.basic?
+        env[:auth_response] = bad_request
+      elsif not User.authenticate(*auth.credentials)
+        env[:auth_response] = unauthorized
+      else
+        env['REMOTE_USER'] = auth.username
+        env[:ruote_authenticated] = true
+      end
     end
-
-    @app.call(env)
   end
+
 end
 
