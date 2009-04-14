@@ -60,7 +60,10 @@ module RuoteRest
     #
     def self.authenticate (remote_addr)
 
-      exists?(:ip => remote_addr, :trusted => true)
+      host = find_by_ip(remote_addr)
+
+      return false unless host
+      host.trusted == '1' ? true : nil
     end
 
     #def valid_host? (host_ip)
