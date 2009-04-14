@@ -63,20 +63,14 @@ module RuoteRest
       host = find_by_ip(remote_addr)
 
       return false unless host
+
+      h = Time.now.hour
+
+      return false if host.from && h < host.from.to_i
+      return false if host.to && h > host.to.to_i
+
       host.trusted == '1' ? true : nil
     end
-
-    #def valid_host? (host_ip)
-    #  info = RuoteRest::Host.find :first, :conditions => ['ip = ?', host_ip]
-    #  hour = Time.now.hour
-    #  if info
-    #    if ((info.from == nil) && (info.to == nil))
-    #      true
-    #    else
-    #      ((info.from.to_i < hour) && (info.to.to_i > hour))   #simple check for time availability. this may be improved as needed...
-    #    end
-    #  end
-    #end
   end
 
   class HostTables < ActiveRecord::Migration
