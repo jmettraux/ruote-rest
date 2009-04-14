@@ -113,7 +113,17 @@ class FtAuthTest < Test::Unit::TestCase
     res = build_classic_auth_chain.call(env)
 
     assert_equal(
-      [ 401, {'WWW-Authenticate'=>'Basic realm="test-realm"'}, [] ], res)
+      [ 401, {}, 'get off !' ], res)
+  end
+
+  def test_chainedauth__whitelist_in__bauth_out
+
+    env = { 'REMOTE_ADDR' => '192.168.168.1' }
+
+    res = build_classic_auth_chain.call(env)
+
+    assert_equal(
+      [ 401, { 'WWW-Authenticate'=>'Basic realm="test-realm"' }, [] ], res)
   end
 
   def test_chainedauth__whitelist_in
@@ -125,16 +135,15 @@ class FtAuthTest < Test::Unit::TestCase
     assert_equal(true, env[:ruote_authenticated])
   end
 
-  def test_chainedauth__pass_in
+  def test_chainedauth__whitelist_in__bauth_in
 
     env = {
-      'REMOTE_ADDR' => '18.4.38.61',
-      'HTTP_AUTHORIZATION' => basic('bob', 'secret')
-    }
+      'REMOTE_ADDR' => '192.168.168.1',
+      'HTTP_AUTHORIZATION' => basic('bob', 'secret') }
 
     res = build_classic_auth_chain.call(env)
 
-    assert_equal 'bob', env['REMOTE_USER']
+    assert_equal(true, env[:ruote_authenticated])
   end
 
   protected
@@ -149,13 +158,8 @@ class FtAuthTest < Test::Unit::TestCase
       # closure...
 
     Rack::Builder.new do
-
-      use(
-        RuoteRest::RackWhiteListing)
-      use(
-        RuoteRest::RackBasicAuth,
-        :realm => 'test-realm', :trusting => true, :blocking => true)
-
+      use(RuoteRest::RackWhiteListing)
+      use(RuoteRest::RackBasicAuth, :realm => 'test-realm')
       run ab
     end
   end

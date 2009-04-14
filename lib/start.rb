@@ -91,11 +91,8 @@ begin
     use Rack::CommonLogger
     use Rack::ShowExceptions
 
-    use(
-      RuoteRest::RackWhiteListing)
-    use(
-      RuoteRest::RackBasicAuth,
-      :realm => basic_auth_realm, :trusting => true, :blocking => true)
+    use RuoteRest::RackWhiteListing
+    use RuoteRest::RackBasicAuth, :realm => basic_auth_realm
 
     run RuoteRest.build_rack_app(
       Rack::File.new(File.join(RUOTE_BASE_DIR, 'public')),

@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.21    not yet released
 
+- todo  #25167 : integrated Gonzalo and Nando's newauth patch
 - bug   #25016 : gem 'activerecord' getting in the way of frozen.rb. Removed.
 - todo  #23769 : moved to fs_engine
 - todo  #23869 : adapted to new ProcessStatus#workitem_expids

@@ -47,16 +47,13 @@ module RuoteRest
 
     def call (env)
 
-      return @app.call(env) \
-        if env[:ruote_authenticated] and @opts[:trusting]
+      return @app.call(env) if env[:ruote_authenticated]
 
-      blocking = @opts[:blocking]
-
-      env[:ruote_authenticated] = nil if blocking
+      env.delete(:ruote_authenticated)
 
       clear(env)
 
-      return @app.call(env) if env[:ruote_authenticated] or (not blocking)
+      return @app.call(env) if env[:ruote_authenticated] != false
 
       env[:auth_response] || [ 401, {}, 'get off !' ]
     end
@@ -79,6 +76,12 @@ module RuoteRest
 
       env[:ruote_authenticated] =
         RuoteRest::Host.authenticate(env['REMOTE_ADDR'])
+          #
+          # sets
+          #
+          # * true   : known and trusted
+          # * nil    : known but has to go through further check
+          # * false  : not known, block
     end
   end
 
@@ -99,6 +102,8 @@ module RuoteRest
     def clear (env)
 
       auth = Rack::Auth::Basic::Request.new(env)
+
+      env[:ruote_authenticated] = false
 
       if not auth.provided?
         env[:auth_response] = unauthorized
