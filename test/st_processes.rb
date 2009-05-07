@@ -251,7 +251,7 @@ class StProcessesTest < Test::Unit::TestCase
     get "/processes/#{fei.wfid}"
 
     #puts @response.body
-    assert_match(/Rufus::AtJob/, @response.body)
+    assert_match(/Rufus::.*AtJob/, @response.body)
   end
 
   def test_cancel_process_over_json
