@@ -13,6 +13,13 @@ module RuoteRest
       puts 'Kilroy was here'
     end
 
+    # a plain error participant for testing purposes
+    # (feel free to remove it !)
+    #
+    RuoteRest.engine.register_participant :houston do
+      raise 'Houston, we have a problem'
+    end
+
     #
     # loading active participants
 
