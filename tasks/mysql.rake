@@ -49,7 +49,8 @@ namespace :mysql do
     require 'openwfe/extras/expool/db_history'
     OpenWFE::Extras::HistoryTables.up
 
-    require 'lib/models/auth.rb'
+    $: << File.dirname(__FILE__) + '/../lib'
+    require 'models/auth.rb'
     RuoteRest::UserTables.up
     RuoteRest::HostTables.up
 

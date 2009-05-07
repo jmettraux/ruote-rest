@@ -1,5 +1,5 @@
 #--
-# Copyright (c) 2009, Gonzalo Suarez, Nando Sola.
+# Copyright (c) 2009, Gonzalo Suarez, Nando Sola and John Mettraux.
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -66,10 +66,10 @@ module RuoteRest
 
       h = Time.now.hour
 
-      return false if host.from && h < host.from.to_i
-      return false if host.to && h > host.to.to_i
+      return false if host.tfrom && h < host.tfrom.to_i
+      return false if host.tto && h > host.tto.to_i
 
-      host.trusted == '1' ? true : nil
+      host.trusted || nil
     end
   end
 
@@ -79,9 +79,9 @@ module RuoteRest
 
       create_table :hosts do |t|
         t.column :ip, :string
-        t.column :trusted, :string
-        t.column :from, :string
-        t.column :to, :string
+        t.column :trusted, :boolean
+        t.column :tfrom, :string
+        t.column :tto, :string
       end
     end
 
