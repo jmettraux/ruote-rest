@@ -55,7 +55,7 @@ module RuoteRest
 
     e = rparse(:expression)
 
-    RuoteRest.engine.update_expression e
+    RuoteRest.engine.update_expression(e)
 
     render_ok(e.href(request), "expression at #{e.href} updated")
   end
