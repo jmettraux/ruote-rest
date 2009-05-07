@@ -78,6 +78,15 @@ module RuoteRest
     end
   end
 
+  post '/workitems' do
+
+    wi = rparse(:workitem)
+
+    RuoteRest.engine.reply(wi)
+
+    response.location = request.href(:workitems)
+    rrender(:workitems, find_workitems)
+  end
 
   #
   # helpers
