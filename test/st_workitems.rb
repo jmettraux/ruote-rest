@@ -15,7 +15,9 @@ class StWorkitemsTest < Test::Unit::TestCase
   include TestBase
 
 
-  def test_0
+  # ugly longish test
+  #
+  def test_launch_view_proceed
 
     #$OWFE_LOG.level = Logger::DEBUG
 
@@ -36,7 +38,6 @@ class StWorkitemsTest < Test::Unit::TestCase
     }
 
     sleep 0.450
-    #sleep 5
 
     #ps = RuoteRest.engine.process_status(fei)
     #p ps.errors.size
@@ -162,6 +163,39 @@ class StWorkitemsTest < Test::Unit::TestCase
 
     assert_equal 1, workitems.size
     assert_equal 'bravo', workitems.first.participant_name
+  end
+
+  # posting a workitem to /workitems
+  #
+  def test_http_listener
+
+    fei = RuoteRest.engine.launch %{
+      class TestHttpListener < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    }
+
+    sleep 0.450
+
+    get "/workitems/#{fei.wfid}/0_0_0"
+
+    workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
+
+    post(
+      "/workitems",
+      workitem.to_h().to_json,
+      { 'CONTENT_TYPE' => 'application/json' })
+
+    sleep 0.450
+
+    get "/workitems/#{fei.wfid}/0_0_1"
+
+    workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
+
+    assert_equal 'bravo', workitem.participant_name
   end
 
 end

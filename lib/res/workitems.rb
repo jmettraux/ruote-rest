@@ -78,6 +78,10 @@ module RuoteRest
     end
   end
 
+  # the "http listener"
+  #
+  # redirects any workitem coming here to the engine.
+  #
   post '/workitems' do
 
     wi = rparse(:workitem)
