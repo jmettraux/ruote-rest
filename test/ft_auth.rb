@@ -118,7 +118,7 @@ class FtAuthTest < Test::Unit::TestCase
 
   def test_chainedauth__whitelist_in__bauth_out
 
-    env = { 'REMOTE_ADDR' => '192.168.168.1' }
+    env = { 'REMOTE_ADDR' => '192.168.168.128' }
 
     res = build_classic_auth_chain.call(env)
 
@@ -138,7 +138,7 @@ class FtAuthTest < Test::Unit::TestCase
   def test_chainedauth__whitelist_in__bauth_in
 
     env = {
-      'REMOTE_ADDR' => '192.168.168.1',
+      'REMOTE_ADDR' => '192.168.168.128',
       'HTTP_AUTHORIZATION' => basic('bob', 'secret') }
 
     res = build_classic_auth_chain.call(env)
