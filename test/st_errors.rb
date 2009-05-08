@@ -15,7 +15,7 @@ class StErrorsTest < Test::Unit::TestCase
   include TestBase
 
 
-  def test_0
+  def test_get_empty_errors
 
     get '/errors'
 
@@ -33,7 +33,7 @@ class StErrorsTest < Test::Unit::TestCase
     assert_nil @response.headers['Last-Modified']
   end
 
-  def test_1
+  def test_get_errors
 
     fei = RuoteRest.engine.launch <<-EOS
 <process-definition name="st_errors" revision="t1">
@@ -41,7 +41,7 @@ class StErrorsTest < Test::Unit::TestCase
 </process-definition>
     EOS
 
-    sleep 0.350
+    sleep 0.450
 
     get '/errors'
 
@@ -54,6 +54,25 @@ class StErrorsTest < Test::Unit::TestCase
 
     assert_not_nil @response.headers['ETag']
     assert_not_nil @response.headers['Last-Modified']
+  end
+
+  def test_replay_error
+
+    fei = RuoteRest.engine.launch <<-EOS
+<process-definition name="st_errors" revision="t1">
+  <participant ref="tonto" />
+</process-definition>
+    EOS
+
+    sleep 0.450
+
+    get '/errors'
+
+    puts @response.body
+    errors = OpenWFE::Xml.errors_from_xml(@response.body)
+
+    p errors.first
+    flunk
   end
 end
 

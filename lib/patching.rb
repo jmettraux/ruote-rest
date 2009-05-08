@@ -219,7 +219,7 @@ end
 # The new activerecord based workitem, adding etag and timestamp...
 #
 class OpenWFE::Extras::ArWorkitem
-  
+
   def pretag
     "#{fei} #{store_name} #{last_modified} #{dispatch_time} " +
     "#{field_hash.collect { |key,value| key.to_s + ' ' + value.to_s }.join(', ')}"
