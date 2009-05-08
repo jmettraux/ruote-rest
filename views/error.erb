@@ -12,23 +12,16 @@
 
   <br/>
 
-  <% if alone %>
   <div>
     <form action="<%= error.href %>" method="post" enctype="multipart/form-data">
-      <input type="hidden" name="_method" value="PUT" />
+      <% if alone %>
+      workitem attributes :<br/>
+      <textarea name="workitem_attributes" cols="60" rows="12"><%= error.workitem.attributes.to_json %></textarea>(json)<br/>
+      <% end %>
 
-      <textarea name="attributes" cols="60" rows="12"><%= error.workitem.attributes.to_json %></textarea>(json)<br/>
-
-      update workitem :
-      <input type="submit" value="PUT <%= error.href %>" />
-
-    </form>
-  <br/>
-  <% end %>
-
-  <div>
-    <form action="<%= error.href %>" method="post" enctype="multipart/form-data">
       <input type="hidden" name="_method" value="DELETE" />
+
+      <br/>
 
       replay at error :
       <input type="submit" value="DELETE <%= error.href %>" />

@@ -65,10 +65,23 @@ module RuoteRest
 
     error = find_error
 
-    RuoteRest.engine.replay_at_error(error)
+    if error
 
-    'replayed'
+      workitem_payload = json_parse(params[:workitem_attributes]) rescue nil
+      error.workitem.attributes = workitem_payload if workitem_payload
+
+      RuoteRest.engine.replay_at_error(error)
+
+      'replayed'
+    else
+
+      'ok'
+    end
   end
+
+  #put '/errors/:wfid/:error_id' do
+  #  update_workitem
+  #end
 
 
   #
