@@ -64,15 +64,26 @@ class StErrorsTest < Test::Unit::TestCase
 </process-definition>
     EOS
 
-    sleep 0.450
+    sleep 1
 
     get '/errors'
 
-    puts @response.body
+    #puts @response.body
     errors = OpenWFE::Xml.errors_from_xml(@response.body)
+    error = errors.first
 
-    p errors.first
-    flunk
+    e0date = error.date
+
+    delete error.href
+
+    sleep 0.450
+
+    # error re-occured since root cause hasn't been fixed
+
+    get error.href
+    error = OpenWFE::Xml.error_from_xml(@response.body)
+
+    assert_not_equal e0date, error.date
   end
 end
 

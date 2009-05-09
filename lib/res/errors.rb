@@ -56,33 +56,17 @@ module RuoteRest
     rrender(:errors, errors)
   end
 
-  get '/errors/:wfid/:error_id' do
+  get '/errors/:wfid/:expid' do
 
     rrender(:error, find_error)
   end
 
-  delete '/errors/:wfid/:error_id' do
-
-    error = find_error
-
-    if error
-
-      workitem_payload = json_parse(params[:workitem_attributes]) rescue nil
-      error.workitem.attributes = workitem_payload if workitem_payload
-
-      RuoteRest.engine.replay_at_error(error)
-
-      'replayed'
-    else
-
-      'ok'
-    end
+  delete '/errors/:wfid/:expid' do
+    replay_error
   end
-
-  #put '/errors/:wfid/:error_id' do
-  #  update_workitem
-  #end
-
+  post '/errors/:wfid/:expid' do
+    replay_error
+  end
 
   #
   # well, helpers...
@@ -92,11 +76,29 @@ module RuoteRest
     def find_error
 
       wfid = params[:wfid]
-      error_id = params[:error_id]
+      expid = OpenWFE.to_dots(params[:expid])
 
       errors = RuoteRest.engine.get_error_journal.get_error_log(wfid)
 
-      errors.find { |e| e.error_id == error_id }
+      errors.find { |e| e.fei.expid == expid }
+    end
+
+    def replay_error
+
+      error = find_error
+
+      if error
+
+        workitem_payload = json_parse(params[:workitem_attributes]) rescue nil
+        error.workitem.attributes = workitem_payload if workitem_payload
+
+        RuoteRest.engine.replay_at_error(error)
+
+        'replayed'
+      else
+
+        'ok'
+      end
     end
   end
 
