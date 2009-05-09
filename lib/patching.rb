@@ -237,20 +237,22 @@ end
 class OpenWFE::ProcessError
   include RuoteLinkable
 
-  def error_id
-
-    OpenWFE.to_uscores(fei.expid) +
-    '_' +
-    Rufus::Mnemo.from_integer(date.to_i.abs)
-      # 2008 AD, but what about 2008 BC ?
-  end
+  #def error_id
+  #  OpenWFE.to_uscores(fei.expid) +
+  #  '_' +
+  #  Rufus::Mnemo.from_integer(date.to_i.abs)
+  #    # 2008 AD, but what about 2008 BC ?
+  #end
 
   #
   # Returns the 'ruote-rest' href for this ProcessError instance
   #
   def href (request=nil)
 
-    request ? request.href(:errors, wfid, expid) : "/errors/#{wfid}/#{error_id}"
+    #request ? request.href(:errors, wfid, fei.expid) : "/errors/#{wfid}/#{error_id}"
+    request ?
+      request.href(:errors, wfid, fei.expid) :
+      "/errors/#{wfid}/#{OpenWFE.to_uscores(fei.expid)}"
   end
 
   def pretag
