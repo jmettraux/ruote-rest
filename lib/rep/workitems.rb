@@ -41,7 +41,7 @@ module RuoteRest
 
     def parse_workitem_xml (xml)
 
-      OpenWFE::Xml.workitem_from_xml xml
+      OpenWFE::Xml.workitem_from_xml(xml)
     end
 
     def parse_workitem_form (x)
@@ -58,7 +58,7 @@ module RuoteRest
 
     def parse_workitem_json (json)
 
-      OpenWFE::workitem_from_h(json_parse(json))
+      OpenWFE.workitem_from_h(json_parse(json))
     end
 
 
