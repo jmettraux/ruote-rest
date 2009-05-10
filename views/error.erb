@@ -16,7 +16,7 @@
     <form action="<%= error.href %>" method="post" enctype="multipart/form-data">
       <% if alone %>
       workitem attributes :<br/>
-      <textarea name="workitem_attributes" cols="60" rows="12"><%= error.workitem.attributes.to_json %></textarea>(json)<br/>
+      <textarea name="attributes" cols="60" rows="12"><%= error.workitem.attributes.to_json %></textarea>(json)<br/>
       <% end %>
 
       <input type="hidden" name="_method" value="DELETE" />

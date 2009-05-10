@@ -66,7 +66,6 @@ module RuoteRest
       wi.destroy
 
       response.location = request.href(:workitems)
-
       rrender(:workitems, find_workitems)
     else
 

@@ -95,10 +95,10 @@ module RuoteRest
 
         RuoteRest.engine.replay_at_error(error)
 
-        'replayed'
+        render_ok(request.href(:errors), "error at #{error.href} replayed")
       else
 
-        'ok'
+        redirect(request.href(:errors))
       end
     end
   end
