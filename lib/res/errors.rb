@@ -89,8 +89,9 @@ module RuoteRest
 
       if error
 
-        workitem_payload = json_parse(params[:workitem_attributes]) rescue nil
-        error.workitem.attributes = workitem_payload if workitem_payload
+        wi = rparse(:workitem, true)
+        atts = wi ? wi.attributes : rparse(:hash, true)
+        error.workitem.attributes = atts if atts
 
         RuoteRest.engine.replay_at_error(error)
 

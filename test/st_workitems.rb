@@ -185,7 +185,7 @@ class StWorkitemsTest < Test::Unit::TestCase
     workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
 
     post(
-      "/workitems",
+      '/workitems',
       workitem.to_h().to_json,
       { 'CONTENT_TYPE' => 'application/json' })
 

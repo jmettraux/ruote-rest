@@ -35,13 +35,7 @@ class StErrorsTest < Test::Unit::TestCase
 
   def test_get_errors
 
-    fei = RuoteRest.engine.launch <<-EOS
-<process-definition name="st_errors" revision="t1">
-  <participant ref="tonto" />
-</process-definition>
-    EOS
-
-    sleep 0.450
+    fei = launch_faulty_process
 
     get '/errors'
 
@@ -58,23 +52,17 @@ class StErrorsTest < Test::Unit::TestCase
 
   def test_replay_error
 
-    fei = RuoteRest.engine.launch <<-EOS
-<process-definition name="st_errors" revision="t1">
-  <participant ref="tonto" />
-</process-definition>
-    EOS
-
-    sleep 1
+    fei = launch_faulty_process
 
     get '/errors'
 
-    #puts @response.body
     errors = OpenWFE::Xml.errors_from_xml(@response.body)
     error = errors.first
 
-    e0date = error.date
+    fd0 = error.fdate
 
     delete error.href
+    #puts @response.body
 
     sleep 0.450
 
@@ -83,7 +71,72 @@ class StErrorsTest < Test::Unit::TestCase
     get error.href
     error = OpenWFE::Xml.error_from_xml(@response.body)
 
-    assert_not_equal e0date, error.date
+    assert_not_equal fd0, error.fdate
+  end
+
+  def test_replay_error_with_updated_workitem
+
+    fei = launch_faulty_process
+
+    err = get_error(fei.wfid)
+
+    wi = err.workitem
+    wi.attributes['kilroy'] = 'was here'
+
+    post(
+      "/errors/#{fei.wfid}/0_0",
+      wi.to_h().to_json,
+      { 'CONTENT_TYPE' => 'application/json' })
+
+    assert_equal 200, @response.status
+
+    sleep 0.450
+
+    err = get_error(fei.wfid)
+
+    assert_equal({ 'kilroy' => 'was here' }, err.workitem.attributes)
+  end
+
+  def test_replay_error_with_updated_workitem_attributes
+
+    fei = launch_faulty_process
+
+    err = get_error(fei.wfid)
+
+    post(
+      "/errors/#{fei.wfid}/0_0",
+      { 'kilroy' => 'was there' }.to_json,
+      { 'CONTENT_TYPE' => 'application/json' })
+
+    assert_equal 200, @response.status
+
+    sleep 0.450
+
+    err = get_error(fei.wfid)
+
+    assert_equal({ 'kilroy' => 'was there' }, err.workitem.attributes)
+  end
+
+  protected
+
+  def launch_faulty_process
+
+    fei = RuoteRest.engine.launch <<-EOS
+<process-definition name="st_errors" revision="t1">
+  <participant ref="tonto" />
+</process-definition>
+    EOS
+
+    sleep 0.450
+
+    fei
+  end
+
+  def get_error (wfid)
+
+    get "/errors/#{wfid}/0_0"
+
+    OpenWFE::Xml.error_from_xml(@response.body)
   end
 end
 

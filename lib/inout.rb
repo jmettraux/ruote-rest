@@ -34,21 +34,28 @@
 
 class Rufus::Sixjo::Context
 
+  # Parses the representation sent in the request body
   #
-  # parses the representation sent in the request body
+  # If tolerant is set to true, will simply return nil when it fails to parse
+  # the incoming representation.
   #
-  def rparse (type)
+  def rparse (type, tolerant=false)
 
+    request.body.rewind
     representation = request.body.read
 
     format = determine_in_format
 
-    send("parse_#{type}_#{format}", representation) \
-      rescue throw :done, [ 400, "failed to parse incoming representation" ]
+    begin
+      #p [ "parse_#{type}_#{format}", representation ]
+      send("parse_#{type}_#{format}", representation)
+    rescue Exception => e
+      return nil if tolerant
+      throw :done, [ 400, "failed to parse incoming representation" ]
+    end
   end
 
-  #
-  # the entry point for rendering any ruote-rest object
+  # The entry point for rendering any ruote-rest object
   #
   # (pronounce with a "rolling r")
   #
@@ -88,12 +95,11 @@ class Rufus::Sixjo::Context
     "var #{varname} = #{send(method, object)}"
   end
 
-  #
-  # simply reads the "Content-Type" header
+  # Simply reads the "Content-Type" header
   #
   def determine_in_format
 
-    ct = request.env['CONTENT_TYPE']
+    ct = request.env['CONTENT_TYPE'] || ''
 
     return 'form' if ct.index('form-')
     return 'json' if ct.index('application/json')
@@ -102,8 +108,6 @@ class Rufus::Sixjo::Context
     'xml'
   end
 
-
-  #
   # some common formats
   #
   FORMATS = {
@@ -120,8 +124,7 @@ class Rufus::Sixjo::Context
   FTYPES = FORMATS.keys.collect { |k| k.to_s } \
     unless defined?(FTYPES)
 
-  #
-  # determines the format the client is expecting
+  # Determines the format the client is expecting
   #
   def determine_out_format (options={})
 
@@ -144,7 +147,6 @@ class Rufus::Sixjo::Context
     FORMATS[:xml]
   end
 
-  #
   # Returns true if the string is something like "xxx.json" or "yyy.xml"
   #
   def has_filetype? (s)

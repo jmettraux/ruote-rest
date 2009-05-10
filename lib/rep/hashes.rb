@@ -32,93 +32,27 @@
 #++
 
 
-require 'rexml/document'
-
-require 'rufus/sixjo'
-
-module RuoteRest
-  extend Rufus::Sixjo
-
-  def self.build_rack_app (parent, options={})
-    @app = new_sixjo_rack_app(parent, options)
-    # returns @app
-  end
-
-  def self.app
-    @app
-  end
-
-  VERSION = '0.9.21'
-end
-
-
-#
-# conf
-
-$env = ENV['ruote.environment'] || 'development'
-
-require 'part.rb'
-
-require 'db'
-require 'engine'
-require 'participants'
-
-#
-# misc
-
-require 'patching'
-require 'misc'
-
-#
-# representations
-
-load 'inout.rb'
-
-load 'rep/links.rb'
-
-load 'rep/service.rb'
-load 'rep/fei.rb'
-load 'rep/launchitems.rb'
-load 'rep/processes.rb'
-load 'rep/errors.rb'
-load 'rep/expressions.rb'
-load 'rep/participants.rb'
-load 'rep/workitems.rb'
-load 'rep/hashes.rb'
-load 'rep/history.rb'
-
-#
-# resources
-
-load 'res/service.rb'
-load 'res/processes.rb'
-load 'res/errors.rb'
-load 'res/expressions.rb'
-load 'res/participants.rb'
-load 'res/workitems.rb'
-load 'res/history.rb'
-
-#
-# helpers
-
-load 'helpers/application.rb'
-load 'helpers/links.rb'
-load 'helpers/fluo.rb'
-
-#
-# '/' redirection and more
-
 module RuoteRest
 
-  get '/' do
-    redirect request.href(:service)
+  helpers do
+
+    #
+    # IN
+
+    def parse_hash_xml (xml)
+
+      OpenWFE::Xml.hash_from_xml(xml)
+    end
+
+    def parse_hash_form (x)
+
+      json_parse(params[:attributes])
+    end
+
+    def parse_hash_json (json)
+
+      json_parse(json)
+    end
   end
 end
-
-#
-# Racking
-
-Rufus::Sixjo.view_path = RUOTE_BASE_DIR + '/views'
-
-load 'auth.rb'
 
