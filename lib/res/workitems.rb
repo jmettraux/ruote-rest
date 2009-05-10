@@ -56,15 +56,14 @@ module RuoteRest
       RuoteRest.engine.reply(owi)
       wi.destroy
 
-      response.location = request.href(:workitems)
-      rrender(:workitems, find_workitems)
+      render_reply(200, "workitem at #{owi.href} proceeded")
     else
 
       # TODO : notify HTML clients of the update ? flash.notice ?
 
       wi.replace_fields(owi.attributes)
 
-      rrender(:workitem, wi)
+      render_reply(200, "workitem at #{owi.href} updated")
     end
   end
 
@@ -78,8 +77,7 @@ module RuoteRest
 
     RuoteRest.engine.reply(wi)
 
-    response.location = request.href(:workitems)
-    rrender(:workitems, find_workitems)
+    render_reply(200, "workitem #{wi.fei.wfid} #{wi.fei.expid}proceeded")
   end
 
   #

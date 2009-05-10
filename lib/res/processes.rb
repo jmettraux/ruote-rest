@@ -130,11 +130,11 @@ module RuoteRest
 
     wfid = params[:wfid]
 
-    RuoteRest.engine.cancel_process wfid
+    RuoteRest.engine.cancel_process(wfid)
 
     sleep 0.350
 
-    render_ok(request.href(:processes), "process #{wfid} deleted")
+    render_reply(200, "process #{wfid} deleted")
   end
 
 

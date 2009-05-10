@@ -25,8 +25,7 @@
 
 module RuoteRest
 
-SERVICES = [ :processes, :workitems, :errors, :participants, :history ]
-
+  SERVICES = [ :processes, :workitems, :errors, :participants, :history ]
 
   helpers do
 

@@ -86,10 +86,11 @@ module RuoteRest
 
         RuoteRest.engine.replay_at_error(error)
 
-        render_ok(request.href(:errors), "error at #{error.href} replayed")
+        render_reply(200, "error at #{error.href} replayed")
       else
 
-        redirect(request.href(:errors))
+        #render_reply(404, "no error found at #{error.href}")
+        render_reply(200, "no error found at #{error.href}")
       end
     end
   end
