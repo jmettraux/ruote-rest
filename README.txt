@@ -96,7 +96,7 @@ conf/auth.rb
 
 == license
 
-BSD
+MIT
 
 
 == feedback
