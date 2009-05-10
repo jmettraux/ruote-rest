@@ -117,20 +117,25 @@ module RuoteRest
       "<div class=\"pager\">#{s}</div>"
     end
 
-    def render_ok (location, message)
+    # renders an information/message page
+    #
+    def render_reply (status, message)
 
       format, type = determine_out_format
 
+      response.status = status
+
       if format == 'xml'
-        #response.status = 200
+
         "<message>#{message}</message>"
+
       elsif format == 'json'
-        #response.status = 200
+
         message.to_json
+
       else
-        response.status = 303
-        response.location = request.href(:processes)
-        message
+
+        _erb(:reply, :layout => :html, :locals => { :message => message })
       end
     end
 

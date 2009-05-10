@@ -47,9 +47,15 @@ module RuoteRest
   delete '/participants/:pid' do
 
     pid, part = get_participant
-    Participants.remove pid
 
-    render_ok(request.href(:participants), "participant #{pid} removed")
+    if pid
+
+      Participants.remove(pid)
+      render_reply(200, "participant #{pid} removed")
+    else
+
+      render_reply(200, "no participant '#{pid}' to remove")
+    end
   end
 
 
