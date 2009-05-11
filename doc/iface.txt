@@ -1,0 +1,94 @@
+
+= ruote-{rest|web2|kit} resources
+
+note : the URIs are generic.
+
+
+== high-level process instance manipulation
+
+POST /processes                   
+  rel="http://openwfe.org/rels/processes"
+  body : launchitem representation
+  launches new process instance
+
+PUT /processes/:wfid
+  rel="http://openwfe.org/rels/process"
+  body : mini process representation
+  update (pause/resume) process instance
+
+DELETE /processes/:wfid
+  rel="http://openwfe.org/rels/process"
+  body : none
+  cancel/abort process instance
+
+
+== incoming workitems
+
+This is not "worklist" bound. An engine with no worklist would present this resource anyway.
+
+POST /workitems
+  rel="http://openwfe.org/rels/workitems"
+  body : a workitem
+  participant may post back an updated workitem here directly
+
+supplement : this resource could accept launchitems as well
+
+
+== low-level process instance manipulation
+
+PUT /expressions/:wfid/:expid
+  rel="http://openwfe.org/rels/process/expression"
+  body : expression representation (YAML)
+  updates an expression (mostly its branch of the AST)
+
+PUT /expressions/:wfid/:expid/tree
+  rel="http://openwfe.org/rels/process/expression/tree"
+  body : expression tree as JSON
+  updates an expression (mostly its branch of the AST)
+
+DELETE /expressions/:wfid/:expid/tree
+  rel="http://openwfe.org/rels/process/expression"
+  body : none
+  cancels an expression (its branch of the process instance)
+
+(
+POST /expressions/:wfid/:expid
+  rel="http://openwfe.org/rels/process/expression"
+  body : none
+  re-applies the expression
+)
+
+
+== error management
+
+DELETE /errors/:wfid/:expid
+POST /errors/:wfid/:expid
+  rel="http://openwfe.org/rels/process/error"
+  body : none or workitem or workitem payload (hash)
+  replays the process instance at the error [point]
+
+
+== participant management
+
+(not sure about this one, not really keen on doing participant management over HTTP)
+
+POST /participants
+  rel="http://openwfe.org/rels/participants"
+  body : participant id + participant parameters
+  registers a participant in the engine
+
+DELETE /participants/:pid
+  rel="http://openwfe.org/rels/participant"
+  body : none
+  de-registers a participant from the engine
+
+
+== worklist management
+
+PUT /workitems/:wfid/:expid
+  rel="http://openwfe.org/rels/workitem"
+  body : workitem
+  updates or updates + proceeds workitem
+
+what about PUT for update and POST for proceed ?
+
