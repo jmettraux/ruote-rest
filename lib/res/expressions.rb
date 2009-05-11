@@ -46,6 +46,13 @@ module RuoteRest
     render_reply(200, "expression at #{e.href} updated")
   end
 
+  #post '/expressions/:wfid/:expid' do
+  #  e = rparse(:expression)
+  #  RuoteRest.engine.update_expression(e)
+  #  RuoteRest.engine.apply
+  #  render_reply(200, "expression at #{e.href} updated")
+  #end
+
   get '/expressions/:wfid/:expid' do
 
     rrender(:expression, find_expression)
@@ -70,14 +77,11 @@ module RuoteRest
 
     e = find_expression
 
-    RuoteRest.engine.cancel_expression e
+    RuoteRest.engine.cancel_expression(e)
 
     render_reply(200, "expression at #{e.href} cancelled (terminated)")
   end
 
-
-#
-# some helper methods
 
   helpers do
 
@@ -88,8 +92,8 @@ module RuoteRest
 
       env = false
 
-      if expid[-1, 1] == 'e'
-        expid = expid[0..-2]
+      if m = expid.match(/^(.*)e$/)
+        expid = m[1]
         env = true
       end
 
