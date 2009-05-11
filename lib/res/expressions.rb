@@ -37,6 +37,8 @@ module RuoteRest
     rrender :expressions, ps.all_expressions
   end
 
+  # Update expression
+  #
   put '/expressions/:wfid/:expid' do
 
     e = rparse(:expression)
@@ -46,12 +48,17 @@ module RuoteRest
     render_reply(200, "expression at #{e.href} updated")
   end
 
-  #post '/expressions/:wfid/:expid' do
-  #  e = rparse(:expression)
-  #  RuoteRest.engine.update_expression(e)
-  #  RuoteRest.engine.apply
-  #  render_reply(200, "expression at #{e.href} updated")
-  #end
+  # Re-apply
+  #
+  post '/expressions/:wfid/:expid' do
+
+    #e = rparse(:expression)
+    e = find_expression
+
+    RuoteRest.engine.reapply(e)
+
+    render_reply(200, "expression at #{e.href} re-applied")
+  end
 
   get '/expressions/:wfid/:expid' do
 
@@ -63,6 +70,8 @@ module RuoteRest
     rrender(:expression_tree, find_expression)
   end
 
+  # Update expression tree
+  #
   put '/expressions/:wfid/:expid/tree' do
 
     tree = rparse(:expression_tree)
@@ -73,6 +82,8 @@ module RuoteRest
     render_reply(200, "expression at #{e.href} updated")
   end
 
+  # Cancel expression
+  #
   delete '/expressions/:wfid/:expid' do
 
     e = find_expression

@@ -180,5 +180,45 @@ class StExpressionsTest < Test::Unit::TestCase
 
     sleep 0.350
   end
+
+  class UnreliableParticipant
+    include OpenWFE::LocalParticipant
+
+    def consume (workitem)
+      @counter ||= 0
+      @counter += 1
+      reply_to_engine(workitem) if @counter == 2
+    end
+  end
+
+  def test_reapply
+
+    pdef = OpenWFE.process_definition :name => 'test_reapply' do
+      sequence do
+        theo
+        bravo
+      end
+    end
+
+    RuoteRest.engine.register_participant :theo, UnreliableParticipant
+
+    fei = RuoteRest.engine.launch(pdef)
+
+    sleep 0.350
+
+    theo = RuoteRest.engine.process_status(fei.wfid).expressions.last.fei
+
+    post(theo.href, '', {})
+
+    #p @response.body
+    assert_equal 200, @response.status
+
+    sleep 0.350
+
+    last = RuoteRest.engine.process_status(fei.wfid).expressions.last.fei
+    assert_equal 'bravo', last.expname
+
+    RuoteRest.engine.cancel_process(fei)
+  end
 end
 
