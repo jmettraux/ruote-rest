@@ -47,7 +47,7 @@ module RuoteRest
       pdef = request.params['pdef']
       fields = json_parse(request.params['fields'])
 
-      if pdef.strip != ''
+      if pdef && pdef.strip != ''
         li = OpenWFE::LaunchItem.new pdef
       else
         li = OpenWFE::LaunchItem.new
