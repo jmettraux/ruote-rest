@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.21    not yet released
 
+- todo  #25167 : rake password:generate
 - todo  #25799 : post /expressions/:wfid/:expid linked to engine.reapply(exp)
 - todo  #25858 : reply page for things like "process x got cancelled"
 - todo  #25710 : made workitem [payload] editable at error replay time

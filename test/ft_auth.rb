@@ -86,7 +86,7 @@ class FtAuthTest < Test::Unit::TestCase
 
   def test_basicauth_in_alice
 
-    env = { 'HTTP_AUTHORIZATION' => basic('alice', 'secret') }
+    env = { 'HTTP_AUTHORIZATION' => basic('alice', 'alice') }
 
     res = RuoteRest::RackBasicAuth.new(@ab, :realm => 'test-realm').call(env)
 
@@ -98,7 +98,7 @@ class FtAuthTest < Test::Unit::TestCase
 
     # Bob uses a different hash algo than Alice
 
-    env = { 'HTTP_AUTHORIZATION' => basic('bob', 'secret') }
+    env = { 'HTTP_AUTHORIZATION' => basic('bob', 'bob') }
 
     res = RuoteRest::RackBasicAuth.new(@ab, :realm => 'test-realm').call(env)
 
@@ -139,7 +139,7 @@ class FtAuthTest < Test::Unit::TestCase
 
     env = {
       'REMOTE_ADDR' => '192.168.168.128',
-      'HTTP_AUTHORIZATION' => basic('bob', 'secret') }
+      'HTTP_AUTHORIZATION' => basic('bob', 'bob') }
 
     res = build_classic_auth_chain.call(env)
 

@@ -1,6 +1,12 @@
+
+
+** Note : most of this documentation got integrated into README.txt
+   Thanks to Gonzalo and Nando for all their work ! **
+
+
 This is a draft for a new authentication model in ruote-rest.
 
-authors: Gonzalo<gonzalo@abstra.cc>
+authors: Gonzalo <gonzalo@abstra.cc>
          "Nando Sola"<nando@abstra.cc>
 
 Our main goal was to avoid storing passwords in plain text (conf/authentication.yaml)
