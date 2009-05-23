@@ -47,6 +47,22 @@ To prepare the dev database with the admin 'toto'
   rake mysql:setup dbadmin=toto
 )
 
+The last step of the database preparation is loading the authentication settings :
+
+  rake mysql:populate
+
+These settings may be modified by editing tasks/fixtures/host.yml and/or tasks/fixtures/users.yml
+
+To generate a password for a user :
+
+  rake password:generate smd5 my_very_secret_password
+
+or
+
+  rake password:generate ssha my_very_secret_password
+
+The resulting string (something like "{SMD5}HKBKsOPQ1PleLG3KOlmHTWtoNW9HVGxC") can be inserted in the fixture or in the 'password' column database for the given user.
+
 
 == starting it
 

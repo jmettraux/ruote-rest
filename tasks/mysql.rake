@@ -75,6 +75,12 @@ namespace :mysql do
       Fixtures.create_fixtures(
         'tasks/fixtures', File.basename(fixture_file, '.*'))
     end
+
+    $: << File.dirname(__FILE__) + '/../lib'
+    require 'models/auth.rb'
+
+    puts "loaded #{RuoteRest::Host.find(:all).size} hosts"
+    puts "loaded #{RuoteRest::User.find(:all).size} users"
   end
 
   def determine_stage
