@@ -131,7 +131,7 @@ module RuoteRest
 
       elsif format == 'json'
 
-        message.to_json
+        OpenWFE::Json.encode( message )
 
       else
 

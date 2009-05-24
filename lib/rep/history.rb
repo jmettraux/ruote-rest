@@ -65,7 +65,7 @@ module RuoteRest
 
     def render_history_json (history)
 
-      history[:entries].collect { |e|
+      h = history[:entries].collect { |e|
         {
           'created_at' => e.created_at,
           'source' => e.source,
@@ -75,7 +75,9 @@ module RuoteRest
           'participant' => e.participant,
           'message' => e.message
         }
-      }.to_json
+      }
+
+      OpenWFE::Json.encode( h )
     end
 
     def render_history_atom (history)

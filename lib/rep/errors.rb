@@ -45,14 +45,14 @@ module RuoteRest
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.errors_to_h(errors, options).to_json
+      OpenWFE::Json.encode( OpenWFE::Json.errors_to_h(errors, options) )
     end
 
     def render_error_json (error, options={})
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.error_to_h(error, options).to_json
+      OpenWFE::Json.encode( OpenWFE::Json.error_to_h(error, options) )
     end
 
     def render_errors_html (errors)

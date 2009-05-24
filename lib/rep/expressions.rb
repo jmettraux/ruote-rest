@@ -79,7 +79,7 @@ module RuoteRest
       options[:linkgen] = RackLinkGenerator.new(request)
       options[:short] = true
 
-      OpenWFE::Json.expressions_to_h(es, options).to_json
+      OpenWFE::Json.encode( OpenWFE::Json.expressions_to_h(es, options) )
     end
 
     def render_expressions_html (es)
@@ -128,7 +128,7 @@ module RuoteRest
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.expression_to_h(e, options).to_json
+      OpenWFE::Json.encode( OpenWFE::Json.expression_to_h(e, options) )
     end
 
     def render_expression_tree_html (fexp)
@@ -138,7 +138,7 @@ module RuoteRest
 
     def render_expression_tree_json (fexp)
 
-      fexp.raw_representation.to_json
+      OpenWFE::Json.encode( fexp.raw_representation)
     end
 
     #

@@ -34,17 +34,12 @@ end
 #
 # JSON related stuff and patching
 
-# makes sure to have some JSON capabilities around
-#
-unless {}.respond_to?(:to_json)
-
-  require 'json'
-end
-
 # making sure there is a way to parse JSON strings
 #
 def json_parse (s)
 
-  defined?(ActiveSupport::JSON) ? ActiveSupport::JSON.decode(s) : JSON.parse(s)
+  #defined?(ActiveSupport::JSON) ? ActiveSupport::JSON.decode(s) :
+  #JSON.parse(s)
+  OpenWFE::Json.decode( s )
 end
 

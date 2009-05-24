@@ -41,7 +41,7 @@ module RuoteRest
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.processes_to_h(ps, options).to_json
+      OpenWFE::Json.encode( OpenWFE::Json.processes_to_h(ps, options))
     end
 
     def render_processes_html (ps)
@@ -67,7 +67,7 @@ module RuoteRest
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.process_to_h(p, options).to_json
+      OpenWFE::Json.encode(OpenWFE::Json.process_to_h(p, options))
     end
 
     def render_process_xml (p, options={ :indent => 2 })
@@ -104,14 +104,14 @@ module RuoteRest
     #
     def render_process_tree_json (expressions)
 
-      expressions.tree.to_json
+      OpenWFE::Json.encode(expressions.tree)
     end
 
     # Renders the variables as JSON.
     #
     def render_process_variables_json (variables)
 
-      variables.to_json
+      OpenWFE::Json.encode(variables)
     end
 
     # Renders the variables as XML.

@@ -82,14 +82,14 @@ module RuoteRest
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.workitems_to_h(wis, options).to_json
+      OpenWFE::Json.encode(OpenWFE::Json.workitems_to_h(wis, options))
     end
 
     def render_workitem_json (wi, options={})
 
       options[:linkgen] = RackLinkGenerator.new(request)
 
-      OpenWFE::Json.workitem_to_h(wi, options).to_json
+      OpenWFE::Json.encode(OpenWFE::Json.workitem_to_h(wi, options))
     end
 
     def render_workitems_html (wis)

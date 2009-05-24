@@ -48,7 +48,7 @@ module RuoteRest
       rep = if wfid == nil
         "<script>var proc_rep = null;</script>"
       elsif wfid.is_a?(Array)
-        "<script>var proc_rep = #{wfid.to_json};</script>"
+        "<script>var proc_rep = #{OpenWFE::Json.encode( wfid )};</script>"
       else
         "<script src=\"/processes/#{wfid}/tree?format=js&var=proc_rep\"></script>"
       end

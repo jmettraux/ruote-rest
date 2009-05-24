@@ -65,7 +65,7 @@ module RuoteRest
         'name' => 'engine_variables',
         'href' => request.href('processes', 0, 'variables')
       }
-      h.to_json
+      OpenWFE::Json.encode( h )
     end
 
   end

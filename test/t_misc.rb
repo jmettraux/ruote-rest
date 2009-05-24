@@ -23,6 +23,7 @@ class MiscTest < Test::Unit::TestCase
 
     a = [ 1, 2, 3 ]
 
-    assert_equal a, json_parse(a.to_json)
+    # This feels redundent now since the hacks aren't loaded anymore
+    assert_equal a, json_parse(OpenWFE::Json.encode(a))
   end
 end
