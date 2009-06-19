@@ -45,13 +45,12 @@ module RuoteRest
     wi = find_workitem
 
     owi = rparse(:workitem)
+    owi.fei = wi.full_fei
 
     #owi.attributes.delete('_uri')
     state = owi.attributes.delete('_state')
 
     if state == 'proceeded'
-
-      owi.fei = wi.full_fei
 
       RuoteRest.engine.reply(owi)
       wi.destroy

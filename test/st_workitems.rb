@@ -107,6 +107,8 @@ class StWorkitemsTest < Test::Unit::TestCase
       OpenWFE::Xml.workitem_to_xml(workitem),
       { 'CONTENT_TYPE' => 'application/xml' })
 
+    #puts @response.body
+
     get workitem.uri
 
     workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
@@ -196,6 +198,51 @@ class StWorkitemsTest < Test::Unit::TestCase
     workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
 
     assert_equal 'bravo', workitem.participant_name
+  end
+
+  def test_update_workitem_via_form
+
+    fei = RuoteRest.engine.launch %{
+      class Test0 < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    }
+
+    sleep 0.450
+
+    body = %{--AaB03x\r
+Content-Disposition: form-data; name="_method"\r
+\r
+PUT\r
+--AaB03x\r
+Content-Disposition: form-data; name="attributes"\r
+\r
+{"key1": "NADA", "params": {"ref": "alpha"}, "key0": "value0"}\r
+--AaB03x--\r
+}
+
+    post(
+      "/workitems/#{fei.wfid}/0_0_0",
+      body,
+      { 'CONTENT_TYPE' => 'multipart/form-data; boundary=AaB03x',
+        'CONTENT_LENGTH' => body.size.to_s })
+
+    assert_equal(
+      "<message>workitem at /workitems/#{fei.wfid}/0_0_0 updated</message>",
+      @response.body)
+
+    sleep 0.450
+
+    get "/workitems/#{fei.wfid}/0_0_0"
+
+    #puts @response.body
+
+    workitem = OpenWFE::Xml.workitem_from_xml(@response.body)
+
+    assert_equal 'NADA', workitem.attributes['key1']
   end
 
 end
