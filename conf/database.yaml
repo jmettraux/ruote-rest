@@ -1,6 +1,7 @@
 
 defaults: &defaults
   adapter: mysql
+  #adapter: jdbcmysql
   host: localhost
   encoding: utf8
 

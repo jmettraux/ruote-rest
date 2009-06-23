@@ -66,8 +66,8 @@ module RuoteRest
         :offset => offset, :limit => limit, :order => order, :conditions => cond
       }
 
-      total = ActiveRecord::Base::connection.execute(
-        'select count(*) from history').fetch_row[0].to_i
+      total = OpenWFE::Extras::HistoryEntry.count_by_sql(
+        'SELECT COUNT(*) FROM history')
 
       entries = {
         :entries => OpenWFE::Extras::HistoryEntry.find(:all, opts),

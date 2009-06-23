@@ -30,6 +30,8 @@ class StHistoryTest < Test::Unit::TestCase
 
     get '/history.json'
 
+    #puts @response.body
+
     assert_equal 200, @response.status
 
     a = json_parse(@response.body)
