@@ -1,21 +1,16 @@
 
-%w{
+# runs all the tests
 
-  t_misc
-  t_auth
+dirpath = File.dirname(__FILE__)
 
-  ft_auth
+ts = Dir.new(dirpath).entries.select { |e| e.match(/^t\_.*\.rb$/) }.sort
+  # small tests
 
-  st_service
-  st_errors
-  st_expressions
-  st_participants
-  st_history
+fts = Dir.new(dirpath).entries.select { |e| e.match(/^ft\_.*\.rb$/) }.sort
+  # functional tests
 
-  st_processes
-  st_workitems
+sts = Dir.new(dirpath).entries.select { |e| e.match(/^st\_.*\.rb$/) }.sort
+  # resource tests (can't remember the why of the 's')
 
-}.each do |t|
-  require File.join(File.dirname(__FILE__), t)
-end
+(ts + fts + sts).each { |e| load(File.join(dirpath, e)) }
 
