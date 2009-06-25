@@ -74,6 +74,8 @@ module RuoteRest
 
       t = object.send(accessor)
 
+      t = Time.parse(t) if t.is_a?(String)
+
       t ? "#{t.ctime} (#{display_since(t)})" : ''
     end
 
