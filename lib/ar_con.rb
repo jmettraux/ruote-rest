@@ -38,15 +38,11 @@ module RuoteRest
       "No database configuration for #{application.environment} environment!")
     ) if configuration.nil?
 
-    ActiveRecord::Base.establish_connection(
-      :adapter => configuration['adapter'],
-      :database => configuration['database'],
-      :username => configuration['username'],
-      :password => configuration['password'],
-      :host => configuration['host'],
-      :encoding => configuration['encoding'],
-      :pool => 30
-    )
+    opts = %w[
+      adapter database username password host encoding driver url jndi
+    ].inject({ :pool => 30 }) { |h, k| h[k.to_sym] = configuration[k]; h }
+
+    ActiveRecord::Base.establish_connection(opts)
   end
 end
 
