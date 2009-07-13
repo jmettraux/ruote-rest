@@ -50,7 +50,7 @@ class Rack::Request
       base << ":#{port}"
     end
 
-    "#{base}/#{args.collect {|a| a.to_s }.join('/')}"
+    "#{base}/#{args.collect {|a| OpenWFE.to_uscores(a.to_s) }.join('/')}"
   end
 end
 
@@ -94,9 +94,9 @@ class OpenWFE::FlowExpressionId
     env = self.expname == 'environment' ? 'e' : ''
     ei = "#{OpenWFE.to_uscores(self.expid)}#{env}"
 
-    return req.href(resource_name, wfid, ei) if req
+    return req.href(resource_name, OpenWFE.to_uscores(wfid), ei) if req
 
-    "/#{resource_name}/#{wfid}/#{ei}"
+    "/#{resource_name}/#{OpenWFE.to_uscores(wfid)}/#{ei}"
   end
 end
 

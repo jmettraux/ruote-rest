@@ -49,7 +49,7 @@ module RuoteRest
 
       params = args.last.is_a?(Hash) ? args.pop : nil
 
-      params = "?" + params.collect { |k, v|
+      params = '?' + params.collect { |k, v|
         "#{k}=#{OpenWFE.to_uscores(v)}"
       }.join("&") if params
 

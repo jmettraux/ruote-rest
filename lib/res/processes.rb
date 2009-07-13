@@ -143,16 +143,24 @@ module RuoteRest
 
   helpers do
 
+    SUBPROCESS_REGEX = /(.*)\_\d+$/ unless defined?(SUBPROCESS_REGEX)
+
     def get_process_status
 
       wfid = params[:wfid]
+
+      if m = wfid.match(SUBPROCESS_REGEX)
+        wfid = m[1]
+      end
 
       RuoteRest.engine.process_status(wfid) ||
         throw(:done, [ 404, "no process '#{wfid}'" ])
     end
 
     def has? (key)
+
       v = params[key]
+
       v == 'true' or v == '1'
     end
   end

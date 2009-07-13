@@ -107,7 +107,8 @@ module RuoteRest
       elsif sn
         OpenWFE::Extras::ArWorkitem.find_in_stores(sn)
       elsif wfid
-        OpenWFE::Extras::ArWorkitem.find_all_by_wfid(wfid)
+        OpenWFE::Extras::ArWorkitem.find(
+          :all, :conditions => [ "wfid like ?", "#{wfid}%" ]) # grrrr
       else
         OpenWFE::Extras::ArWorkitem.find :all
       end
@@ -129,6 +130,5 @@ module RuoteRest
       sname ? sname.split(',') : nil
     end
   end
-
 end
 

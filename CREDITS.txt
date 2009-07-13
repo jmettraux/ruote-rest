@@ -25,6 +25,7 @@ Nicholas Petrella - participant patches
 Feedback
 --------
 
+- Patrick D. Clark (ruote-rest and subprocesses)
 - Corin Moss
 - many more
 

@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.21    not yet released
 
+- issue #5 : expressions/workitems in subprocesses not visible. (Thanks Patrick)
 - issue #4 : unlocked full range of db params for activerecord (Thanks Nando)
 - todo  #25167 : rake password:generate
 - todo  #25799 : post /expressions/:wfid/:expid linked to engine.reapply(exp)
