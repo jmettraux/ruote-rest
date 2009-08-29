@@ -43,7 +43,7 @@ module RuoteRest
       OpenWFE::Xml.fei_to_xml fei, :indent => 2, :request => request
     end
 
-    def render_fei_xml (fei)
+    def render_fei_json (fei)
 
       fei.to_h.to_json
     end

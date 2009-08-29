@@ -15,7 +15,7 @@ class StProcessesTest < Test::Unit::TestCase
   include TestBase
 
 
-  def test_0
+  def test_get_processes
 
     get '/processes'
 
@@ -32,7 +32,7 @@ class StProcessesTest < Test::Unit::TestCase
     assert_match(/count="0"/,  @response.body)
   end
 
-  def test_1
+  def test_launch_process
 
     li = OpenWFE::LaunchItem.new <<-EOS
       class TestStProcesses1 < OpenWFE::ProcessDefinition
@@ -267,6 +267,30 @@ class StProcessesTest < Test::Unit::TestCase
     delete "/processes/#{fei.wfid}.json"
 
     assert_equal 200, @response.status
+  end
+
+  def test_launch_process_json
+
+    li = OpenWFE::LaunchItem.new <<-EOS
+      class TestStProcesses1 < OpenWFE::ProcessDefinition
+        sequence do
+          alpha
+          bravo
+        end
+      end
+    EOS
+
+    post(
+      '/processes.json',
+      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
+      { 'CONTENT_TYPE' => 'application/xml' })
+
+    sleep 0.350
+
+    assert_equal 'application/json', @response.headers['Content-type']
+
+    fei = json_parse(@response.body)
+    assert_equal 'ruote_rest', fei['engine_id']
   end
 end
 
