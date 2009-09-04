@@ -34,10 +34,13 @@ module RuoteRest
     #
     def parse_launchitem_xml (xml)
 
-      OpenWFE::Xml.launchitem_from_xml xml
+      OpenWFE::Xml.launchitem_from_xml(xml)
     end
 
-    # TODO : parse_launchitem_json (json)
+    def parse_launchitem_json (json)
+
+      OpenWFE::Json.launchitem_from_h(json)
+    end
 
     # Builds a launchitem from the request parameters (html form)
     #

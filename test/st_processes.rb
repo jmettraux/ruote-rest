@@ -24,8 +24,11 @@ class StProcessesTest < Test::Unit::TestCase
     end
   EOS
 
-  LI_WITH_DEFINITION_XML = OpenWFE::Xml.launchitem_to_xml(
-    LI_WITH_DEFINITION, :indent => 2)
+  LI_WITH_DEFINITION_XML =
+    OpenWFE::Xml.launchitem_to_xml(LI_WITH_DEFINITION, :indent => 2)
+
+  LI_WITH_DEFINITION_JSON =
+    OpenWFE::Json.launchitem_to_h(LI_WITH_DEFINITION).to_json
 
 
   def test_get_processes
@@ -268,6 +271,31 @@ class StProcessesTest < Test::Unit::TestCase
 
     fei = json_parse(@response.body)
     assert_equal 'ruote_rest', fei['engine_id']
+  end
+
+  def test_launch_process_with_json_launchitem
+
+    li = LI_WITH_DEFINITION.to_h.dup
+    li['attributes']['food'] = 'tamales'
+
+    post(
+      '/processes.json',
+      li.to_json,
+      { 'CONTENT_TYPE' => 'application/json' })
+
+    sleep 0.350
+
+    #puts @response.body
+
+    assert_equal 'application/json', @response.headers['Content-type']
+
+    fei = json_parse(@response.body)
+    assert_equal 'ruote_rest', fei['engine_id']
+
+    assert_equal 1, OpenWFE::Extras::ArWorkitem.find(:all).size
+    wi = OpenWFE::Extras::ArWorkitem.find(:first)
+
+    assert_equal 'tamales', wi.as_owfe_workitem.fields['food']
   end
 end
 
