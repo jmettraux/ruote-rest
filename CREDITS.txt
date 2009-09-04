@@ -12,13 +12,13 @@ The main project team
 
 John Mettraux ( project lead ( john >at< gmail.com ) )
 Kenneth Kalmer - enhanced authentication, daemonization
+Gonzalo Suarez - enhanced authentication, JSON
+Nando Sola - enhanced authentication, JSON
 
 
 Contributors
 ------------
 
-Gonzalo Suarez - enhanced authentication
-Nando Sola - enhanced authentication
 Nicholas Petrella - participant patches
 
 

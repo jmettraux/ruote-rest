@@ -86,7 +86,7 @@ class FtAuthTest < Test::Unit::TestCase
     #assert_equal(
     #  [ 401, { 'WWW-Authenticate'=>'Basic realm="test-realm"' }, [] ], res)
 
-    assert_equal res[0], 401
+    assert_equal 401, res[0]
     assert res[1].has_key?('WWW-Authenticate')
   end
 
@@ -96,8 +96,8 @@ class FtAuthTest < Test::Unit::TestCase
 
     res = RuoteRest::RackBasicAuth.new(@ab, :realm => 'test-realm').call(env)
 
-    assert_equal('alice', env['REMOTE_USER'])
-    assert_equal(true, env[:ruote_authenticated])
+    assert_equal 'alice', env['REMOTE_USER']
+    assert_equal true, env[:ruote_authenticated]
   end
 
   def test_basicauth_in_bob
