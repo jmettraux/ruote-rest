@@ -15,45 +15,36 @@ class StProcessesTest < Test::Unit::TestCase
   include TestBase
 
 
+  LI_WITH_DEFINITION = OpenWFE::LaunchItem.new <<-EOS
+    class TestStProcesses1 < OpenWFE::ProcessDefinition
+      sequence do
+        alpha
+        bravo
+      end
+    end
+  EOS
+
+  LI_WITH_DEFINITION_XML = OpenWFE::Xml.launchitem_to_xml(
+    LI_WITH_DEFINITION, :indent => 2)
+
+
   def test_get_processes
 
     get '/processes'
-
-    #p @response
-    #puts @response.body
 
     assert_equal(
       'application/xml',
       @response.content_type)
 
-    #assert_equal(
-    #  "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<processes count=\"0\" href=\"http://example.org/processes\">\n</processes>\n",
-    #  @response.body)
     assert_match(/count="0"/,  @response.body)
   end
 
   def test_launch_process
 
-    li = OpenWFE::LaunchItem.new <<-EOS
-      class TestStProcesses1 < OpenWFE::ProcessDefinition
-        sequence do
-          alpha
-          bravo
-        end
-      end
-    EOS
-    #li.attributes.merge!(
-    #  "customer" => "toto", "amount" => 5, "discount" => false )
-    #puts
-    #puts OpenWFE::Xml.launchitem_to_xml(li, :indent => 2)
-    #puts
-
     post(
       '/processes',
-      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
+      LI_WITH_DEFINITION_XML,
       { 'CONTENT_TYPE' => 'application/xml' })
-
-    #puts @response.body
 
     fei = OpenWFE::Xml.fei_from_xml @response.body
 
@@ -65,20 +56,14 @@ class StProcessesTest < Test::Unit::TestCase
 
     get '/processes'
 
-    #puts @response.body
-
     assert_not_nil @response.body.index(fei.wfid)
 
     get "/processes/#{fei.wfid}"
-    #puts
-    #puts @response.body
-    #puts
 
     assert_not_nil @response.body.index("<wfid>#{fei.wfid}</wfid>")
 
     get "/processes/#{fei.wfid}/representation.json"
 
-    #puts @response.body
     js = json_parse(@response.body)
     assert_kind_of Array, js
     assert_equal 'application/json', @response['Content-Type']
@@ -113,6 +98,7 @@ class StProcessesTest < Test::Unit::TestCase
   end
 
   def test_process_lookup
+
     running_expressions = []
     running_expressions << RuoteRest.engine.launch(OpenWFE.process_definition(:name => 'one') do
       sequence do
@@ -271,18 +257,9 @@ class StProcessesTest < Test::Unit::TestCase
 
   def test_launch_process_json
 
-    li = OpenWFE::LaunchItem.new <<-EOS
-      class TestStProcesses1 < OpenWFE::ProcessDefinition
-        sequence do
-          alpha
-          bravo
-        end
-      end
-    EOS
-
     post(
       '/processes.json',
-      OpenWFE::Xml.launchitem_to_xml(li, :indent => 2),
+      LI_WITH_DEFINITION_XML,
       { 'CONTENT_TYPE' => 'application/xml' })
 
     sleep 0.350
