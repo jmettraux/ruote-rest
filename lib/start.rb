@@ -74,7 +74,9 @@ begin
   $:.unshift "#{RUOTE_BASE_DIR}/conf"
 
   $:.unshift '~/ruote/lib'
+  $:.unshift '~/w/ruote/lib'
   $:.unshift '~/rufus/rufus-sixjo/lib'
+  $:.unshift '~/w/rufus/rufus-sixjo/lib'
     #
     # feel free to nuke those two lines (dev only !)
 

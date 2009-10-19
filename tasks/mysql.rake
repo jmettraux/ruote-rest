@@ -41,6 +41,7 @@ namespace :mysql do
     RuoteRest.establish_ar_connection(stage)
 
     $:.unshift('~/ruote/lib')
+    $:.unshift('~/w/ruote/lib')
       # feel free to remove that, core dev only
 
     require 'openwfe/extras/participants/ar_participants'

@@ -7,7 +7,7 @@ elsif File.exist?('vendorf/frozen.rb')
   require 'vendorf/frozen'
 end
 
-%w{ lib conf ~/ruote/lib ~/rufus/rufus-sixjo/lib test }.each do |path|
+%w{ lib conf ~/w/ruote/lib ~/w/rufus/rufus-sixjo/lib test }.each do |path|
 
   path = File.dirname(__FILE__) + '/../' + path unless path[0, 1] == '~'
   path = File.expand_path(path)
