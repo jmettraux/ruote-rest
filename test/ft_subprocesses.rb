@@ -40,6 +40,11 @@ class FtSubprocessesTest < Test::Unit::TestCase
     get "/processes"
     assert_not_nil @response.body.index('processes count="1"')
 
+    get "/processes/#{fei.wfid}"
+    #puts @response.body
+    assert_not_nil(@response.body.index(
+      "<link href=\"/expressions/#{fei.wfid}_0/0_0\" "))
+
     get "/expressions/#{fei.wfid}"
     assert_not_nil @response.body.index('expressions count="6"')
     assert_not_nil @response.body.index("#{fei.wfid}_0")
