@@ -71,5 +71,36 @@ class FtSubprocessesTest < Test::Unit::TestCase
     get "/processes/#{fei.wfid}", nil, { 'HTTP_ACCEPT' => 'text/html' }
     assert_not_nil @response.body.match("GET /expressions/#{fei.wfid}_0/0_0")
   end
+
+  def test_subprocess_on_cancel
+
+    li = OpenWFE::LaunchItem.new %{
+      OpenWFE.process_definition :name => 'test' do
+        sequence :on_cancel => 'foxtrott' do
+          alpha
+        end
+        process_definition :name => 'foxtrott' do
+          delta
+        end
+      end
+    }
+
+    post(
+      "/processes",
+      OpenWFE::Xml.launchitem_to_xml(li),
+      { "CONTENT_TYPE" => "application/xml" })
+
+    fei = OpenWFE::Xml.fei_from_xml(@response.body)
+
+    sleep 0.350
+
+    delete "/processes/#{fei.wfid}"
+
+    sleep 0.350
+
+    get "/processes/#{fei.wfid}"
+    #puts @response.body
+    assert_not_nil @response.body.match("\"/expressions/#{fei.wfid}_0/0\"")
+  end
 end
 

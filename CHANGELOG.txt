@@ -4,6 +4,7 @@
 
 == ruote-rest - 0.9.21    not yet released
 
+- issue    : with on_cancel and get /processes. Thanks Gonzalo
 - issue    : render_fei_json missing (Thanks Gonzalo)
 - issue #5 : expressions/workitems in subprocesses not visible. (Thanks Patrick)
 - issue #4 : unlocked full range of db params for activerecord (Thanks Nando)
